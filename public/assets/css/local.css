@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+
+/* =====================
+   SESSÃO LOCAL - ESTILOS
+   ===================== */
+
+/* Seção principal com fundo suave e espaçamento */
+.sessao-local {
+  background: #f3f3f3;
+  padding: 56px 0 0 0;
+  border-top: 2px solid #e0e0e0;
+  border-bottom: 2px solid #e0e0e0;
+}
+.nome-sessao{
+    font-size: large;
+    font-weight: 700;
+    text-align: left;
+    display: block;
+    margin-bottom: 24px;
+    color: #BED232;
+    
+}
+
+/* Container centralizado e responsivo */
+.container-local {
+  font-size: 1.18rem;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 16px;
+}
+
+/* Título da sessão */
+.local-titulo {
+  color: #005523;
+  font-family: 'Bungee', cursive;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+/* Descrição da sessão */
+.local-desc {
+  font-size: 1.18rem;
+  color: #333;
+  margin-bottom: 18px;
+  line-height: 1.6;
+  font-weight: 800;
+  text-align: left;
+}
+
+/* Endereço destacado */
+.local-endereco {
+  font-size: 1.1rem;
+  color: #222;
+  padding: 10px 0px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  text-align: left;
+}
+
+/* Botão/link do Google Maps */
+.local-mapa-link {
+  display: inline-block;
+  background: #994C11;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 32px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  transition: background 0.2s, color 0.2s;
+  margin-top: 6px;
+}
+.local-mapa-link:hover {
+  background: #be5e14;
+  color: #fff;
+}
+
+/* Full-width map wrapper - quebra o container para largura total */
+.local-mapa-iframe-wrapper {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  margin-top: 5px;
+}
+
+/* Iframe interno preenche 100% da largura */
+.local-mapa-iframe-wrapper iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+}
+
+
+/* Responsividade para telas menores */
+@media (max-width: 600px) {
+  .container-local {
+    padding: 0 4vw;
+  }
+  .local-titulo {
+    font-size: 1.3rem;
+  }
+  .local-endereco {
+    font-size: 1rem;
+    padding: 12px 8px;
+  }
+  .local-mapa-link {
+    padding: 10px 18px;
+    font-size: 0.98rem;
+  }
+}

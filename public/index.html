@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Feira do Agronegócio - Home</title>
+  <link rel="stylesheet" href="assets/css/home.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <!-- =====================
+       HEADER/NAVBAR
+       ===================== -->
+  <header class="site-header">
+    <div class="container">
+      <!-- Logo da Feira -->
+      <div class="logo-area">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
+      </div>
+      <!-- Menu de Navegação -->
+      <nav class="menu">
+        <a href="index.html">Home</a>
+        <!-- Dropdown: A Feira -->
+        <div class="dropdown">
+          <a href="#afeira" class="dropdown-toggle">A Feira</a>
+          <div class="dropdown-menu">
+            <a href="#sobre">Sobre a Feira</a>
+            <a href="#expositores">Expositores</a>
+            <a href="#mapa">Mapa da Feira</a>
+            <a href="#programacao">Programação</a>
+            <a href="#manual">Manual da Feira</a>
+            <a href="#local">Local</a>
+          </div>
+        </div>
+        <a href="galeria.html">Galeria</a>
+        <a href="contato.html">Contato</a>
+      </nav>
+      <!-- Botões de autenticação -->
+      <div class="auth-buttons">
+        <a href="cadastro.html" class="btn btn-outline">Cadastre-se</a>
+        <a href="login.html" class="btn btn-solid">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================
+       BANNER PRINCIPAL
+       ===================== -->
+  <section class="banner" style="max-width:1440px;max-height:720px;width:100%;height:720px;margin:0 auto;overflow:hidden;">
+    <img src="" alt="Banner da Feira" id="banner-img" style="width:100%;height:100%;object-fit:cover;max-width:1440px;max-height:720px;">
+  </section>
+
+  <!-- =====================
+       CONTADOR REGRESSIVO
+       ===================== -->
+<link rel="stylesheet" href="assets/css/contador.css">
+<section class="contador-banner">
+  <h2> Em breve, a feira que movimenta o agro estará de volta</h2>
+  <div id="contador">
+    <div><span id="dias" class="contador-numero">00</span><span class="contador-label">dias</span></div>
+    <div>:</div>
+    <div><span id="horas" class="contador-numero">00</span><span class="contador-label">horas</span></div>
+    <div>:</div>
+    <div><span id="minutos" class="contador-numero">00</span><span class="contador-label">min</span></div>
+    <div>:</div>
+    <div><span id="segundos" class="contador-numero">00</span><span class="contador-label">seg</span></div>
+  </div>
+</section>
+  <script>
+    // Data do início da feira (exemplo: 16 de junho de 2025, 08:00)
+    const dataFeira = new Date('2026-07-16T08:00:00');
+    function atualizarContador() {
+      const agora = new Date();
+      const diff = dataFeira - agora;
+      if (diff <= 0) {
+        document.getElementById('contador').innerHTML = "<span style='color:#BE5E14;'>A feira já começou!</span>";
+        return;
+      }
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diff / (1000 * 60)) % 60);
+      const segundos = Math.floor((diff / 1000) % 60);
+      document.getElementById('dias').textContent = dias.toString().padStart(2, '0');
+      document.getElementById('horas').textContent = horas.toString().padStart(2, '0');
+      document.getElementById('minutos').textContent = minutos.toString().padStart(2, '0');
+      document.getElementById('segundos').textContent = segundos.toString().padStart(2, '0');
+    }
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+  </script>
+<!-- ...existing code... -->
+
+
+  <!-- =====================
+       FAIXA ABAIXO DO BANNER
+       ===================== -->
+  <section class="faixa-abaixo-banner">
+    <div class="container faixa-container">
+      <h2 class="faixa-titulo" id="faixa-titulo"></h2>
+      <p class="faixa-texto" id="faixa-texto"></p>
+      <a href="#" class="btn btn-solid faixa-botao" id="faixa-botao" style="display:none;"></a>
+    </div>
+  </section>
+
+  <!-- =====================
+     SESSÃO A FEIRA
+     ===================== -->
+<section id="afeira" class="sessao-afeira">
+  <div class="container-afeira">
+    <div class="afeira-texto">
+      <p class="afeira-subtitulo-dinamico" id="afeira-subtitulo">SOBRE A FEIRA</p>
+      <h2 id="afeira-titulo" class="afeira-subtitulo"></h2>
+      <p id="afeira-texto"></p>
+    </div>
+    <div class="afeira-imagens" id="afeira-imagens">
+      <img src="assets/img/afeira1.jpg" alt="Imagem 1 da Feira">
+      <img src="assets/img/afeira2.jpg" alt="Imagem 2 da Feira">
+      <img src="assets/img/afeira3.jpg" alt="Imagem 3 da Feira">
+    </div>
+  </div>
+</section>
+
+  <!-- =====================
+     SESSÃO O QUE ESPERAR
+     ===================== -->
+<section id="oqueesperar" class="sessao-oqueesperar">
+  <div class="container-oqueesperar">
+    <h2 class="oqueesperar-titulo">O QUE ESPERAR</h2>
+    <div class="oqueesperar-grid">
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 1</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar1.jpg" alt="Item 1" /></div>
+      </div>
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 2</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar2.jpg" alt="Item 2" /></div>
+      </div>
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 3</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar3.jpg" alt="Item 3" /></div>
+      </div>
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 4</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar4.jpg" alt="Item 4" /></div>
+      </div>
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 5</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar5.jpg" alt="Item 5" /></div>
+      </div>
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 6</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar6.jpg" alt="Item 6" /></div>
+      </div>
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 7</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar7.jpg" alt="Item 7" /></div>
+      </div>
+      <div class="oqueesperar-card">
+        <div class="oqueesperar-card-front">Item 8</div>
+        <div class="oqueesperar-card-back"><img src="assets/img/oqesperar8.jpg" alt="Item 8" /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- =====================
+     SESSÃO EXPOSITOR
+     ===================== -->
+<section id="expositor" class="sessao-expositor">
+  <div class="container-expositor">
+    <p class="expositor-label">Expositor</p>
+    <h1 class="expositor-titulo">O CORAÇÃO DA FEIRA</h1>
+    <p class="expositor-setores-label">Setores</p>
+    <div class="expositor-setores-grid">
+      <div class="expositor-setor-card" data-setor="legado">
+        ESPAÇO LEGADO
+        <div class="setor-carrossel" style="display:none;">
+          <button class="carrossel-prev" type="button">&#10094;</button>
+          <div class="carrossel-logos">
+            <img src="assets/img/logo1.png" alt="Empresa 1" class="carrossel-logo">
+            <img src="assets/img/logo2.png" alt="Empresa 2" class="carrossel-logo">
+            <img src="assets/img/logo3.png" alt="Empresa 3" class="carrossel-logo">
+          </div>
+          <button class="carrossel-next" type="button">&#10095;</button>
+        </div>
+      </div>
+      <div class="expositor-setor-card" data-setor="evolucao">
+        ESPAÇO EVOLUÇÃO
+        <div class="setor-carrossel" style="display:none;">
+          <button class="carrossel-prev" type="button">&#10094;</button>
+          <div class="carrossel-logos">
+            <img src="assets/img/logo4.png" alt="Empresa 4" class="carrossel-logo">
+            <img src="assets/img/logo5.png" alt="Empresa 5" class="carrossel-logo">
+            <img src="assets/img/logo6.png" alt="Empresa 6" class="carrossel-logo">
+          </div>
+          <button class="carrossel-next" type="button">&#10095;</button>
+        </div>
+      </div>
+      <div class="expositor-setor-card" data-setor="conexao">
+        ESPAÇO CONEXÃO
+        <div class="setor-carrossel" style="display:none;">
+          <button class="carrossel-prev" type="button">&#10094;</button>
+          <div class="carrossel-logos">
+            <img src="assets/img/logo7.png" alt="Empresa 7" class="carrossel-logo">
+            <img src="assets/img/logo8.png" alt="Empresa 8" class="carrossel-logo">
+            <img src="assets/img/logo9.png" alt="Empresa 9" class="carrossel-logo">
+          </div>
+          <button class="carrossel-next" type="button">&#10095;</button>
+        </div>
+      </div>
+      <div class="expositor-setor-card" data-setor="raiz">
+        ESPAÇO RAIZ
+        <div class="setor-carrossel" style="display:none;">
+          <button class="carrossel-prev" type="button">&#10094;</button>
+          <div class="carrossel-logos">
+            <img src="assets/img/logo10.png" alt="Empresa 10" class="carrossel-logo">
+            <img src="assets/img/logo11.png" alt="Empresa 11" class="carrossel-logo">
+            <img src="assets/img/logo12.png" alt="Empresa 12" class="carrossel-logo">
+          </div>
+          <button class="carrossel-next" type="button">&#10095;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- =====================
+     SESSÃO MAPA DA FEIRA
+     ===================== -->
+<section id="mapa" class="sessao-mapa">
+  <div class="container-mapa">
+    <h2 class="mapa-titulo">MAPA DA FEIRA</h2>
+    <div class="mapa-imagem-wrapper" id="mapa-imagem-wrapper">
+      <!-- O preview do mapa será inserido via JS -->
+    </div>
+    <a href="#" id="btn-download-mapa" download class="btn btn-download-mapa" style="display:none;">Download do Mapa</a>
+  </div>
+</section>
+
+    <style>
+      /* Efeito de zoom elegante no mapa da feira */
+      .mapa-imagem-zoom {
+        /* Removido o efeito de zoom anterior para não conflitar com a lupa */
+        transition: none;
+        cursor: zoom-in;
+        z-index: 2;
+        will-change: auto;
+      }
+      .mapa-imagem-zoom:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        filter: none;
+        cursor: zoom-in;
+      }
+      @media (max-width: 900px) {
+        .mapa-imagem-zoom:hover {
+          transform: none;
+        }
+      }
+      /* MAGNIFIER (LUPA) EFFECT */
+      #mapa-magnifier {
+        box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
+        border: 2.5px solid #994C11;
+        border-radius: 50%;
+        width: 160px;
+        height: 160px;
+        pointer-events: none;
+        position: absolute;
+        z-index: 10;
+        display: none;
+        background: #fff;
+        transition: opacity 0.2s;
+      }
+      @media (max-width: 900px) {
+        #mapa-magnifier { display: none !important; }
+      }
+    </style>
+
+  <script>
+    // =====================
+    // Carrega o banner salvo pelo admin e dados da faixa
+    // =====================
+    fetch('http://localhost:3000/api/home')
+      .then(res => res.json())
+      .then(data => {
+        // DEBUG: Dados carregados do backend
+        console.log('[DEBUG] Dados carregados do backend:', data);
+        if (data.banner) {
+          document.getElementById('banner-img').src = 'http://localhost:3000' + data.banner;
+        } else {
+          document.getElementById('banner-img').src = 'assets/img/banner-exemplo.jpg';
+        }
+        // Faixa abaixo do banner
+        if (data.faixa_titulo) document.getElementById('faixa-titulo').textContent = data.faixa_titulo;
+        if (data.faixa_texto) document.getElementById('faixa-texto').textContent = data.faixa_texto;
+        if (data.faixa_botao_ativo && data.faixa_botao_texto && data.faixa_botao_url) {
+          const botao = document.getElementById('faixa-botao');
+          botao.textContent = data.faixa_botao_texto;
+          botao.href = data.faixa_botao_url;
+          botao.style.display = 'inline-block';
+        } else {
+          document.getElementById('faixa-botao').style.display = 'none';
+        }
+
+        // =====================
+        // Sessão "A Feira" dinâmico
+        // =====================
+        if (data.afeira_subtitulo) document.getElementById('afeira-subtitulo').textContent = data.afeira_subtitulo;
+        if (data.afeira_titulo) document.getElementById('afeira-titulo').textContent = data.afeira_titulo;
+        if (data.afeira_texto) document.getElementById('afeira-texto').textContent = data.afeira_texto;
+        const container = document.getElementById('afeira-imagens');
+        let imgs = Array.isArray(data.afeira_imagens) ? data.afeira_imagens.slice(0,3) : [];
+        while (imgs.length < 3) imgs.push('');
+        container.innerHTML = imgs.map((src, i) =>
+          src ? `<div style='text-align:center;margin-bottom:18px;'>
+                    <img src="http://localhost:3000${src}" alt="Imagem ${i+1} da Feira">
+                    <div style='font-size:15px;color:#333;margin-top:6px;'>Imagem ${i+1}</div>
+                  </div>`
+              : `<div style='text-align:center;margin-bottom:18px;'>
+                    <div style='width:500px;height:250px;display:inline-block;background:#eee;border-radius:10px;'></div>
+                    <div style='font-size:15px;color:#aaa;margin-top:6px;'>Imagem ${i+1}</div>
+                 </div>`
+        ).join('');
+
+        // =====================
+        // Sessão "O QUE ESPERAR" dinâmico
+        // =====================
+        if (data.oqueesperar_titulo) {
+          document.querySelector('.oqueesperar-titulo').textContent = data.oqueesperar_titulo;
+        }
+        const grid = document.querySelector('.oqueesperar-grid');
+        grid.innerHTML = '';
+        for (let i = 1; i <= 8; i++) {
+          const texto = data[`oqueesperar_card${i}_texto`] || `Item ${i}`;
+          const img = data[`oqueesperar_card${i}_img`] ? `http://localhost:3000${data[`oqueesperar_card${i}_img`]}` : `assets/img/oqesperar${i}.jpg`;
+          const card = document.createElement('div');
+          card.className = 'oqueesperar-card';
+          card.innerHTML = `
+            <div class="oqueesperar-card-front">${texto}</div>
+            <div class="oqueesperar-card-back"><img src="${img}" alt="Item ${i}" /></div>
+          `;
+          grid.appendChild(card);
+        }
+
+        // =====================
+        // Sessão "EXPOSITOR" dinâmico - 4 setores, carrossel ao hover
+        // =====================
+        if (data.expositor_titulo) {
+          document.querySelector('.sessao-expositor h1').textContent = data.expositor_titulo;
+        }
+        const setoresGrid = document.querySelector('.expositor-setores-grid');
+        setoresGrid.innerHTML = '';
+        // Dados dos setores (títulos, cores, logos)
+        const setores = [
+          {
+            texto: data.expositor_setor1_texto || 'Agroquímicos e Fertilizantes',
+            cor: data.expositor_setor1_cor || '#BE5E14',
+            textoCor: data.expositor_setor1_texto_cor || '#fff',
+            logos: (data.expositor_setor1_logos || []).map((src, i) => ({
+              src: 'http://localhost:3000' + src,
+              alt: `Logo ${i+1}`
+            }))
+          },
+          {
+            texto: data.expositor_setor2_texto || 'Máquinas, Implementos, Sementes e Corretivos',
+            cor: data.expositor_setor2_cor || '#005523',
+            textoCor: data.expositor_setor2_texto_cor || '#fff',
+            logos: (data.expositor_setor2_logos || []).map((src, i) => ({
+              src: 'http://localhost:3000' + src,
+              alt: `Logo ${i+1}`
+            }))
+          },
+          {
+            texto: data.expositor_setor3_texto || 'Ferragens e Veterinária',
+            cor: data.expositor_setor3_cor || '#00466D',
+            textoCor: data.expositor_setor3_texto_cor || '#fff',
+            logos: (data.expositor_setor3_logos || []).map((src, i) => ({
+              src: 'http://localhost:3000' + src,
+              alt: `Logo ${i+1}`
+            }))
+          },
+          {
+            texto: data.expositor_setor4_texto || 'Setor 4',
+            cor: data.expositor_setor4_cor || '#745943',
+            textoCor: data.expositor_setor4_texto_cor || '#fff',
+            logos: (data.expositor_setor4_logos || []).map((src, i) => ({
+              src: 'http://localhost:3000' + src,
+              alt: `Logo ${i+1}`
+            }))
+          }
+        ];
+        // Renderiza setores
+        setores.forEach((setor, idx) => {
+          const card = document.createElement('div');
+          card.className = 'expositor-setor-card';
+          card.style.background = setor.cor;
+          card.style.color = setor.textoCor;
+          card.style.borderRadius = '16px';
+          card.style.textAlign = 'center';
+          card.style.fontWeight = 'bold';
+          card.style.fontSize = '1.2rem';
+          card.style.padding = '32px 12px 18px 12px';
+          card.style.margin = '0 16px';
+          card.style.flex = '1';
+          card.style.cursor = 'pointer';
+          // Remove seta/retângulo
+          card.innerHTML = `${setor.texto}`;
+          card.dataset.setorIdx = idx;
+          setoresGrid.appendChild(card);
+        });
+        // Carrossel container
+        let carrosselContainer = document.querySelector('.setor-carrossel-destaque');
+        if (!carrosselContainer) {
+          carrosselContainer = document.createElement('div');
+          carrosselContainer.className = 'setor-carrossel-destaque';
+          carrosselContainer.style.display = 'none';
+          carrosselContainer.style.justifyContent = 'center';
+          carrosselContainer.style.alignItems = 'center';
+          carrosselContainer.style.borderRadius = '16px';
+          carrosselContainer.style.margin = '32px 0 0 0';
+          carrosselContainer.style.padding = '32px 0';
+          carrosselContainer.style.minHeight = '120px';
+          carrosselContainer.innerHTML = `
+            <div class="carrossel-logos-destaque" style="display:flex;gap:32px;"></div>
+          `;
+          setoresGrid.parentNode.appendChild(carrosselContainer);
+        }
+        // Estado do carrossel
+        let setorSelecionado = null;
+        let logoAtual = 0;
+        function renderCarrossel() {
+          if (setorSelecionado === null) return;
+          const logosDiv = carrosselContainer.querySelector('.carrossel-logos-destaque');
+          const logos = setores[setorSelecionado].logos;
+          if (!logos || logos.length === 0) {
+            logosDiv.innerHTML = `<span style='color:#fff;font-size:1.1rem;'>Nenhuma logo cadastrada para este setor.</span>`;
+            carrosselContainer.style.background = setores[setorSelecionado].cor;
+            return;
+          }
+          // Exibe até 5 logos a partir do logoAtual
+          let html = '';
+          for (let i = 0; i < Math.min(5, logos.length); i++) {
+            const idx = (logoAtual + i) % logos.length;
+            html += `<img src='${logos[idx].src}' alt='${logos[idx].alt}' style='height:80px;max-width:180px;background:#fff;border-radius:8px;padding:8px;'>`;
+          }
+          logosDiv.innerHTML = html;
+          // Cor do carrossel igual ao setor selecionado
+          carrosselContainer.style.background = setores[setorSelecionado].cor;
+        }
+        // Hover nos setores
+        setoresGrid.querySelectorAll('.expositor-setor-card').forEach(card => {
+          card.addEventListener('mouseenter', function() {
+            // DEBUG: Setor selecionado no hover
+            console.log('[DEBUG] Setor selecionado:', card.dataset.setorIdx);
+            setorSelecionado = parseInt(card.dataset.setorIdx);
+            logoAtual = 0;
+            renderCarrossel();
+            carrosselContainer.style.display = 'flex';
+            // Destaque visual do setor selecionado
+            setoresGrid.querySelectorAll('.expositor-setor-card').forEach(c => c.style.boxShadow = 'none');
+            card.style.boxShadow = '0 0 0 4px #FFD700';
+          });
+          card.addEventListener('mouseleave', function() {
+            carrosselContainer.style.display = 'none';
+            card.style.boxShadow = 'none';
+          });
+        });
+        // Esconde carrossel ao sair do container
+        carrosselContainer.addEventListener('mouseleave', function() {
+          carrosselContainer.style.display = 'none';
+          setoresGrid.querySelectorAll('.expositor-setor-card').forEach(c => c.style.boxShadow = 'none');
+        });
+
+        // =====================
+        // SESSÃO MAPA DA FEIRA DINÂMICA
+        // =====================
+        const mapaWrapper = document.getElementById('mapa-imagem-wrapper');
+        const btnDownload = document.getElementById('btn-download-mapa');
+        mapaWrapper.innerHTML = '';
+        btnDownload.style.display = 'none';
+        if (data.mapa_imagem && data.mapa_imagem.length > 0) {
+          const url = 'http://localhost:3000' + data.mapa_imagem;
+          const ext = url.split('.').pop().toLowerCase();
+          if (["jpg","jpeg","png","gif","webp","bmp","svg"].includes(ext)) {
+            mapaWrapper.innerHTML = `<img src="${url}" alt="Mapa da Feira" class="mapa-imagem mapa-imagem-zoom" style="max-width:100%;height:auto;max-height:700px;width:auto;display:block;margin:0 auto;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);object-fit:contain;">`;
+            btnDownload.href = url;
+            btnDownload.style.display = 'inline-block';
+          } else if (ext === 'pdf') {
+            mapaWrapper.innerHTML = `<iframe src="${url}" style="width:100%;min-height:500px;max-width:700px;height:700px;border:none;display:block;margin:0 auto;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"></iframe>`;
+            btnDownload.href = url;
+            btnDownload.style.display = 'inline-block';
+          } else {
+            mapaWrapper.innerHTML = `<div style='color:#994C11;font-size:1.1rem;padding:32px;'>Arquivo de mapa não suportado.</div>`;
+          }
+        } else {
+          mapaWrapper.innerHTML = `<div style='color:#aaa;font-size:1.1rem;padding:32px;'>Nenhum mapa cadastrado.</div>`;
+        }
+      });
+
+    // =====================
+    // MAGNIFIER (LUPA) EFFECT FOR MAPA DA FEIRA
+    // =====================
+    function addMagnifierToMapa() {
+      const mapaImg = document.querySelector('.mapa-imagem-zoom');
+      if (!mapaImg) return;
+      // Remove any existing magnifier
+      const oldMagnifier = document.getElementById('mapa-magnifier');
+      if (oldMagnifier) oldMagnifier.remove();
+      // Only activate on non-touch devices
+      if ('ontouchstart' in window || window.innerWidth < 700) return;
+      // Create magnifier element
+      const magnifier = document.createElement('div');
+      magnifier.id = 'mapa-magnifier';
+      magnifier.style.position = 'absolute';
+      magnifier.style.pointerEvents = 'none';
+      magnifier.style.border = '2.5px solid #994C11';
+      magnifier.style.borderRadius = '50%';
+      magnifier.style.boxShadow = '0 4px 24px 0 rgba(0,0,0,0.18)';
+      magnifier.style.width = '160px';
+      magnifier.style.height = '160px';
+      magnifier.style.overflow = 'hidden';
+      magnifier.style.zIndex = '10';
+      magnifier.style.display = 'none';
+      magnifier.style.background = '#fff';
+      magnifier.style.transition = 'opacity 0.2s';
+      // Add to wrapper
+      const wrapper = document.getElementById('mapa-imagem-wrapper');
+      wrapper.style.position = 'relative';
+      wrapper.appendChild(magnifier);
+      // Set up background image for magnifier
+      magnifier.style.backgroundImage = `url('${mapaImg.src}')`;
+      magnifier.style.backgroundRepeat = 'no-repeat';
+      magnifier.style.backgroundSize = `${mapaImg.width * 2}px ${mapaImg.height * 2}px`;
+      // Mouse events
+      mapaImg.addEventListener('mousemove', moveMagnifier);
+      mapaImg.addEventListener('mouseenter', showMagnifier);
+      mapaImg.addEventListener('mouseleave', hideMagnifier);
+      function showMagnifier(e) {
+        magnifier.style.display = 'block';
+        magnifier.style.opacity = '1';
+      }
+      function hideMagnifier(e) {
+        magnifier.style.display = 'none';
+        magnifier.style.opacity = '0';
+      }
+      function moveMagnifier(e) {
+        const rect = mapaImg.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        // Clamp to image bounds
+        const mx = Math.max(0, Math.min(x, mapaImg.width));
+        const my = Math.max(0, Math.min(y, mapaImg.height));
+        // Position magnifier
+        magnifier.style.left = (mx - 80) + 'px';
+        magnifier.style.top = (my - 80) + 'px';
+        // Set background position for zoom
+        const zoom = 2;
+        magnifier.style.backgroundPosition = `-${mx * zoom - 80}px -${my * zoom - 80}px`;
+      }
+    }
+    // Chama a função após o mapa ser renderizado
+    fetch('http://localhost:3000/api/home')
+      .then(res => res.json())
+      .then(data => {
+        // ...existing code...
+        // SESSÃO MAPA DA FEIRA DINÂMICA
+        // ...existing code...
+        setTimeout(addMagnifierToMapa, 400); // Aguarda renderização da imagem
+      });
+  </script>
+
+
+  <!-- =====================
+     SESSÃO PROGRAMAÇÃO
+     ===================== -->
+<section id="programacao" class="sessao-programacao">
+  <div class="container-programacao">
+    <p class="programacao-label">PROGRAMAÇÃO</p>
+    <h1 class="programacao-titulo">Fique por dentro dos principais eventos</h1>
+    <div class="programacao-botoes">
+      <button id="btn-feira-online" class="btn-programacao ativo">Feira Online</button>
+      <button id="btn-feira-presencial" class="btn-programacao">Feira Presencial</button>
+    </div>
+    <div class="programacao-tipo-titulo" id="programacao-tipo-titulo">FEIRA ONLINE</div>
+    <div class="programacao-menus">
+      <div id="programacao-menu-online" class="programacao-menu" style="display:block;">
+        <div class="programacao-menu-lista"></div>
+      </div>
+      <div id="programacao-menu-presencial" class="programacao-menu" style="display:none;">
+        <div class="programacao-menu-lista"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<link rel="stylesheet" href="assets/css/programacao.css">
+
+
+<!-- =====================
+   SESSÃO MATERIAL OFICIAL
+   ===================== -->
+<section class="sessao-material-oficial">
+  <div class="container-material">
+    <p>Material Oficial</p>
+    <h1>Baixe nossos kits de materiais oficiais da feira</h1>
+    <p class="material-desc">Garanta que sua participação na feira tenha o máximo de impacto! Aqui você encontra os materiais oficiais para expositores e imprensa. Faça o download do Manual do Expositor e o Release de Imprensa.</p>
+    <div class="material-botoes">
+      <a href="#" class="btn btn-solid">Baixar Manual</a>
+      <a href="#" class="btn btn-outline">RELEASE DE IMPRENSA</a>
+    </div>
+  </div>
+</section>
+  <link rel="stylesheet" href="assets/css/material-oficial.css">
+
+  <script>
+    // =====================
+    // SESSÃO PROGRAMAÇÃO DINÂMICA
+    // =====================
+    fetch('http://localhost:3000/api/home')
+      .then(res => res.json())
+      .then(data => {
+        // DEBUG: Dados de programação recebidos
+        console.log('[DEBUG] Dados de programação:', data.programacao_online, data.programacao_presencial);
+        // Função para renderizar programação
+        function renderProgramacao(tipo, containerId) {
+          const lista = (tipo === 'online' ? data.programacao_online : data.programacao_presencial) || [];
+          const container = document.getElementById(containerId).querySelector('.programacao-menu-lista');
+          if (!lista.length) {
+            container.innerHTML = '<div style="color:#994C11;font-size:1.1rem;padding:18px;">Nenhuma programação cadastrada.</div>';
+            return;
+          }
+          var html = '<ul class="programacao-menu-lista">';
+          lista.forEach((dia, idx) => {
+            // Formata data para dia da semana e dia do mês
+            let dataFormatada = null;
+            if (dia.data && typeof dia.data === 'string') {
+              try {
+                dataFormatada = formatarDataComDiaSemana(dia.data.trim());
+              } catch (e) {
+                dataFormatada = null;
+              }
+            }
+            const diaMes = (dataFormatada && dataFormatada.diaMes && dataFormatada.diaMes !== 'undefined de undefined') ? dataFormatada.diaMes : (dia.data||'');
+            const diaSemana = (dataFormatada && dataFormatada.diaSemana && dataFormatada.diaSemana !== 'undefined') ? dataFormatada.diaSemana : '';
+            html += `<li class='programacao-dia-item'>
+              <div class='programacao-dia-conteudo'>
+                <div class='programacao-dia-textos'>
+                  <div class='programacao-dia-semana'>${diaSemana}</div>
+                  <div class='programacao-dia-mes'>${diaMes}</div>
+                </div>
+                <button class='btn-toggle-eventos' data-dia-idx='${idx}'>▼</button>
+              </div>
+              <div class='programacao-eventos-wrapper' style='display:none;'></div>
+            </li>`;
+          });
+          html += '</ul>';
+          container.innerHTML = html;
+
+          // Adiciona eventos de clique para expandir/colapsar eventos
+          container.querySelectorAll('.btn-toggle-eventos').forEach(btn => {
+            btn.addEventListener('click', function() {
+              const idx = parseInt(btn.getAttribute('data-dia-idx'));
+              const eventosWrapper = btn.closest('.programacao-dia-conteudo').parentNode.querySelector('.programacao-eventos-wrapper');
+              if (eventosWrapper.style.display === 'block') {
+                eventosWrapper.style.display = 'none';
+                btn.textContent = '▼';
+              } else {
+                // Renderiza eventos
+                const dia = lista[idx];
+                eventosWrapper.innerHTML = '';
+                const eventosUl = document.createElement('ul');
+                eventosUl.className = 'programacao-eventos-lista';
+                eventosWrapper.appendChild(eventosUl);
+                (dia.eventos||[]).forEach(ev => {
+                  const li = document.createElement('li');
+                  li.className = 'programacao-evento-item';
+                  // Renderiza "hora : nome" na mesma linha
+                  li.innerHTML = `${ev.hora ? `<span class='evento-hora'>${ev.hora}</span>` : ''}${ev.hora && ev.titulo ? ' : ' : ''}${ev.titulo ? `<span class='evento-titulo'>${ev.titulo}</span>` : ''}${ev.desc ? ` <span style='color:#555;'>(${ev.desc})</span>` : ''}`;
+                  eventosUl.appendChild(li);
+                });
+                eventosWrapper.style.display = 'block';
+                btn.textContent = '▲';
+              }
+            });
+          });
+        }
+        // Botões de alternância
+        var btnOnline = document.getElementById('btn-feira-online');
+        var menuOnline = document.getElementById('programacao-menu-online');
+        var btnPresencial = document.getElementById('btn-feira-presencial');
+        var menuPresencial = document.getElementById('programacao-menu-presencial');
+        var tipoTitulo = document.getElementById('programacao-tipo-titulo');
+        btnOnline.addEventListener('click', function() {
+          // DEBUG: Botão FEIRA ONLINE clicado
+          renderProgramacao('online', 'programacao-menu-online');
+          menuOnline.style.display = 'block';
+          menuPresencial.style.display = 'none';
+          tipoTitulo.textContent = 'FEIRA ONLINE';
+          btnOnline.classList.add('ativo');
+          btnPresencial.classList.remove('ativo');
+        });
+        btnPresencial.addEventListener('click', function() {
+          // DEBUG: Botão FEIRA PRESENCIAL clicado
+          renderProgramacao('presencial', 'programacao-menu-presencial');
+          menuPresencial.style.display = 'block';
+          menuOnline.style.display = 'none';
+          tipoTitulo.textContent = 'FEIRA PRESENCIAL';
+          btnPresencial.classList.add('ativo');
+          btnOnline.classList.remove('ativo');
+        });
+        // Renderiza programação online por padrão se existir
+        if ((data.programacao_online||[]).length) {
+          renderProgramacao('online', 'programacao-menu-online');
+          tipoTitulo.textContent = 'FEIRA ONLINE';
+          btnOnline.classList.add('ativo');
+          btnPresencial.classList.remove('ativo');
+        }
+      });
+
+    // Função utilitária para formatar data no formato "23 de janeiro" e retornar o dia da semana
+    function formatarDataComDiaSemana(dataStr) {
+      if (!dataStr) return '';
+      // Espera data no formato dd/mm/yyyy
+      const partes = dataStr.split('/');
+      if (partes.length !== 3) return dataStr;
+      const [dia, mes, ano] = partes;
+      const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+      const data = new Date(`${ano}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`);
+      if (isNaN(data.getTime())) return dataStr;
+      const diaSemana = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'][data.getDay()];
+      return { diaSemana, diaMes: `${parseInt(dia)} de ${meses[data.getMonth()]}` };
+    }
+  </script>
+
+<!-- =====================
+   SESSÃO LOCAL
+   ===================== -->
+<section class="sessao-local">
+  <div class="container-local">
+    <p class="nome-sessao">Local</p>
+    <h2 class="local-titulo">como chegar</h2>
+    <p class="local-desc">O Agronegócios Copercana acontece no Centro de Eventos Copercana “Manoel Carlos de Azevedo Ortolan”</p>
+    <p class="local-endereco">Estrada Herminio Bizio n° 28 - Recreio Planalto - Sertãozinho/SP</p>
+  </div>
+  <div class="container-local">
+    <h2 class="local-titulo" id="local-titulo"></h2>
+    <p class="local-desc" id="local-desc"></p>
+    <div class="local-endereco" id="local-endereco"></div>
+    <a class="local-mapa-link" id="local-mapa-link" href="#" target="_blank" style="display:none;">Ver no Google Maps</a>
+    <div class="local-mapa-iframe-wrapper" id="local-mapa-iframe-wrapper">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1243.8102131301343!2d-48.01983643048648!3d-21.13868844841832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b99ec005ebdf23%3A0xf1e6033652b3d72c!2sCentro%20de%20Eventos%20Copercana!5e1!3m2!1spt-BR!2sbr!4v1752688550093!5m2!1spt-BR!2sbr"
+        width="100%"
+        height="450"
+        style="border:0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+<link rel="stylesheet" href="assets/css/local.css">
+<!-- Dynamic local script removed to prevent header overlap; static HTML now handles map -->
+
+  <!-- Footer -->
+  <footer class="footer">
+  <!-- Linha 1: Logos centralizadas -->
+  <div class="footer-logo-wrapper">
+    <div class="footer-logo">
+      <img src="assets/img/Modo_de_isolamento.png" alt="Logo Agronegócios Copercana">
+      <img src="assets/img/Copercana_Horizontal.png" alt="Logo Realização" class="footer-partner-logo">
+      <img src="assets/img/rovista.png" alt="Logo Imprensa" class="footer-partner-logo">
+    </div>
+  </div>
+
+  <!-- Linha 2: Seções -->
+  <div class="container-footer">
+    <div class="footer-section">
+      <h4>Informações</h4>
+      <ul>
+        <li><img src="assets/img/calendario.png" alt="Ícone Calendário" class="footer-info-icon"> 16 a 27 de Junho de 2025</li>
+        <li><img src="assets/img/Modo.png" alt="Ícone Localização" class="footer-info-icon"> Centro de Eventos Copercana - Sertãozinho, SP</li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Links úteis</h4>
+      <ul>
+        <li><a href="cadastro.html">Cadastramento</a></li>
+        <li><a href="#mapa">Mapa da Feira</a></li>
+        <li><a href="#programacao">Programação</a></li>
+        <li><a href="#material">Materiais Oficiais</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contato</h4>
+      <ul>
+        <li><img src="assets/img/email.png" alt="Ícone Email" class="footer-contact-icon"> marketing@copercana.com.br</li>
+        <li><img src="assets/img/fone.png" alt="Ícone Telefone" class="footer-contact-icon"> (16) 3946-3300</li>
+      </ul>
+    </div>
+    <div class="footer-section social-icons">
+      <h4>Redes Sociais</h4>
+      <a href="#"><img src="assets/img/face.png" alt="Facebook"></a>
+      <a href="#"><img src="assets/img/Insta.png" alt="Instagram"></a>
+      <a href="#"><img src="assets/img/youtube.png" alt="YouTube"></a>
+      <a href="#"><img src="assets/img/link.png" alt="LinkedIn"></a>
+    </div>
+  </div>
+
+  <!-- Linha 3: Rodapé inferior -->
+  <div class="footer-bottom">
+    <a href="#">Política de Privacidade</a> | <a href="#">Política de Cookies</a><br>
+    © 2025 Agronegócios Copercana. Todos os direitos reservados.
+  </div>
+  <link rel="stylesheet" href="assets/css/footer.css">
+</html>

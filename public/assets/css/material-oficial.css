@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+
+/* =====================
+   SESSÃO MATERIAL OFICIAL
+   ===================== */
+.sessao-material-oficial {
+  background: #994C11;
+  padding: 56px 0 48px 0;
+}
+.container-material {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+}
+.sessao-material-oficial p {
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+  text-align: left;
+  color: #BED232;
+}
+.sessao-material-oficial h1 {
+  font-family: 'Bungee', cursive;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 18px;
+}
+.sessao-material-oficial .material-desc {
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+  color: #fff;
+}
+.material-botoes {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.material-botoes .btn {
+  font-weight: 600;
+  padding: 14px 38px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  min-width: 180px;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.material-botoes .btn-solid {
+  background: #BED232;
+  color: #073F1E;
+  border: none;
+}
+.material-botoes .btn-solid:hover {
+  background: #b0c42a;
+}
+.material-botoes .btn-outline {
+  border: none;
+  color: #073F1E;
+  background: #BED232;
+}
+.material-botoes .btn-outline:hover {
+  background: #BED232;
+  color: #073F1E;
+}
+@media (max-width: 600px) {
+  .sessao-material-oficial h1 {
+    font-size: 1.5rem;
+  }
+  .material-botoes .btn {
+    font-size: 1rem;
+    padding: 12px 18px;
+    min-width: 120px;
+  }
+}

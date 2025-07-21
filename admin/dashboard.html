@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Home</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
+      </div>
+      <nav>
+        <a href="dashboard.html"> Painel</a>
+        <a href="editar-home.html"> Editar Home</a>
+        <a href="gerenciar-galeria.html"> Galeria</a>
+        <a href="mensagens.html"> Mensagens</a>
+      </nav>
+      <div class="logout-footer">
+        <a href="/logout" class="logout-btn">Desconectar</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Editar Conteúdo da Home</h1>
+      <div class="form-box">
+        <form action="/admin/salvar-home" method="POST" enctype="multipart/form-data">
+          <div class="form-section">
+            <label for="titulo">Título da Home:</label>
+            <input type="text" id="titulo" name="titulo" required>
+
+            <label for="texto">Texto de destaque:</label>
+            <textarea id="texto" name="texto" rows="4" required></textarea>
+          </div>
+
+          <div class="form-section">
+            <h3>Banner Atual</h3>
+            <div class="banner-preview">
+              <img src="assets/img/banner-exemplo.jpg" alt="Banner atual">
+            </div>
+
+            <label for="banner">Substituir imagem do banner:</label>
+            <input type="file" id="banner" name="banner">
+          </div>
+
+          <div class="form-section">
+            <label for="modo_carrossel">Modo Carrossel:</label>
+            <label class="switch">
+              <input type="checkbox" id="modo_carrossel" name="modo_carrossel">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="form-section">
+            <label>Vídeo de Apresentação (futuro):</label>
+            <div class="video-placeholder">
+              Área reservada para adicionar vídeo futuramente.
+            </div>
+          </div>
+
+          <button type="submit">Salvar Alterações</button>
+        </form>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

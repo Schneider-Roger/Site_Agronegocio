@@ -1,0 +1,50 @@
+/* Contador Regressivo - Feira do Agronegócio */
+.contador-banner {
+  width: 100%;
+  background: #005523;
+  padding: 32px 0;
+  text-align: center;
+}
+.contador-banner h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+#contador {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  font-size: 96px;
+  font-weight: bold;
+  color: #fff;
+}
+/* Números grandes, texto pequeno */
+/* Menor espaço entre número e texto */
+#contador > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 0;
+}
+#contador .contador-numero {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 1;
+}
+#contador .contador-label {
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: #fff;
+  margin-top: 0.1em;
+  margin-bottom: 50px;
+  line-height: 1.1;
+}
+@media (max-width: 700px) {
+  #contador {
+    font-size: 40px;
+    gap: 12px;
+  }
+  .contador-banner h2 {
+    font-size: 1.2rem;
+  }
+}

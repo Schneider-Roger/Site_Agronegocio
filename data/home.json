@@ -1,0 +1,86 @@
+{
+  "banner": "/uploads/banner-1752002859412.png",
+  "titulo": "Título de Exemplo",
+  "descricao": "Descrição de exemplo da home.",
+  "faixa_titulo": "GARANTA SUA PARTICIPAÇÃO",
+  "faixa_texto": "Facilite sua entrada na feira! Ao se cadastrar agora, você agiliza o credenciamento na hora da feira, evitando filas e ganhando mais tempo para aproveitar o evento.",
+  "faixa_botao_texto": "FAÇA SEU CADASTRO",
+  "faixa_botao_url": "#",
+  "faixa_botao_ativo": false,
+  "afeira_imagens": [
+    "/uploads/afeira_imagens-1752174231563.jpg",
+    "/uploads/afeira_imagens-1752174231591.jpg",
+    "/uploads/afeira_imagens-1752174231610.jpg"
+  ],
+  "afeira_titulo": "Há mais de duas décadas FAZENDO HISTÓRIA",
+  "afeira_texto": "Há mais de duas décadas, nossa feira tem o orgulho de reunir produtores rurais, cooperados e convidados em um evento que celebra a inovação, a colaboração e o desenvolvimento sustentável do setor. Este ano, mais uma vez, oferecemos uma forma única para explorar novas tecnologias, compartilhar conhecimentos e fortalecer parcerias. De forma online durante todo o evento e presencialmente do dia 23 a 27 de junho, das 13h às 19h. Junte-se a nós e faça parte desta tradição que impulsiona o futuro do a",
+  "oqueesperar_titulo": "O QUE ESPERAR",
+  "oqueesperar_card1_texto": "Soluções inovadoras para o cultivo de cana-de-açúcar, soja, milho e amendoim",
+  "oqueesperar_card1_img": "/uploads/oqueesperar_card1_img-1752176945522.jpg",
+  "oqueesperar_card2_texto": "Ofertas exclusivas com condições vantajosas para facilitar investimentos no setor agro",
+  "oqueesperar_card2_img": "",
+  "oqueesperar_card3_texto": " Apresentação das últimas tecnologias e tendências do agronegócio",
+  "oqueesperar_card3_img": "",
+  "oqueesperar_card4_texto": "Palestras técnicas com especialistas abordando temas relevantes para o dia a dia do produtor",
+  "oqueesperar_card4_img": "",
+  "oqueesperar_card5_texto": "Oportunidade de interagir com líderes do setor, expositores e outros profissionais do agronegócio",
+  "oqueesperar_card5_img": "",
+  "oqueesperar_card6_texto": "Ambiente ideal para estabelecer conexões valiosas e parcerias estratégicas",
+  "oqueesperar_card6_img": "",
+  "oqueesperar_card7_texto": "Centro de eventos bem estruturado, oferecendo conforto e comodidade",
+  "oqueesperar_card7_img": "",
+  "oqueesperar_card8_texto": "Áreas dedicadas a diferentes segmentos do agronegócio, facilitando a navegação e a exploração dos temas de interesse",
+  "oqueesperar_card8_img": "",
+  "expositor_titulo": "",
+  "expositor_setor1_texto": "",
+  "expositor_setor1_logos": [
+    "/uploads/expositor_setor1_logos-1752244071053.jpg"
+  ],
+  "expositor_setor2_texto": "",
+  "expositor_setor2_logos": [],
+  "expositor_setor3_texto": "",
+  "expositor_setor3_logos": [],
+  "expositor_setor4_texto": "fr",
+  "expositor_setor4_logos": [],
+  "mapa_imagem": "/uploads/mapa_imagem-1752258615019.png",
+  "programacao_online": [
+    {
+      "data": "16/07/2025",
+      "eventos": [
+        {
+          "hora": "14:00",
+          "titulo": "Inicio "
+        },
+        {
+          "hora": "15:00",
+          "titulo": "meio"
+        },
+        {
+          "hora": "16:00",
+          "titulo": "fim"
+        }
+      ]
+    },
+    {
+      "data": "17/07/2025",
+      "eventos": [
+        {
+          "hora": "14:00",
+          "titulo": "teste"
+        }
+      ]
+    }
+  ],
+  "programacao_presencial": [
+    {
+      "data": "18/08/2026",
+      "eventos": [
+        {
+          "hora": "12:00",
+          "titulo": "começo",
+          "desc": "test"
+        }
+      ]
+    }
+  ]
+}
