@@ -1,0 +1,434 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+/* =============================
+   SEÇÃO HERO COM BACKGROUND
+   ============================= */
+.contato-hero {
+  background-image: url('../img/Group\ Contados.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+}
+
+.contato-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 0;
+}
+
+.contato-hero .container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.contato-titulo {
+  font-family: 'Bungee', cursive;
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.contato-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  opacity: 0.95;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* =============================
+   SEÇÃO DE CONTEÚDO
+   ============================= */
+.contato-content {
+  background: #f8f9fa;
+  padding: 80px 0;
+  position: relative;
+}
+
+.contato-content .container {
+  display: block;
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =============================
+   TEXTO INTRODUTÓRIO
+   ============================= */
+.texo-formulario {
+  max-width: 1200px;
+  margin: 0 auto 0px;
+  text-align: left;
+  color: #555;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.6;
+}
+
+.formulario-intro {
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 0;
+  padding: 0 40px 40px 40px;
+  border-radius: 15px;
+}
+
+.formulario-intro strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* =============================
+   FORMULÁRIO DE CONTATO
+   ============================= */
+.contato-form {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: block;
+  margin-bottom: 0;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: #005523;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #9BAD1D;
+  box-shadow: 0 0 0 3px rgba(155, 173, 29, 0.1);
+  transform: translateY(-2px);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* =============================
+   CHECKBOX PERSONALIZADO
+   ============================= */
+.checkbox-group {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem !important;
+  line-height: 1;
+  color: #555;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+  align-items: center;
+}
+
+.checkmark {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  margin-right: 12px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.checkbox-label:hover .checkmark {
+  border-color: #9BAD1D;
+}
+
+.checkbox-label input:checked ~ .checkmark {
+  background: #9BAD1D;
+  border-color: #9BAD1D;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-label a {
+  color: #9BAD1D;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.checkbox-label a:hover {
+  text-decoration: underline;
+}
+
+/* =============================
+   BOTÃO DE ENVIO
+   ============================= */
+.btn-submit {
+  width: 20%;
+  background: #9BAD1D;
+  color: white;
+  border: none;
+  padding: 18px 30px;
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(155, 173, 29, 0.3);
+  margin: 0 auto;
+  display: block;
+  min-width: 200px; /* Largura mínima para manter legibilidade */
+}
+
+.btn-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(155, 173, 29, 0.4);
+}
+
+.btn-submit:active {
+  transform: translateY(-1px);
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-loading {
+  display: none;
+}
+
+
+/* =============================
+   RESPONSIVIDADE
+   ============================= */
+@media (max-width: 768px) {
+  .contato-hero {
+    min-height: 60vh;
+    padding: 0 20px;
+  }
+  
+  .contato-hero .container {
+    max-width: 100%;
+  }
+  
+  .contato-titulo {
+    font-size: 2.5rem;
+  }
+  
+  .contato-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .contato-content {
+    padding: 60px 0;
+  }
+  
+  .texo-formulario {
+    margin: 0 20px 30px;
+  }
+  
+  .formulario-intro {
+    font-size: 1rem;
+    padding: 30px 20px;
+  }
+  
+  .contato-form {
+    margin: 0 20px;
+    padding: 30px 20px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .contato-mapa {
+    padding: 60px 0;
+  }
+  
+  .contato-mapa h2 {
+    font-size: 2rem;
+    padding: 0 20px;
+  }
+  
+  .mapa-wrapper {
+    margin: 0 20px 30px;
+  }
+  
+  .endereco-completo {
+    margin: 0 20px;
+    padding: 25px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contato-hero {
+    min-height: 50vh;
+    padding: 0 15px;
+  }
+  
+  .contato-hero .container {
+    max-width: 100%;
+  }
+  
+  .contato-titulo {
+    font-size: 2rem;
+  }
+  
+  .contato-subtitle {
+    font-size: 1rem;
+  }
+  
+  .contato-content {
+    padding: 40px 0;
+  }
+  
+  .formulario-intro {
+    font-size: 0.95rem;
+    padding: 20px 15px;
+  }
+  
+  .contato-form {
+    padding: 25px 15px;
+    margin: 0 10px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 12px;
+  }
+  
+  .btn-submit {
+    width: 40%; /* Aumenta largura em tablets */
+    padding: 16px 28px;
+    font-size: 1rem;
+    min-width: 180px;
+  }
+  
+  .contato-mapa {
+    margin: 0 5px;
+    padding: 40px 0;
+  }
+  
+  .endereco-completo h3 {
+    font-size: 1.3rem;
+  }
+  
+  .endereco-completo p {
+    font-size: 0.9rem;
+  }
+}
+
+/* =============================
+   RESPONSIVIDADE - TABLETS PEQUENOS
+   ============================= */
+@media (max-width: 600px) {
+  .btn-submit {
+    width: 60%; /* Ainda maior em tablets pequenos */
+    padding: 15px 25px;
+    font-size: 0.95rem;
+    min-width: 160px;
+  }
+}
+
+/* =============================
+   RESPONSIVIDADE - MOBILE
+   ============================= */
+@media (max-width: 480px) {
+  .btn-submit {
+    width: 80%; /* Quase toda largura em mobile */
+    padding: 14px 22px;
+    font-size: 0.9rem;
+    min-width: 140px;
+    border-radius: 35px; /* Menos arredondado em telas pequenas */
+  }
+}
+
+/* =============================
+   RESPONSIVIDADE - MOBILE PEQUENO
+   ============================= */
+@media (max-width: 360px) {
+  .btn-submit {
+    width: 90%; /* Máxima largura em telas muito pequenas */
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    min-width: 120px;
+    border-radius: 30px;
+  }
+}

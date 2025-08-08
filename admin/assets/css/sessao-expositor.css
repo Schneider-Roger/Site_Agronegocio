@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =====================================================
+   SESSÃO EXPOSITOR - ESTILOS ESPECÍFICOS
+   ===================================================== */
+
+.expositor-section {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 32px;
+  margin: 0 auto 40px auto;
+  max-width: calc(100% - 500px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.expositor-section h2 {
+  color: #994C11;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.expositor-section .form-section {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.expositor-section .form-section label {
+  display: block;
+  color: #994C11;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.expositor-section input[type="text"] {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Setores do expositor */
+.expositor-setores-admin {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.setor-expositor-admin {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(153, 76, 17, 0.1);
+}
+
+.setor-expositor-admin h3 {
+  color: #994C11;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.setor-nome-input {
+  width: 90%;
+  padding: 12px;
+  border: 0px solid rgba(153, 76, 17, 0.2);
+  border-radius: 8px;
+  color: #333;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* Área de logos */
+.logos-admin-wrapper {
+  margin-top: 12px;
+}
+
+.logos-admin-wrapper label {
+  color: #994C11;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.logos-salvas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.logo-salva-thumb {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  border: 1px solid #eee;
+}
+
+.logo-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10);
+  transition: background 0.2s;
+}
+
+.logo-remove-btn:hover {
+  background: #ffdddd;
+}
+
+.logo-remove-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: #c00;
+}
+
+.logos-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.logos-preview .logo-preview-thumb {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+  position: relative;
+}
+
+.logo-preview-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10);
+  transition: background 0.2s;
+}
+
+.logo-preview-remove-btn:hover {
+  background: #ffdddd;
+}
+
+.logo-preview-remove-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: #c00;
+}
+
+.adicionar-logo-btn {
+  background: #994C11;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.3s ease;
+}
+
+.adicionar-logo-btn:hover {
+  background: #7a3c0e;
+}
+
+.input-logo-setor {
+  display: none;
+}
+
+/* Botão salvar seção */
+.salvar-expositor-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid rgba(153, 76, 17, 0.2);
+}
+
+.salvar-expositor-container button {
+  background: #005523;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .expositor-setores-admin {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .expositor-section {
+    padding: 20px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .expositor-section h2 {
+    font-size: 24px;
+  }
+  
+  .expositor-section input[type="text"],
+  .setor-nome-input {
+    width: 90%;
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .expositor-setores-admin {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .logo-salva-thumb,
+  .logo-preview-thumb {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .expositor-section {
+    padding: 16px;
+    border-radius: 16px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .expositor-section h2 {
+    font-size: 20px;
+  }
+  
+  .logo-salva-thumb,
+  .logo-preview-thumb {
+    width: 100px;
+    height: 100px;
+  }
+}

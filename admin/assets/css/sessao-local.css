@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =====================================================
+   SESSÃO LOCAL - ESTILOS ESPECÍFICOS
+   ===================================================== */
+
+.local-section {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 32px;
+  margin: 0 auto 40px auto;
+  max-width: calc(100% - 500px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.local-section h2 {
+  color: #994C11;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.local-section .form-section {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.local-section .form-section label {
+  display: block;
+  color: #994C11;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.local-section input[type="text"],
+.local-section input[type="url"] {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  background: #fff;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.local-section input[type="text"]:focus,
+.local-section input[type="url"]:focus {
+  outline: none;
+  border-color: #994C11;
+  box-shadow: 0 0 0 3px rgba(153, 76, 17, 0.1);
+}
+
+.local-section input[type="text"]:hover,
+.local-section input[type="url"]:hover {
+  border-color: #994C11;
+  background: rgba(153, 76, 17, 0.02);
+}
+
+.local-section small {
+  color: #666;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  margin-top: 8px;
+  display: block;
+  font-style: italic;
+}
+
+/* Estilos para inputs desabilitados/readonly */
+.local-section input[type="text"]:disabled,
+.local-section input[type="url"]:disabled,
+.local-section input[type="text"][readonly],
+.local-section input[type="url"][readonly] {
+  background: #f8f9fa;
+  cursor: not-allowed;
+  border-color: rgba(153, 76, 17, 0.1);
+  color: #6c757d;
+}
+
+/* Container para o iframe do Google Maps (se necessário) */
+.local-section .maps-preview {
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 200px;
+  border: 0px solid rgba(153, 76, 17, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.local-section .maps-preview:empty::before {
+  content: 'Preview do mapa aparecerá aqui...';
+  color: #999;
+  font-style: italic;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.local-section .maps-preview iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 8px;
+}
+
+/* Botão salvar específico para seção local */
+.salvar-local-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.salvar-local-container button {
+  background: #005523;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.salvar-local-container button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.salvar-local-container button:hover {
+  background: #006629;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 85, 35, 0.3);
+}
+
+.salvar-local-container button:hover::before {
+  left: 100%;
+}
+
+.salvar-local-container button:active {
+  transform: translateY(-1px);
+}
+
+.salvar-local-container button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .local-section {
+    padding: 20px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .local-section h2 {
+    font-size: 24px;
+  }
+  
+  .local-section .form-section {
+    padding: 16px;
+  }
+  
+  .local-section input[type="text"],
+  .local-section input[type="url"] {
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .salvar-local-container button {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+  
+  .local-section .maps-preview {
+    min-height: 150px;
+  }
+  
+  .local-section .maps-preview iframe {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .local-section {
+    padding: 16px;
+    border-radius: 16px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .local-section h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .local-section .form-section {
+    padding: 12px;
+  }
+  
+  .local-section input[type="text"],
+  .local-section input[type="url"] {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .salvar-local-container button {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+/* Validação visual */
+.local-section .form-section.has-error input {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.local-section .form-section.has-error label {
+  color: #dc3545;
+}
+
+.local-section .form-section.has-success input {
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+/* Animações de feedback */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.local-section .form-section.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Estilos para loading/salvando */
+.salvar-local-container button.loading {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.salvar-local-container button.success {
+  background: #28a745;
+}
+
+.salvar-local-container button.error {
+  background: #dc3545;
+}

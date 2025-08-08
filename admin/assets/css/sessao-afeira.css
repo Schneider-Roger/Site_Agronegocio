@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =====================================================
+   SESSÃO A FEIRA - ESTILOS ESPECÍFICOS
+   ===================================================== */
+
+.afeira-section {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 32px;
+  margin: 0 auto 40px auto;
+  max-width: calc(100% - 500px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.afeira-section h2 {
+  color: #994C11;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.afeira-section .form-section {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.afeira-section .form-section label {
+  display: block;
+  color: #994C11;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+.afeira-section input[type="text"] {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+
+
+.afeira-section textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  resize: vertical;
+  min-height: 140px;
+}
+
+
+
+/* Seção de imagens específica */
+.afeira-section .form-section label:has(+ #afeira_imagens)::before {
+  content: ' ';
+  opacity: 0.8;
+}
+
+.afeira-section input[type="file"] {
+  width: 94%;
+  padding: 16px;
+  border: 0px solid rgba(153, 76, 17, 0.3);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+
+
+
+
+/* Preview das imagens individuais */
+.afeira-section .afeira-imagem-preview {
+  margin-top: 12px;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 60px;
+  padding: 12px;
+  background: rgba(153, 76, 17, 0.02);
+  border: 1px solid rgba(153, 76, 17, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.afeira-section .afeira-imagem-preview:empty::before {
+  content: '📷 Preview da imagem aparecerá aqui';
+  color: rgba(153, 76, 17, 0.5);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: center;
+}
+
+.afeira-section .afeira-imagem-preview img {
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Preview das imagens (antigo - mantido para compatibilidade) */
+.afeira-section .afeira-imagens-preview {
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-height: 120px;
+  padding: 16px;
+  background: rgba(153, 76, 17, 0.02);
+  border: 0px solid rgba(153, 76, 17, 0.1);
+}
+
+.afeira-section .afeira-imagens-preview:empty::before {
+  content: '📷 As imagens da feira aparecerão aqui após serem selecionadas (até 3 imagens)';
+  color: rgba(153, 76, 17, 0.6);
+  font-style: italic;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+}
+
+.afeira-section .afeira-imagens-preview img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Botão salvar seção */
+.salvar-afeira-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid rgba(153, 76, 17, 0.2);
+}
+
+.salvar-afeira-container button {
+  background: #005523;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .afeira-section {
+    padding: 20px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .afeira-section h2 {
+    font-size: 24px;
+  }
+  
+  .afeira-section input[type="text"],
+  .afeira-section textarea,
+  .afeira-section input[type="file"] {
+    width: 90%;
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .afeira-section .afeira-imagens-preview img {
+    width: 120px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .afeira-section {
+    padding: 16px;
+    border-radius: 16px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .afeira-section h2 {
+    font-size: 20px;
+  }
+  
+  .afeira-imagem-preview img {
+    width: 100px;
+    height: 70px;
+  }
+}
+
+
+
+

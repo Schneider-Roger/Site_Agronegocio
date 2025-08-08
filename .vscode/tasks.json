@@ -1,0 +1,26 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start Server",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"server.js"
+			],
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Kill Port 3000",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-Command",
+				"$proc = Get-Process | Where-Object {$_.ProcessName -eq 'node'}; if($proc) { Stop-Process -Id $proc.Id -Force }"
+			],
+			"group": "build"
+		}
+	]
+}

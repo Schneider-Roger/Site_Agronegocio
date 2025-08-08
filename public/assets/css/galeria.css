@@ -1,0 +1,623 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto;
+}
+
+/* =============================
+   Seção principal da galeria
+   ============================= */
+.main-galeria {
+  width: 100%;
+  position: relative; /* Permite posicionamento absoluto das setas */
+  padding: 50px 0 0 0; /* 50px em cima, 0 nas laterais, sem padding embaixo para não empurrar o footer */
+  background-image: url('../img/Group 24.png');
+  background-size: cover;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =============================
+   Título da galeria
+   ============================= */
+.titulo-galeria{
+  font-family: 'Bungee', cursive;
+  font-size: 36px;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Responsividade para o título */
+@media (max-width: 768px) {
+  .titulo-galeria {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titulo-galeria {
+    font-size: 24px;
+    margin-bottom: 15px;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .titulo-galeria {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+}
+
+/* =============================
+   Texto de introdução da galeria
+   ============================= */
+.texto-galeria{
+  margin: 0 auto 100px auto;
+  width: 50%;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 200;
+  color: #fff;
+  text-align: justify;
+  line-height: 1.5;
+}
+
+/* Responsividade para o texto da galeria */
+@media (max-width: 768px) {
+  .texto-galeria {
+    width: 90%;
+    font-size: 18px;
+    text-align: center;
+    margin: 0 auto 60px auto;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .texto-galeria {
+    width: 95%;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 auto 40px auto;
+    padding: 0 15px;
+  }
+}
+
+/* =============================
+   Container dos cards da galeria
+   ============================= */
+.galeria-container {
+  width: 100%;
+  margin-bottom: 0;
+  background-color: #fff;
+  padding: 60px 16px 20px 16px; /* Adiciona padding inferior para espaçamento das setas */
+  display: flex;
+  flex-wrap: wrap; /* Permite quebra de linha dos cards */
+  justify-content: center; /* Centraliza os itens horizontalmente */
+  gap: 32px; /* Espaçamento uniforme entre os cards */
+  overflow-x: hidden; /* Evita rolagem horizontal */
+  min-height: 300px;
+  box-sizing: border-box; /* Inclui padding no cálculo da largura */
+}
+
+/* =============================
+   Wrapper para card + ano
+   ============================= */
+.galeria-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0; /* Remove espaçamento entre card e ano */
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 900px) {
+  .galeria-container {
+    gap: 20px; /* Reduz o espaçamento entre cards */
+    padding: 40px 8px 15px 8px; /* Adiciona padding inferior em tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .galeria-container {
+    flex-direction: column; /* Empilha os cards verticalmente */
+    align-items: center; /* Centraliza os cards na coluna */
+    gap: 16px; /* Espaçamento menor entre cards */
+    padding: 24px 4px 10px 4px; /* Adiciona padding inferior em mobile */
+  }
+  
+  .galeria-item-wrapper {
+    gap: 0; /* Remove espaço entre card e ano em mobile */
+    width: 100%;
+    max-width: 350px; /* Limita largura máxima em mobile */
+  }
+  
+  /* Esconde todos os cards exceto o primeiro em mobile */
+  .galeria-item-wrapper:not(:first-child) {
+    display: none;
+  }
+}
+
+/* =============================
+   Card individual da galeria
+   ============================= */
+.galeria-item{
+  margin: 0;
+  position: relative;
+  width: 400px;
+  height: 650px;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.galeria-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+/* =============================
+   ANIMAÇÕES DE TRANSIÇÃO IMERSIVA
+   ============================= */
+.galeria-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.galeria-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.galeria-transition-img {
+  position: fixed;
+  z-index: 1001;
+  border-radius: 18px;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: blur(0px);
+}
+
+.galeria-transition-img.zooming {
+  transform: scale(1.5);
+  filter: blur(2px);
+}
+
+/* =============================
+   GALERIA EXPANDIDA (40 FOTOS)
+   ============================= */
+.galeria-expandida {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  z-index: 1002;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.6s ease;
+  overflow-y: auto;
+  pointer-events: none;
+}
+
+.galeria-expandida.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.galeria-expandida-header {
+  background: linear-gradient(135deg, #125529);
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.galeria-expandida-titulo {
+  font-family: 'Bungee', cursive;
+  font-size: 2.5rem;
+  margin: 0 0 10px 0;
+}
+
+.galeria-expandida-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.btn-voltar {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  font-size: 1.5rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-voltar:hover {
+  background: white;
+  color: #9BAD1D;
+  transform: scale(1.1);
+}
+
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.galeria-grid-item {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.galeria-grid-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.galeria-grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.galeria-grid-item:hover img {
+  transform: scale(1.1);
+}
+
+/* Responsividade para a galeria expandida */
+@media (max-width: 1200px) {
+  .galeria-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .galeria-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .galeria-expandida-titulo {
+    font-size: 2rem;
+  }
+  
+  .btn-voltar {
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .galeria-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 15px;
+  }
+  
+  .galeria-expandida-header {
+    padding: 20px 15px;
+  }
+  
+  .galeria-expandida-titulo {
+    font-size: 1.5rem;
+  }
+}
+
+/* =============================
+   Bloco exclusivo para o h2 do ano na galeria (card do ano)
+   ============================= */
+
+.ano-bloco {
+  margin: 0;
+  padding: 0; /* Remove padding interno */
+  width: 200px;
+height: 80px;
+  background: linear-gradient(90deg, #994C11, #994C11);
+  color: #E8C48B;
+  font-family: 'Bungee', cursive;
+  font-size: 18px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.galeria-item img {
+  max-height: 670px; /* por exemplo, se o card tem 750px */
+  object-fit: cover;
+  width: 100%;
+  border-radius: 18px 18px 0 0;
+}
+
+/* =============================
+   WRAPPER E CONTAINER DA GALERIA COM SETAS
+   ============================= */
+.galeria-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 0; /* Remove margem para eliminar espaço extra */
+  pointer-events: none; /* Permite cliques passarem através do container */
+  z-index: 10;
+}
+
+.galeria-wrapper .galeria-container {
+  display: none; /* Oculta o container desnecessário */
+}
+
+/* =============================
+   SETAS DE NAVEGAÇÃO DA GALERIA
+   ============================= */
+
+.setas-container {
+  background: #fff; /* Fundo branco */
+  position: relative;
+  width: 100%;
+  height: 150px; /* Altura suficiente para as setas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* Permite cliques passarem através do container */
+  margin: 0; /* Remove margem para eliminar faixas */
+}
+
+.seta {
+  position: absolute;
+  background-color: #9BAD1D;
+  color: #fff;
+  font-size: 2.2rem;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+  pointer-events: auto; /* Restaura cliques nas setas */
+}
+
+.seta:hover {
+  background-color: #93a51b;
+}
+
+.seta:active {
+  background-color: #7e9118;
+  color: #e8c48b;
+}
+
+.seta.esquerda {
+  left: calc(50% - 80px); /* Posiciona a seta esquerda mais próxima do centro */
+}
+
+.seta.direita {
+  right: calc(50% - 80px); /* Posiciona a seta direita mais próxima do centro */
+}
+
+/* Responsividade para telas médias */
+@media (max-width: 900px) {
+  .seta {
+    font-size: 1.5rem;
+    padding: 8px 14px;
+  }
+  
+  .seta.esquerda {
+    left: calc(50% - 120px); /* Menor espaçamento em telas médias */
+  }
+  
+  .seta.direita {
+    right: calc(50% - 120px);
+  }
+  
+  .setas-container {
+    height: 50px; /* Altura menor para tablet */
+  }
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 600px) {
+  .seta {
+    font-size: 1.1rem;
+    padding: 6px 10px;
+  }
+  
+  .seta.esquerda {
+    left: calc(50% - 100px); /* Menor espaçamento em mobile */
+  }
+  
+  .seta.direita {
+    right: calc(50% - 100px);
+  }
+  
+  .setas-container {
+    height: 40px; /* Altura menor para mobile */
+  }
+}
+
+/* =============================
+   MODAL DE VISUALIZAÇÃO DE IMAGEM
+   ============================= */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.image-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.image-modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-modal-img {
+  width: 600px;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.image-modal-close {
+  position: absolute;
+  top: -50px;
+  right: -10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 10001;
+  transition: color 0.3s ease;
+}
+
+.image-modal-close:hover {
+  color: #9BAD1D;
+}
+
+.image-modal-nav {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.image-modal-prev,
+.image-modal-next {
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  pointer-events: all;
+}
+
+.image-modal-prev:hover,
+.image-modal-next:hover {
+  background: rgba(155, 173, 29, 0.9);
+  transform: scale(1.1);
+}
+
+.image-modal-prev {
+  margin-left: -60px;
+}
+
+.image-modal-next {
+  margin-right: -60px;
+}
+
+/* Responsividade do modal */
+@media (max-width: 768px) {
+  .image-modal-img {
+    width: 90vw;
+    height: 90vw;
+    max-width: 400px;
+    max-height: 400px;
+  }
+  
+  .image-modal-close {
+    top: -40px;
+    right: 0;
+    font-size: 2.5rem;
+  }
+  
+  .image-modal-prev,
+  .image-modal-next {
+    font-size: 1.5rem;
+    padding: 10px 15px;
+  }
+  
+  .image-modal-prev {
+    margin-left: -40px;
+  }
+  
+  .image-modal-next {
+    margin-right: -40px;
+  }
+}

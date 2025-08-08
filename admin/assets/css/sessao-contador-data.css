@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =====================================================
+   SESSÃO CONTADOR DATA - ESTILOS ESPECÍFICOS
+   ===================================================== */
+
+.contador-data-section {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 32px;
+  margin: 0 auto 40px auto;
+  max-width: calc(100% - 500px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.contador-data-section h2 {
+  color: #994C11;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contador-data-section .form-section {
+  margin-bottom: 24px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.contador-data-section .form-section label {
+  display: block;
+  color: #994C11;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.contador-data-section input[type="date"],
+.contador-data-section input[type="datetime-local"] {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.contador-data-section input[type="date"]:focus,
+.contador-data-section input[type="datetime-local"]:focus {
+  border-color: #994C11;
+  box-shadow: 0 4px 16px rgba(153, 76, 17, 0.2);
+  outline: none;
+}
+
+/* Checkbox especial */
+.contador-data-section input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  accent-color: #994C11;
+  cursor: pointer;
+  align-items: center;
+}
+
+.contador-data-section label[for="contador_data_ativo"] {
+  display: flex !important;
+  margin-left: 0px;
+  align-items: center;
+  cursor: pointer;
+  padding: 16px;
+  transition: all 0.3s ease;
+  margin-top: -20px;
+}
+
+
+
+/* Botão de Zerar Contador */
+.zerar-contador-container {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+  padding: 20px;
+  
+}
+
+.zerar-contador-container button {
+  background: #BE5E14;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+.zerar-contador-container button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(190, 94, 20, 0.3);
+}
+
+/* Botão de Salvar */
+.salvar-contador-data-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  
+}
+
+.salvar-contador-data-container button {
+  background: #005523;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.salvar-contador-data-container button:hover {
+  background: #004419;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 85, 35, 0.4);
+}
+
+.salvar-contador-data-container button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 85, 35, 0.3);
+}
+
+/* Efeito visual do botão sendo pressionado */
+.salvar-contador-data-container button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.salvar-contador-data-container button:hover::before {
+  left: 100%;
+}
+
+/* Status visual de sucesso/erro */
+.contador-data-status {
+  display: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  text-align: center;
+}
+
+.contador-data-status.success {
+  background: rgba(0, 128, 0, 0.1);
+  color: #008000;
+  border: 2px solid rgba(0, 128, 0, 0.3);
+}
+
+.contador-data-status.error {
+  background: rgba(255, 0, 0, 0.1);
+  color: #cc0000;
+  border: 2px solid rgba(255, 0, 0, 0.3);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .contador-data-section {
+    padding: 20px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .contador-data-section h2 {
+    font-size: 24px;
+  }
+  
+  .contador-data-section input[type="date"],
+  .contador-data-section input[type="datetime-local"] {
+    width: 90%;
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .zerar-contador-container button,
+  .salvar-contador-data-container button {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contador-data-section {
+    padding: 16px;
+    border-radius: 16px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .contador-data-section h2 {
+    font-size: 20px;
+  }
+  
+  .contador-data-section input[type="date"],
+  .contador-data-section input[type="datetime-local"] {
+    width: 85%;
+    padding: 12px;
+    font-size: 14px;
+  }
+}

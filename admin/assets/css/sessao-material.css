@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =====================================================
+   SESSÃO MATERIAL OFICIAL - ESTILOS ESPECÍFICOS
+   ===================================================== */
+
+.material-section {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 32px;
+  margin: 0 auto 40px auto;
+  max-width: calc(100% - 500px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.material-section h2 {
+  color: #994C11;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.material-section .form-section {
+  margin-bottom: 24px;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.material-section .form-section label {
+  display: block;
+  color: #994C11;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.material-section input[type="file"] {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.material-section input[type="file"]:focus {
+  outline: none;
+  border-color: #994C11;
+  box-shadow: 0 0 0 3px rgba(153, 76, 17, 0.1);
+}
+
+.material-section input[type="file"]:hover {
+  border-color: #994C11;
+  background: rgba(153, 76, 17, 0.02);
+}
+
+.material-section .material-preview {
+  margin-top: 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 50px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(153, 76, 17, 0.02);
+  transition: all 0.3s ease;
+  padding: 16px;
+}
+
+.material-section .material-preview:empty::before {
+  content: 'Preview do arquivo aparecerá aqui...';
+  color: #333;
+  font-style: italic;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.material-section .material-preview .file-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.1);;
+  padding: 12px 16px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.material-section .material-preview .file-icon {
+  font-size: 24px;
+  color: #994C11;
+}
+
+.material-section .material-preview .file-details {
+  flex: 1;
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+.material-section .material-preview .file-name {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.material-section .material-preview .file-size {
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.material-section small {
+  color: #333;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.4;
+  margin-top: 12px;
+  display: block;
+}
+
+/* Botão salvar específico para seção material */
+.salvar-material-container {
+  display: flex;
+  justify-content: center;
+  
+}
+
+.salvar-material-container button {
+  background: #005523;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.salvar-material-container button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.salvar-material-container button:hover {
+  background: #006629;
+  
+}
+
+.salvar-material-container button:active {
+  transform: translateY(-1px);
+}
+
+.salvar-material-container button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .material-section {
+    padding: 20px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .material-section h2 {
+    font-size: 24px;
+  }
+  
+  .material-section .form-section {
+    padding: 16px;
+  }
+  
+  .salvar-material-container button {
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+  
+  .material-section .material-preview .file-name {
+    font-size: 14px;
+  }
+}
+
+/* Animações de feedback */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+  .material-section {
+    padding: 16px;
+    border-radius: 16px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .material-section h2 {
+    font-size: 20px;
+  }
+  
+  .salvar-material-container button {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+.salvar-material-container button[data-status="success"] {
+  background: linear-gradient(135deg, #28a745 0%, #34ce57 100%);
+  animation: pulse 0.6s ease-in-out;
+}
+
+.salvar-material-container button[data-status="error"] {
+  background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Efeito shimmer para loading */
+@keyframes shimmer {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.material-section.loading {
+  animation: shimmer 1.5s ease-in-out infinite;
+}

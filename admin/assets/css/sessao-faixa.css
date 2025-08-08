@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =====================================================
+   SESSÃO FAIXA ABAIXO DO BANNER - ESTILOS ESPECÍFICOS
+   ===================================================== */
+
+.faixa-section {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  padding: 32px;
+  margin: 0 auto 40px auto;
+  max-width: calc(100% - 500px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.faixa-section h2 {
+  color: #994C11;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.faixa-section .form-section {
+  margin-bottom: 24px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 20px;
+ 
+}
+
+.faixa-section .form-section label {
+  display: block;
+  color: #994C11;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+
+.faixa-section input[type="text"],
+.faixa-section input[type="url"] {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+
+
+.faixa-section textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  color: #333;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  resize: vertical;
+  min-height: 120px;
+}
+
+
+
+/* Checkbox especial */
+.faixa-section input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  accent-color: #994C11;
+  cursor: pointer;
+  align-items: center;
+}
+
+.faixa-section label[for="faixa_botao_ativo"] {
+  display: flex !important;
+  margin-left: 0px;
+  align-items: center;
+  cursor: pointer;
+  padding: 16px;
+  transition: all 0.3s ease;
+  margin-top: -50px;
+}
+
+
+
+.faixa-section label[for="faixa_botao_ativo"]::before {
+  content: ' ';
+  opacity: 0.8;
+  margin-right: 8px;
+}
+
+.salvar-faixa-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid rgba(153, 76, 17, 0.2);
+}
+
+.salvar-faixa-container button {
+  background: #005523;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .faixa-section {
+    padding: 20px;
+    max-width: calc(100% - 40px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .faixa-section h2 {
+    font-size: 24px;
+  }
+  
+  .faixa-section input[type="text"],
+  .faixa-section input[type="url"],
+  .faixa-section textarea {
+    width: 90%;
+    padding: 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .faixa-section {
+    padding: 16px;
+    border-radius: 16px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .faixa-section h2 {
+    font-size: 20px;
+  }
+  
+  .faixa-section input[type="text"],
+  .faixa-section input[type="url"],
+  .faixa-section textarea {
+    width: 85%;
+    padding: 12px;
+    font-size: 14px;
+  }
+}

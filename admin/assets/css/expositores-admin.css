@@ -1,0 +1,408 @@
+/* CSS específico para a página de expositores do admin */
+
+/* Sobrescrever a limitação de largura do form-box para usar toda a tela */
+.form-box {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.setores-admin-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.setores-admin-header p {
+  margin: 0;
+  color: #495057;
+  font-size: 14px;
+}
+
+.btn-adicionar-setor {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-adicionar-setor:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.setor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.btn-remover-setor {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+  flex-shrink: 0;
+}
+
+.btn-remover-setor:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+.expositor-setores-admin {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 50px !important;
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: none !important;
+}
+
+.expositor-setores-admin > div {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 20px;
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  align-items: start;
+  transition: box-shadow 0.2s;
+  border: 1px solid #e8f5e8;
+  min-height: auto;
+  width: 100%;
+}
+
+.setor-info {
+  display: flex;
+  flex-direction: column;
+}
+.expositor-setores-admin > div:hover {
+  box-shadow: 0 4px 20px rgba(0,85,35,0.10);
+  border-color: #BED232;
+}
+
+.setor-nome-input {
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1.5px solid #ccc;
+  font-size: 1.05rem;
+  background: #f9fbe7;
+  transition: border 0.2s, background 0.2s;
+}
+.setor-nome-input:focus {
+  border-color: #005523;
+  outline: 2px solid #BED232;
+  background: #f8fff2;
+}
+
+.logos-admin-wrapper {
+  margin-top: 16px;
+  position: relative;
+}
+
+.instrucoes-acumulo {
+  margin-bottom: 12px;
+}
+
+.alerta-sucesso {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border: 2px solid #28a745;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #155724;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.alerta-sucesso::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #28a745, #20c997, #28a745);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.logos-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carousel-nav-btn {
+  background: #005523;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  z-index: 3;
+}
+
+.carousel-nav-btn:hover {
+  background: #007d36;
+  transform: scale(1.1);
+}
+
+.carousel-nav-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.logos-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.contador-logos-salvas {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 2px solid #2196f3;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #0d47a1;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(33, 150, 243, 0.15);
+}
+
+.contador-logos-preview {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border: 2px solid #ff9800;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #e65100;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.15);
+  animation: pulse-preview 2s infinite;
+}
+
+@keyframes pulse-preview {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes pulse-save {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+  }
+}
+
+.logos-admin-wrapper label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.logos-salvas-grid,
+.logos-preview {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-bottom: 12px;
+  justify-content: flex-start;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 8px 0;
+}
+
+.logos-salvas-grid::-webkit-scrollbar,
+.logos-preview::-webkit-scrollbar {
+  height: 8px;
+}
+
+.logos-salvas-grid::-webkit-scrollbar-track,
+.logos-preview::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.logos-salvas-grid::-webkit-scrollbar-thumb,
+.logos-preview::-webkit-scrollbar-thumb {
+  background: #BED232;
+  border-radius: 4px;
+}
+
+.logos-salvas-grid::-webkit-scrollbar-thumb:hover,
+.logos-preview::-webkit-scrollbar-thumb:hover {
+  background: #005523;
+}
+
+.logo-salva-thumb,
+.logo-preview-thumb {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #f9fbe7;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 2px solid #BED232;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.logo-salva-thumb:hover,
+.logo-preview-thumb:hover {
+  border: 2px solid #005523;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,85,35,0.15);
+}
+
+.logo-remove-btn,
+.logo-preview-remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #fff;
+  border: 2px solid #dc3545;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(220,53,69,0.20);
+  transition: all 0.2s ease;
+}
+
+.logo-remove-btn:hover,
+.logo-preview-remove-btn:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+  transform: scale(1.1);
+  box-shadow: 0 3px 12px rgba(220,53,69,0.30);
+}
+
+.logo-remove-btn svg,
+.logo-preview-remove-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #dc3545;
+  transition: fill 0.2s ease;
+}
+
+.logo-remove-btn:hover svg,
+.logo-preview-remove-btn:hover svg {
+  fill: #fff;
+}
+
+.adicionar-logo-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 16px;
+  background: #005523;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.adicionar-logo-btn:hover {
+  background: #007d36;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,85,35,0.15);
+}
+
+@media (max-width: 1024px) {
+  .expositor-setores-admin > div {
+    grid-template-columns: 250px 1fr;
+    gap: 16px;
+  }
+  
+  .logo-salva-thumb,
+  .logo-preview-thumb {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .expositor-setores-admin {
+    gap: 30px;
+  }
+  
+  .expositor-setores-admin > div {
+    padding: 16px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .logo-salva-thumb,
+  .logo-preview-thumb {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .logo-remove-btn,
+  .logo-preview-remove-btn {
+    width: 28px;
+    height: 28px;
+    top: -4px;
+    right: -4px;
+  }
+}

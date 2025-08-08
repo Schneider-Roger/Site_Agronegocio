@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug - Salvamento Imagens A Feira</title>
+</head>
+<body>
+    <h1>Debug do Salvamento das Imagens A Feira</h1>
+    
+    <div id="status-atual">
+        <h3>Status Atual:</h3>
+        <div id="dados-atual"></div>
+    </div>
+    
+    <hr>
+    
+    <form id="testForm" enctype="multipart/form-data">
+        <h3>Testar Salvamento:</h3>
+        <p>Título: <input type="text" name="afeira_titulo" value="TESTE DEBUG SALVAMENTO"></p>
+        <p>Imagem 1: <input type="file" name="afeira_imagem1" accept="image/*"></p>
+        <button type="submit">Salvar e Testar</button>
+    </form>
+    
+    <div id="resultado"></div>
+
+    <script>
+        async function carregarDadosAtuais() {
+            try {
+                const response = await fetch('/api/home');
+                const data = await response.json();
+                
+                document.getElementById('dados-atual').innerHTML = `
+                    <p><strong>Título atual:</strong> ${data.afeira_titulo || 'Não definido'}</p>
+                    <p><strong>Imagens atuais:</strong></p>
+                    <ul>
+                        ${data.afeira_imagens ? data.afeira_imagens.map((img, i) => 
+                            `<li>Imagem ${i+1}: <code>${img}</code></li>`
+                        ).join('') : '<li>Nenhuma imagem encontrada</li>'}
+                    </ul>
+                `;
+            } catch (error) {
+                document.getElementById('dados-atual').innerHTML = `<p style="color: red;">Erro: ${error.message}</p>`;
+            }
+        }
+        
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const resultado = document.getElementById('resultado');
+            
+            // Log do que está sendo enviado
+            console.log('=== ENVIANDO ===');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
+            
+            resultado.innerHTML = '<p>🔄 Enviando...</p>';
+            
+            try {
+                const response = await fetch('/api/home', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                console.log('Resposta do servidor:', result);
+                
+                if (result.success) {
+                    resultado.innerHTML = '<p style="color: green;">✅ Enviado com sucesso! Aguarde 2 segundos...</p>';
+                    
+                    // Aguardar um pouco e verificar se foi salvo
+                    setTimeout(async () => {
+                        const checkResponse = await fetch('/api/home');
+                        const newData = await checkResponse.json();
+                        
+                        resultado.innerHTML = `
+                            <h4>✅ Resultado do Teste:</h4>
+                            <p><strong>Título salvo:</strong> ${newData.afeira_titulo}</p>
+                            <p><strong>Imagens após salvamento:</strong></p>
+                            <ul>
+                                ${newData.afeira_imagens ? newData.afeira_imagens.map((img, i) => 
+                                    `<li>Imagem ${i+1}: <code>${img}</code></li>`
+                                ).join('') : '<li>Nenhuma imagem encontrada</li>'}
+                            </ul>
+                        `;
+                        
+                        // Atualizar dados atuais
+                        carregarDadosAtuais();
+                    }, 2000);
+                    
+                } else {
+                    resultado.innerHTML = `<p style="color: red;">❌ Erro: ${result.error || 'Erro desconhecido'}</p>`;
+                }
+                
+            } catch (error) {
+                resultado.innerHTML = `<p style="color: red;">❌ Erro de rede: ${error.message}</p>`;
+                console.error('Erro:', error);
+            }
+        });
+        
+        // Carregar dados ao iniciar
+        window.addEventListener('load', carregarDadosAtuais);
+    </script>
+</body>
+</html>

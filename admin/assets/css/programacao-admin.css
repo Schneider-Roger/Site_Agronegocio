@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* =====================================================
+   SESSÃO PROGRAMAÇÃO - ESTILOS ESPECÍFICOS
+   ===================================================== */
+
 /* Painel de Programação - Visual Moderno */
 
 /* Container flexível para as duas colunas (Online e Presencial) */
@@ -13,17 +19,25 @@
   flex: 1 1 0;
   min-width: 700px;
   background: #fff;
-  border-radius: 18px;
+  border: 2px solid #fff;
+  border-radius: 20px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  padding: 28px 22px 32px 22px;
+  padding: 32px;
   margin-bottom: 0;
-
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Responsividade para telas menores */
 @media (max-width: 900px) {
   .programacao-admin-flex { flex-direction: column; gap: 0; }
-  .programacao-col { width: 100%; margin-bottom: 24px; }
+  .programacao-col { 
+    width: 100%; 
+    margin-bottom: 24px;
+    max-width: calc(100% - 40px);
+    padding: 20px;
+  }
 }
 
 /* Lista de dias da programação (fundo claro, cartão interno) */
@@ -31,15 +45,15 @@
   padding: 18px;
   margin-bottom: 12px;
   min-height: 60px;
-  
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
 }
 
 /* Cartão de cada dia da programação */
 .dia-programacao-admin {
-
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 18px;
-  padding: 16px 14px 10px 14px;
+  padding: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   border: 1px solid #e0e0e0;
   display: flex;
@@ -49,40 +63,44 @@
 
 /* Input para data do dia - visual mais moderno e alinhado */
 .input-dia-data {
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-bottom: 8px;
-  border: 2px solid #b2d8c6;
-  border-radius: 8px;
-  padding: 10px 16px;
-  background: #f6f8f7;
-  color: #005523;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #994C11;
   outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  width: calc(100% - 4px); /* Corrige overflow das bordas */
-  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
 }
 .input-dia-data:focus {
-  border-color: #005523;
-  box-shadow: 0 2px 8px rgba(0,85,35,0.10);
+  border-color: #994C11;
+  box-shadow: 0 4px 16px rgba(153, 76, 17, 0.2);
 }
 
 /* Botão para remover dia */
 .remover-dia-btn {
-  background: #c00;
+  background: #BE5E14;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 6px 18px;
-  margin-bottom: 8px;
+  border-radius: 12px;
+  padding: 12px 24px;
+  margin-bottom: 12px;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.2s;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
+  font-size: 14px;
 }
 .remover-dia-btn:hover {
-  background: #a00;
+  background: #994C11;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(190, 94, 20, 0.4);
 }
 
 /* Lista de eventos de cada dia */
@@ -96,66 +114,73 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin-bottom: 8px;
-  background: #f6f8f7;
-  border-radius: 6px;
-  padding: 8px 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Inputs dos eventos (hora e nome na mesma linha) */
 .evento-inputs-row {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
+  margin-bottom: 12px;
 }
 .input-evento-hora {
-  width: 110px;
-  min-width: 80px;
-  max-width: 140px;
+  width: 120px;
+  min-width: 100px;
+  max-width: 150px;
   box-sizing: border-box;
-  border: 1.5px solid #b2d8c6;
-  border-radius: 6px;
-  padding: 10px 12px;
-  background: #fff;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
   outline: none;
-  transition: border 0.2s;
-  margin-bottom: 0;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
 }
 .input-evento-titulo {
   flex: 1;
   box-sizing: border-box;
-  border: 1.5px solid #b2d8c6;
-  border-radius: 6px;
-  padding: 10px 16px;
-  background: #fff;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
   outline: none;
-  transition: border 0.2s;
-  margin-bottom: 0;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
 }
 .input-evento-hora:focus, .input-evento-titulo:focus {
-  border-color: #005523;
+  border-color: #994C11;
+  box-shadow: 0 4px 16px rgba(153, 76, 17, 0.2);
 }
-.input-evento-hora { width: calc(100% - 4px); /* Corrige overflow das bordas */ }
-.input-evento-titulo { width: calc(100% - 4px); /* Corrige overflow das bordas */ }
-.input-evento-desc { flex: 2; }
 
 /* Botão para remover evento */
 .remover-evento-btn {
-  background: #994C11;
+  background: #BE5E14;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 10px 0;
+  border-radius: 12px;
+  padding: 12px 0;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.2s;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 0;
+  font-size: 14px;
 }
 .remover-evento-btn:hover {
-  background: #7a350c;
+  background: #994C11;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(190, 94, 20, 0.4);
 }
 
 /* Container dos botões de adicionar dia/evento */
@@ -168,19 +193,22 @@
 
 /* Botão outline (adicionar dia/evento) */
 .btn.btn-outline {
-  border: 2px solid #005523;
-  color: #005523;
+  border: 2px solid #994C11;
+  color: #994C11;
   background: #fff;
-  border-radius: 8px;
-  padding: 8px 24px;
+  border-radius: 12px;
+  padding: 12px 32px;
   font-weight: 600;
   cursor: pointer;
-  font-size: 1em;
-  transition: background 0.2s, color 0.2s;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.3s ease;
 }
 .btn.btn-outline:hover {
-  background: #005523;
+  background: #994C11;
   color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(153, 76, 17, 0.4);
 }
 
 /* Botão principal de submit - centralizado */
@@ -188,46 +216,85 @@ button[type="submit"] {
   background: #005523;
   color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 12px 40px;
-  font-size: 1.1em;
-  font-weight: 700;
-  margin-top: 18px;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  margin-top: 32px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   display: block;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  overflow: hidden;
 }
 button[type="submit"]:hover {
-  background: #007c36;
+  background: #004419;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 85, 35, 0.4);
 }
 
-/* Caixa principal do formulário - removendo o background para ficar transparente */
+/* Caixa principal do formulário - seguindo padrão das outras seções */
 .form-box {
-  background: transparent;
-  border-radius: 18px;
-  box-shadow: none;
-  padding: 32px 36px 32px 36px;
-  margin-top: 24px;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px;
+  margin: 0 auto 40px auto;
+  max-width: calc(100% - 500px);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Título principal do formulário */
 .form-section h2 {
-  color: #005523;
-  font-size: 2em;
+  color: #994C11;
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Título das colunas (Online/Presencial) */
 .form-section h3 {
-  font-size: 1.3em;
-  font-weight: 700;
-  margin-bottom: 12px;
+  color: #994C11;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
   margin-top: 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Responsividade adicional para form-box */
+@media (max-width: 480px) {
+  .form-box {
+    padding: 16px;
+    border-radius: 16px;
+    max-width: calc(100% - 20px);
+    margin: 0 auto 24px auto;
+  }
+  
+  .form-section h2 {
+    font-size: 20px;
+  }
+  
+  .input-evento-hora,
+  .input-evento-titulo {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .evento-inputs-row {
+    flex-direction: column;
+    gap: 12px;
+  }
 }

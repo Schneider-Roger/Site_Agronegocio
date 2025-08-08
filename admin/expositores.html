@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Expositores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/expositores-admin.css">
+  <link rel="stylesheet" href="assets/css/sessao-expositor.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
+      </div>
+      <nav>
+        <a href="dashboard.html"> Painel</a>
+        <a href="editar-home.html"> Editar Home</a>
+        <a href="editar-programacao.html"> Programação</a>
+        <a href="gerenciar-galeria.html"> Galeria</a>
+        <a href="expositores.html"> Expositores</a>
+        <a href="mensagens.html"> Mensagens</a>
+      </nav>
+      <div class="logout-footer">
+        <a href="/logout" class="logout-btn">Desconectar</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <h1>Gerenciar Expositores</h1>
+      <div class="form-box">
+        <form id="form-expositores">
+          <!-- ===================== Sessão Expositor ===================== -->
+          <div class="expositor-section">
+            <h2>Sessão Expositor</h2>
+            <div class="form-section">
+              <label for="expositor_titulo">Título principal</label>
+              <input type="text" id="expositor_titulo" name="expositor_titulo" maxlength="100" placeholder="O CORAÇÃO DA FEIRA">
+            </div>
+            <div class="form-section">
+              <label>Setores</label>
+              <div class="setores-admin-header">
+                <p>Gerencie os setores de expositores da feira</p>
+                <button type="button" class="btn-adicionar-setor" id="btn-adicionar-setor">
+                  ➕ Adicionar Nova Seção de Expositor
+                </button>
+              </div>
+              <div class="expositor-setores-admin" id="expositor-setores-admin-grid">
+                <!-- Setores serão renderizados dinamicamente aqui -->
+              </div>
+              <template id="setor-template">
+                <div class="setor-expositor-admin">
+                  <div class="setor-header">
+                    <input type="text" class="setor-nome-input" maxlength="60" placeholder="Nome do Setor (ex: ESPAÇO LEGADO)">
+                    <button type="button" class="btn-remover-setor" title="Remover esta sessão">
+                      🗑️ Remover Seção
+                    </button>
+                  </div>
+                  <div class="logos-admin-wrapper">
+                    <label>Logos do Setor</label>
+                    <div class="instrucoes-acumulo">
+                      <div class="alerta-sucesso">
+                        ✅ <strong>ACÚMULO AUTOMÁTICO:</strong> Novas logos são <strong>ADICIONADAS</strong> às existentes (não substituídas)
+                      </div>
+                      <small style="color: #666; font-size: 11px; display: block; margin-top: 4px;">
+                        � Para adicionar mais logos: selecione apenas as <strong>NOVAS</strong> imagens e clique em "Salvar"
+                      </small>
+                    </div>
+                    <div class="logos-salvas-grid"></div>
+                    <div class="logos-preview"></div>
+                    <button type="button" class="adicionar-logo-btn">➕ Adicionar mais logos</button>
+                    <input type="file" class="input-logo-setor" accept="image/*" multiple>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <!-- Botão para salvar apenas a sessão Expositor -->
+            <div class="salvar-expositor-container">
+              <button type="button" id="salvar-expositor-btn">
+                 Salvar Expositores
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <script>
+      console.log('[DEBUG] Script de expositor carregado');
+      
+      // Array para guardar os arquivos de preview de cada setor (dinâmico)
+      window.setoresPreviewFiles = [];
+      window.totalSetores = 4; // Inicia com 4 setores padrão
+      
+      // Função para inicializar arrays de preview
+      function inicializarPreviewFiles() {
+        window.setoresPreviewFiles = [];
+        for (let i = 0; i < window.totalSetores; i++) {
+          window.setoresPreviewFiles.push([]);
+        }
+        console.log(`[DEBUG] Arrays de preview inicializados para ${window.totalSetores} setores`);
+      }
+      
+      // Função para renderizar setores e logos salvas
+      function renderSetoresExpositor(data) {
+        // Detecta quantos setores existem nos dados
+        let setoresEncontrados = 0;
+        for (let i = 1; i <= 20; i++) { // Verifica até 20 setores possíveis
+          if (data[`expositor_setor${i}_texto`] !== undefined || 
+              (data[`expositor_setor${i}_logos`] && data[`expositor_setor${i}_logos`].length > 0)) {
+            setoresEncontrados = i;
+          }
+        }
+        
+        // Garante pelo menos 4 setores (padrão) SEMPRE
+        window.totalSetores = Math.max(4, setoresEncontrados);
+        inicializarPreviewFiles();
+        
+        console.log(`[DEBUG] Renderizando ${window.totalSetores} setores`);
+        
+        // Nomes padrão das seções
+        const nomesPadrao = [
+          'ESPAÇO LEGADO',
+          'ESPAÇO EVOLUÇÃO', 
+          'ESPAÇO CONEXÃO',
+          'ESPAÇO RAIZ'
+        ];
+        
+        const setores = [];
+        for (let i = 1; i <= window.totalSetores; i++) {
+          setores.push({
+            texto: data[`expositor_setor${i}_texto`] || (i <= 4 ? nomesPadrao[i-1] : `Setor ${i}`),
+            logos: data[`expositor_setor${i}_logos`] || []
+          });
+        }
+        
+        const grid = document.getElementById('expositor-setores-admin-grid');
+        grid.innerHTML = '';
+        
+        setores.forEach((setor, idx) => {
+          const tpl = document.getElementById('setor-template').content.cloneNode(true);
+          const inputNome = tpl.querySelector('.setor-nome-input');
+          inputNome.value = setor.texto;
+          inputNome.name = `expositor_setor${idx+1}_texto`;
+          inputNome.id = `expositor_setor${idx+1}_texto`;
+          
+          // Botão remover seção (só aparece se há mais de 4 setores)
+          const btnRemover = tpl.querySelector('.btn-remover-setor');
+          if (window.totalSetores <= 4) {
+            btnRemover.style.display = 'none';
+          } else {
+            btnRemover.onclick = () => removerSetor(idx + 1);
+          }
+          
+          // Logos salvas
+          const logosWrapper = tpl.querySelector('.logos-admin-wrapper');
+          const logosGrid = tpl.querySelector('.logos-salvas-grid');
+          
+          // Criar container do carrossel se houver logos
+          if (Array.isArray(setor.logos) && setor.logos.length > 0) {
+            // Criar estrutura do carrossel
+            const carouselContainer = document.createElement('div');
+            carouselContainer.className = 'logos-carousel-container';
+            
+            // Contador de logos salvas
+            const contadorSalvas = document.createElement('div');
+            contadorSalvas.className = 'contador-logos-salvas';
+            contadorSalvas.innerHTML = `📁 <strong>${setor.logos.length}</strong> logo${setor.logos.length !== 1 ? 's' : ''} salva${setor.logos.length !== 1 ? 's' : ''}`;
+            
+            const btnLeft = document.createElement('button');
+            btnLeft.className = 'carousel-nav-btn';
+            btnLeft.innerHTML = '‹';
+            btnLeft.title = 'Anterior';
+            
+            const logosContainer = document.createElement('div');
+            logosContainer.className = 'logos-container';
+            
+            const btnRight = document.createElement('button');
+            btnRight.className = 'carousel-nav-btn';
+            btnRight.innerHTML = '›';
+            btnRight.title = 'Próximo';
+            
+            // Inserir contador primeiro (antes de mover o logosGrid)
+            logosWrapper.insertBefore(contadorSalvas, logosGrid);
+            
+            // Construir o carrossel
+            carouselContainer.appendChild(btnLeft);
+            carouselContainer.appendChild(logosContainer);
+            carouselContainer.appendChild(btnRight);
+            
+            // Mover o grid para dentro do container do carrossel
+            logosContainer.appendChild(logosGrid);
+            
+            // Substituir o grid original pelo carrossel (usando contadorSalvas como referência)
+            logosWrapper.insertBefore(carouselContainer, contadorSalvas.nextSibling);
+            
+            // Funcionalidade de navegação
+            btnLeft.onclick = () => {
+              logosGrid.scrollLeft -= 140;
+            };
+            btnRight.onclick = () => {
+              logosGrid.scrollLeft += 140;
+            };
+            
+            // Atualizar botões baseado na posição do scroll
+            function updateNavButtons() {
+              btnLeft.disabled = logosGrid.scrollLeft <= 0;
+              btnRight.disabled = logosGrid.scrollLeft >= logosGrid.scrollWidth - logosGrid.clientWidth;
+            }
+            
+            logosGrid.addEventListener('scroll', updateNavButtons);
+            updateNavButtons(); // Chamada inicial
+          }
+          
+          if (Array.isArray(setor.logos)) {
+            setor.logos.forEach((logo, lidx) => {
+              const logoDiv = document.createElement('div');
+              logoDiv.style.position = 'relative';
+              logoDiv.style.display = 'inline-block';
+              logoDiv.style.margin = '0';
+              logoDiv.style.flexShrink = '0';
+              const img = document.createElement('img');
+              img.src = `http://localhost:3000${logo}`;
+              img.className = 'logo-salva-thumb';
+              img.alt = `Logo ${lidx+1}`;
+              // Botão remover
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'logo-remove-btn';
+              btn.title = 'Remover logo';
+              btn.innerHTML = `<svg viewBox='0 0 20 20'><path d='M6 6l8 8M6 14L14 6'/></svg>`;
+              btn.onclick = function() {
+                if (confirm('Remover esta logo?')) {
+                  removerLogoSetor(idx+1, logo);
+                }
+              };
+              logoDiv.appendChild(img);
+              logoDiv.appendChild(btn);
+              logosGrid.appendChild(logoDiv);
+            });
+          }
+          // Preview de novas logos (acumulativo e removível)
+          const previewDiv = tpl.querySelector('.logos-preview');
+          let previewFiles = window.setoresPreviewFiles[idx];
+          
+          // Contador de logos em preview
+          const contadorPreview = document.createElement('div');
+          contadorPreview.className = 'contador-logos-preview';
+          contadorPreview.style.display = 'none';
+          previewDiv.parentNode.insertBefore(contadorPreview, previewDiv);
+          // Botão adicionar logo
+          const btnAdd = tpl.querySelector('.adicionar-logo-btn');
+          const inputLogo = tpl.querySelector('.input-logo-setor');
+          inputLogo.name = `expositor_setor${idx+1}_logos`;
+          inputLogo.id = `expositor_setor${idx+1}_logos`;
+          btnAdd.onclick = () => inputLogo.click();
+          inputLogo.addEventListener('change', function(e) {
+            if (this.files) {
+              previewFiles.push(...Array.from(this.files));
+              window.setoresPreviewFiles[idx] = previewFiles;
+              renderPreview();
+              atualizarBotaoSalvar(); // Atualiza o botão
+              this.value = '';
+            }
+          });
+          function renderPreview() {
+            previewDiv.innerHTML = '';
+            
+            // Atualizar contador
+            if (previewFiles.length > 0) {
+              contadorPreview.innerHTML = `🆕 <strong>${previewFiles.length}</strong> nova${previewFiles.length !== 1 ? 's' : ''} logo${previewFiles.length !== 1 ? 's' : ''} (serão adicionada${previewFiles.length !== 1 ? 's' : ''})`;
+              contadorPreview.style.display = 'block';
+            } else {
+              contadorPreview.style.display = 'none';
+            }
+            
+            previewFiles.forEach((file, i) => {
+              const wrapper = document.createElement('div');
+              wrapper.style.position = 'relative';
+              wrapper.style.display = 'inline-block';
+              wrapper.style.margin = '0';
+              wrapper.style.flexShrink = '0';
+              const img = document.createElement('img');
+              img.src = URL.createObjectURL(file);
+              img.className = 'logo-preview-thumb';
+              img.alt = `Logo nova ${i+1}`;
+              // Botão remover
+              const btn = document.createElement('button');
+              btn.type = 'button';
+              btn.className = 'logo-preview-remove-btn';
+              btn.title = 'Remover logo nova';
+              btn.innerHTML = `<svg viewBox='0 0 20 20'><path d='M6 6l8 8M6 14L14 6'/></svg>`;
+              btn.onclick = function() {
+                previewFiles.splice(i, 1);
+                window.setoresPreviewFiles[idx] = previewFiles;
+                renderPreview();
+                atualizarBotaoSalvar(); // Atualiza o botão
+              };
+              wrapper.appendChild(img);
+              wrapper.appendChild(btn);
+              previewDiv.appendChild(wrapper);
+            });
+          }
+          grid.appendChild(tpl);
+        });
+      }
+      
+      // Função para remover logo (AJAX)
+      function removerLogoSetor(setorIdx, logoPath) {
+        fetch('http://localhost:3000/api/home/remover-logo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ setor: setorIdx, logo: logoPath })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert('Logo removida!');
+            // Atualiza setores
+            fetch('http://localhost:3000/api/home')
+              .then(res => res.json())
+              .then(renderSetoresExpositor);
+          } else {
+            alert('Erro ao remover logo!');
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao remover logo:', error);
+          alert('Erro ao remover logo!');
+        });
+      }
+      
+      // Função para adicionar novo setor
+      function adicionarNovoSetor() {
+        window.totalSetores++;
+        window.setoresPreviewFiles.push([]);
+        
+        console.log(`[DEBUG] Adicionando setor ${window.totalSetores}`);
+        
+        // Re-renderiza com o novo setor
+        fetch('http://localhost:3000/api/home')
+          .then(res => res.json())
+          .then(renderSetoresExpositor)
+          .then(() => atualizarBotaoSalvar());
+      }
+      
+      // Função para remover setor
+      function removerSetor(setorIdx) {
+        if (window.totalSetores <= 4) {
+          alert('❌ Não é possível remover os 4 setores padrão da feira.');
+          return;
+        }
+        
+        const nomeSetor = document.getElementById(`expositor_setor${setorIdx}_texto`)?.value || `Setor ${setorIdx}`;
+        
+        if (!confirm(`⚠️ ATENÇÃO!\n\nVocê está prestes a remover permanentemente:\n"${nomeSetor}"\n\n• Todas as logos desta seção serão perdidas\n• Esta ação NÃO pode ser desfeita\n\nDeseja continuar?`)) {
+          return;
+        }
+        
+        // Remove do backend
+        fetch('http://localhost:3000/api/home/remover-setor', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ setor: setorIdx })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            window.totalSetores--;
+            window.setoresPreviewFiles.splice(setorIdx - 1, 1);
+            
+            alert(`✅ Seção "${nomeSetor}" removida com sucesso!`);
+            
+            // Re-renderiza
+            fetch('http://localhost:3000/api/home')
+              .then(res => res.json())
+              .then(renderSetoresExpositor)
+              .then(() => atualizarBotaoSalvar());
+          } else {
+            alert('❌ Erro ao remover seção: ' + (data.error || 'Erro desconhecido'));
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao remover setor:', error);
+          alert('❌ Erro ao remover seção. Verifique a conexão.');
+        });
+      }
+      
+      // Função para atualizar o botão de salvar com informações dinâmicas
+      function atualizarBotaoSalvar() {
+        const btn = document.getElementById('salvar-expositor-btn');
+        if (!btn) return;
+        
+        let totalNovasLogos = 0;
+        for (let i = 0; i < window.totalSetores; i++) {
+          if (window.setoresPreviewFiles[i]) {
+            totalNovasLogos += window.setoresPreviewFiles[i].length;
+          }
+        }
+        
+        if (totalNovasLogos > 0) {
+          btn.innerHTML = `💾 Salvar Expositores (+${totalNovasLogos} nova${totalNovasLogos !== 1 ? 's' : ''} logo${totalNovasLogos !== 1 ? 's' : ''})`;
+          btn.style.background = '#ff6b35';
+          btn.style.animation = 'pulse-save 1.5s infinite';
+        } else {
+          btn.innerHTML = '💾 Salvar Expositores';
+          btn.style.background = '#005523';
+          btn.style.animation = 'none';
+        }
+      }
+      
+      // Função para salvar apenas a seção Expositor
+      document.getElementById('salvar-expositor-btn').addEventListener('click', function() {
+        console.log('[DEBUG] Botão Salvar Expositor clicado');
+        
+        const formData = new FormData();
+        
+        // Coleta título do expositor
+        const titulo = document.getElementById('expositor_titulo').value;
+        formData.append('expositor_titulo', titulo);
+        
+        // Coleta dados dos setores dinâmicos
+        for (let i = 1; i <= window.totalSetores; i++) {
+          const setorTextoInput = document.getElementById(`expositor_setor${i}_texto`);
+          if (setorTextoInput) {
+            formData.append(`expositor_setor${i}_texto`, setorTextoInput.value);
+            console.log(`[DEBUG] Setor ${i} texto:`, setorTextoInput.value);
+          }
+          
+          // Adiciona logos novas se existirem
+          const previewFiles = window.setoresPreviewFiles[i-1];
+          if (previewFiles && previewFiles.length > 0) {
+            previewFiles.forEach(file => {
+              formData.append(`expositor_setor${i}_logos`, file);
+            });
+            console.log(`[DEBUG] Setor ${i} - ${previewFiles.length} logos adicionadas`);
+          }
+        }
+        
+        // Envia informação sobre o total de setores
+        formData.append('total_setores_expositor', window.totalSetores);
+        
+        console.log('[DEBUG] Dados da seção Expositor coletados');
+        
+        // Mostra loading no botão
+        const btn = this;
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = '⏳ Salvando...';
+        btn.disabled = true;
+        
+        // Envia dados da seção Expositor para o servidor
+        fetch('http://localhost:3000/api/home', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          console.log('[DEBUG] Response status:', response.status);
+          return response.json();
+        })
+        .then(data => {
+          console.log('[DEBUG] Resposta do servidor:', data);
+          
+          // Restaura botão
+          btn.innerHTML = textoOriginal;
+          btn.disabled = false;
+          
+          if (data.success) {
+            // Sucesso - mostra mensagem
+            btn.innerHTML = '✅ Expositores Salvos!';
+            btn.style.background = '#28a745';
+            
+            // Volta ao estado original após 3 segundos
+            setTimeout(() => {
+              btn.innerHTML = textoOriginal;
+              btn.style.background = '#005523';
+            }, 3000);
+            
+            console.log('[DEBUG] Seção Expositor salva com sucesso!');
+            
+            // Calcular estatísticas detalhadas
+            let totalLogosNoSistema = 0;
+            let totalLogosAdicionadas = 0;
+            let detalhePorSetor = [];
+            
+            for (let i = 1; i <= window.totalSetores; i++) {
+              const logosKey = `expositor_setor${i}_logos`;
+              const logosSetor = Array.isArray(data[logosKey]) ? data[logosKey].length : 0;
+              const logosAdicionadasSetor = window.setoresPreviewFiles[i-1] ? window.setoresPreviewFiles[i-1].length : 0;
+              
+              totalLogosNoSistema += logosSetor;
+              totalLogosAdicionadas += logosAdicionadasSetor;
+              
+              if (logosAdicionadasSetor > 0) {
+                const nomeSetor = document.getElementById(`expositor_setor${i}_texto`)?.value || `Setor ${i}`;
+                detalhePorSetor.push(`• ${nomeSetor}: +${logosAdicionadasSetor} logo${logosAdicionadasSetor !== 1 ? 's' : ''}`);
+              }
+            }
+            
+            let mensagemDetalhada = `🎉 EXPOSITORES SALVOS COM SUCESSO!\n\n`;
+            
+            if (totalLogosAdicionadas > 0) {
+              mensagemDetalhada += `✅ ACÚMULO CONFIRMADO:\n`;
+              mensagemDetalhada += `📊 ${totalLogosAdicionadas} nova${totalLogosAdicionadas !== 1 ? 's' : ''} logo${totalLogosAdicionadas !== 1 ? 's' : ''} adicionada${totalLogosAdicionadas !== 1 ? 's' : ''}\n`;
+              if (detalhePorSetor.length > 0) {
+                mensagemDetalhada += detalhePorSetor.join('\n') + '\n';
+              }
+              mensagemDetalhada += `🏆 Total de logos no sistema: ${totalLogosNoSistema}\n`;
+              mensagemDetalhada += `❌ NENHUMA logo foi substituída ou perdida\n\n`;
+              mensagemDetalhada += `💡 PRÓXIMA VEZ:\n`;
+              mensagemDetalhada += `• Selecione apenas as logos NOVAS que deseja adicionar\n`;
+              mensagemDetalhada += `• O sistema sempre mantém as logos anteriores`;
+            } else {
+              mensagemDetalhada += `📝 Textos dos setores atualizados com sucesso\n`;
+              mensagemDetalhada += `📊 Total de logos no sistema: ${totalLogosNoSistema}\n`;
+              mensagemDetalhada += `💡 Para adicionar logos, use o botão "➕ Adicionar mais logos"`;
+            }
+            
+            alert(mensagemDetalhada);
+            
+            // LIMPA os arrays de preview após salvamento - força o usuário a adicionar apenas novas logos
+            // O backend automaticamente acumula as novas com as já salvas
+            inicializarPreviewFiles();
+            atualizarBotaoSalvar(); // Atualiza o botão
+            console.log('[DEBUG] Arrays de preview limpos - usuário deve adicionar apenas novas logos');
+            
+            // Recarrega os dados para atualizar as logos exibidas
+            fetch('http://localhost:3000/api/home')
+              .then(res => res.json())
+              .then(renderSetoresExpositor);
+          } else {
+            alert('Erro ao salvar seção Expositor: ' + (data.error || 'Erro desconhecido'));
+            console.error('[DEBUG] Erro do servidor:', data.error);
+          }
+        })
+        .catch(error => {
+          console.error('[DEBUG] Erro ao salvar seção Expositor:', error);
+          
+          // Restaura botão
+          btn.innerHTML = textoOriginal;
+          btn.disabled = false;
+          
+          alert('Erro ao salvar seção Expositor. Verifique a conexão.');
+        });
+      });
+      
+      // Carrega dados iniciais quando a página carrega
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('[DEBUG] Página carregada, buscando dados...');
+        
+        // Event listener para adicionar seção
+        document.getElementById('btn-adicionar-setor').addEventListener('click', adicionarNovoSetor);
+        
+        // Carrega dados da home para preencher os campos
+        fetch('http://localhost:3000/api/home')
+          .then(res => res.json())
+          .then(data => {
+            console.log('[DEBUG] Dados carregados:', data);
+            
+            // Se não existem dados dos setores padrão, cria com nomes padrão
+            const nomesPadrao = [
+              'ESPAÇO LEGADO',
+              'ESPAÇO EVOLUÇÃO', 
+              'ESPAÇO CONEXÃO',
+              'ESPAÇO RAIZ'
+            ];
+            
+            // Garante que os 4 setores padrão existam
+            for (let i = 1; i <= 4; i++) {
+              if (!data[`expositor_setor${i}_texto`]) {
+                data[`expositor_setor${i}_texto`] = nomesPadrao[i-1];
+              }
+              if (!data[`expositor_setor${i}_logos`]) {
+                data[`expositor_setor${i}_logos`] = [];
+              }
+            }
+            
+            // Preenche título do expositor
+            if (data.expositor_titulo) {
+              const tituloInput = document.getElementById('expositor_titulo');
+              if (tituloInput) {
+                tituloInput.value = data.expositor_titulo;
+                console.log('[DEBUG] Título do expositor preenchido:', data.expositor_titulo);
+              }
+            }
+            
+            // Renderiza setores
+            renderSetoresExpositor(data);
+            
+            // Atualiza o botão de salvar
+            setTimeout(atualizarBotaoSalvar, 100);
+          })
+          .catch(error => {
+            console.error('[DEBUG] Erro ao carregar dados:', error);
+          });
+      });
+      </script>
+    </main>
+  </div>
+</body>
+</html>

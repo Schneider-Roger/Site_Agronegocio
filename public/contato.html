@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Contato - Feira do Agronegócio</title>
+  <link rel="stylesheet" href="assets/css/home.css">
+  <link rel="stylesheet" href="assets/css/contato.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <!-- =====================
+       HEADER/NAVBAR
+       ===================== -->
+  <header class="site-header">
+    <div class="container">
+      <!-- Logo da Feira -->
+      <div class="logo-area">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
+      </div>
+      <!-- Menu de Navegação -->
+      <nav class="menu">
+        <a href="index.html">Home</a>
+        <!-- Dropdown: A Feira -->
+        <div class="dropdown">
+          <a href="#afeira" class="dropdown-toggle">A Feira</a>
+          <div class="dropdown-menu">
+            <a href="index.html#sobre">Sobre a Feira</a>
+            <a href="index.html#expositores">Expositores</a>
+            <a href="index.html#mapa">Mapa da Feira</a>
+            <a href="index.html#programacao">Programação</a>
+            <a href="index.html#manual">Manual da Feira</a>
+            <a href="index.html#local">Local</a>
+          </div>
+        </div>
+        <a href="galeria.html">Galeria</a>
+        <a href="contato.html" class="active">Contato</a>
+      </nav>
+      <!-- Botões de autenticação -->
+      <div class="auth-buttons">
+        <a href="cadastro.html" class="btn btn-outline">Cadastre-se</a>
+        <a href="login.html" class="btn btn-solid">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================
+       SEÇÃO HERO COM BACKGROUND
+       ===================== -->
+  <section class="contato-hero">
+    <div class="container">
+      <h1 class="contato-titulo">Fale Conosco</h1>
+      <p class="contato-subtitle">
+    <strong>Estamos aqui para ajudar!</strong>
+        <br>Se você tiver dúvidas, sugestões ou precisar de mais informações sobre o Agronegócios Copercana, entre em contato conosco. Nossa equipe está pronta para fornecer todo o suporte necessário.
+      </p>
+    </div>
+  </section>
+
+  <!-- =====================
+       SEÇÃO DE CONTEÚDO DO CONTATO
+       ===================== -->
+  <main class="contato-content">
+    <div class="container">
+      <div class="texo-formulario">
+        <p class="formulario-intro">
+          Preencha o formulário abaixo para entrar em contato conosco. 
+          Responderemos o mais breve possível. Utilize o formulário abaixo ou envie um e-mail 
+          para<strong> marketing@copercana.com.br</strong>. 
+          Também estamos disponíveis pelo telefone <strong>(16) 3946-3300 na Assessoria de Comunicação, 
+          Marketing e Eventos. </strong>
+        </p>
+      </div>
+
+      <!-- Formulário de Contato -->
+      <div class="contato-form">
+        <form id="form-contato" class="form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Nome Completo</label>
+              <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="telefone">Telefone</label>
+              <input type="tel" id="telefone" name="telefone">
+            </div>
+            <div class="form-group">
+              <label for="empresa">Empresa/Organização</label>
+              <input type="text" id="empresa" name="empresa">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="assunto">Assunto</label>
+            <select id="assunto" name="assunto" required>
+              <option value="">Selecione um assunto</option>
+              <option value="informacoes-gerais">Informações Gerais</option>
+              <option value="expositor">Quero ser Expositor</option>
+              <option value="patrocinio">Patrocínio</option>
+              <option value="imprensa">Imprensa</option>
+              <option value="parcerias">Parcerias</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="mensagem">Mensagem</label>
+            <textarea id="mensagem" name="mensagem" rows="6" placeholder="Digite sua mensagem aqui..." required></textarea>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="newsletter" name="newsletter">
+              <span class="checkmark"></span>
+Autorizo o uso de meus dados com a finalidade de identificar-me e receber retornos através dos meios informados. Este site respeita a Lei Geral de Proteção de Dados, por isso leia nossa Política de Privacidade.            </label>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="termos" name="termos" required>
+              <span class="checkmark"></span>
+              Concordo com os <a href="#" target="_blank">Termos de Uso</a> e <a href="#" target="_blank">Política de Privacidade</a>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-submit">
+            <span class="btn-text">Enviar Mensagem</span>
+            <span class="btn-loading" style="display: none;">Enviando...</span>
+          </button>
+        </form>
+
+        <!-- Mensagem de sucesso -->
+        <div id="mensagem-sucesso" class="mensagem-feedback sucesso" style="display: none;">
+          <h3>Mensagem Enviada com Sucesso!</h3>
+          <p>Recebemos sua mensagem e entraremos em contato em breve.</p>
+        </div>
+
+        <!-- Mensagem de erro -->
+        <div id="mensagem-erro" class="mensagem-feedback erro" style="display: none;">
+          <h3>Erro ao Enviar Mensagem</h3>
+          <p>Ocorreu um erro ao enviar sua mensagem. Tente novamente ou entre em contato por telefone.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mapa de Localização -->
+  <section class="contato-mapa">
+  <footer class="footer">
+    <!-- Linha 1: Logos centralizadas -->
+    <div class="footer-logo-wrapper">
+      <div class="footer-logo">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo Agronegócios Copercana">
+        <img src="assets/img/Copercana_Horizontal.png" alt="Logo Realização" class="footer-partner-logo">
+        <img src="assets/img/rovista.png" alt="Logo Imprensa" class="footer-partner-logo">
+      </div>
+    </div>
+
+    <!-- Menu Mobile Overflow (visível apenas no mobile) -->
+    <div class="footer-mobile-menu">
+      <button class="footer-mobile-toggle" id="footerMobileToggle" aria-expanded="false" aria-controls="footerMobileContent" title="Menu de informações">
+      </button>
+      <div class="footer-mobile-content" id="footerMobileContent" role="region" aria-labelledby="footerMobileToggle">
+        
+        <!-- Seção Informações -->
+        <div class="footer-mobile-section">
+          <h4>📅 Informações</h4>
+          <ul>
+            <li>
+              <img src="assets/img/calendario.png" alt="Ícone Calendário" class="footer-info-icon" />
+              16 a 27 de Junho de 2025
+            </li>
+            <li>
+              <img src="assets/img/Modo.png" alt="Ícone Localização" class="footer-info-icon" />
+              Centro de Eventos Copercana - Sertãozinho, SP
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Seção Links Úteis -->
+        <div class="footer-mobile-section">
+          <h4>🔗 Links Úteis</h4>
+          <ul>
+            <li><a href="cadastro.html">Cadastramento</a></li>
+            <li><a href="index.html#mapa">Mapa da Feira</a></li>
+            <li><a href="index.html#programacao">Programação</a></li>
+            <li><a href="index.html#material">Materiais Oficiais</a></li>
+          </ul>
+        </div>
+        
+        <!-- Seção Contato -->
+        <div class="footer-mobile-section">
+          <h4>📞 Contato</h4>
+          <ul>
+            <li>
+              <img src="assets/img/email.png" alt="Ícone Email" class="footer-contact-icon" />
+              <a href="mailto:marketing@copercana.com.br">marketing@copercana.com.br</a>
+            </li>
+            <li>
+              <img src="assets/img/fone.png" alt="Ícone Telefone" class="footer-contact-icon" />
+              <a href="tel:+551639463300">(16) 3946-3300</a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Seção Redes Sociais -->
+        <div class="footer-mobile-section">
+          <h4>📱 Redes Sociais</h4>
+          <div class="footer-mobile-social">
+            <a href="#" aria-label="Facebook"><img src="assets/img/face.png" alt="Facebook" /></a>
+            <a href="#" aria-label="Instagram"><img src="assets/img/Insta.png" alt="Instagram" /></a>
+            <a href="#" aria-label="YouTube"><img src="assets/img/youtube.png" alt="YouTube" /></a>
+            <a href="#" aria-label="LinkedIn"><img src="assets/img/link.png" alt="LinkedIn" /></a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Linha 2: Seções (Desktop) -->
+    <div class="container-footer">
+      <div class="footer-section">
+        <h4>Informações</h4>
+        <ul>
+          <li><img src="assets/img/calendario.png" alt="Ícone Calendário" class="footer-info-icon"> 16 a 27 de Junho de 2025</li>
+          <li><img src="assets/img/Modo.png" alt="Ícone Localização" class="footer-info-icon"> Centro de Eventos Copercana - Sertãozinho, SP</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Links úteis</h4>
+        <ul>
+          <li><a href="cadastro.html">Cadastramento</a></li>
+          <li><a href="index.html#mapa">Mapa da Feira</a></li>
+          <li><a href="index.html#programacao">Programação</a></li>
+          <li><a href="index.html#material">Materiais Oficiais</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contato</h4>
+        <ul>
+          <li><img src="assets/img/email.png" alt="Ícone Email" class="footer-contact-icon"> marketing@copercana.com.br</li>
+          <li><img src="assets/img/fone.png" alt="Ícone Telefone" class="footer-contact-icon"> (16) 3946-3300</li>
+        </ul>
+      </div>
+      <div class="footer-section social-icons">
+        <h4>Redes Sociais</h4>
+        <a href="#"><img src="assets/img/face.png" alt="Facebook"></a>
+        <a href="#"><img src="assets/img/Insta.png" alt="Instagram"></a>
+        <a href="#"><img src="assets/img/youtube.png" alt="YouTube"></a>
+        <a href="#"><img src="assets/img/link.png" alt="LinkedIn"></a>
+      </div>
+    </div>
+
+    <!-- Linha 3: Rodapé inferior -->
+    <div class="footer-bottom">
+      <a href="#">Política de Privacidade</a> | <a href="#">Política de Cookies</a><br>
+      © 2025 Agronegócios Copercana. Todos os direitos reservados.
+    </div>
+    
+    <!-- Script para funcionalidade do menu mobile do footer -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('footerMobileToggle');
+        const content = document.getElementById('footerMobileContent');
+        
+        if (toggle && content) {
+          toggle.addEventListener('click', function() {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+              // Fechar menu
+              content.classList.remove('show');
+              toggle.classList.remove('active');
+              toggle.setAttribute('aria-expanded', 'false');
+            } else {
+              // Abrir menu
+              content.classList.add('show');
+              toggle.classList.add('active');
+              toggle.setAttribute('aria-expanded', 'true');
+            }
+          });
+          
+          // Fechar menu ao clicar fora (apenas no mobile)
+          document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768 && 
+                !toggle.contains(event.target) && 
+                !content.contains(event.target) && 
+                toggle.getAttribute('aria-expanded') === 'true') {
+              toggle.click();
+            }
+          });
+          
+          // Melhor acessibilidade - fechar com ESC
+          document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+              toggle.click();
+            }
+          });
+        }
+      });
+    </script>
+  </footer>
+
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <script src="assets/js/contato.js"></script>
+  
+  <!-- Script do menu lateral para mobile -->
+  <script src="assets/js/menu-lateral.js"></script>
+</body>
+</html>

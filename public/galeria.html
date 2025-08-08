@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galeria - Feira do Agronegócio</title>
+  <link rel="stylesheet" href="assets/css/home.css" />
+  <link rel="stylesheet" href="assets/css/galeria.css" />
+</head>
+<body>
+  <!-- =====================
+       HEADER/NAVBAR
+       ===================== -->
+  <header class="site-header">
+    <div class="container">
+      <div class="logo-area">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira" />
+      </div>
+      <nav class="menu">
+        <a href="index.html">Home</a>
+        <div class="dropdown">
+          <a href="index.html#afeira" class="dropdown-toggle">A Feira</a>
+          <div class="dropdown-menu">
+            <a href="index.html#afeira">Sobre a Feira</a>
+            <a href="index.html#expositor">Expositores</a>
+            <a href="index.html#mapa">Mapa da Feira</a>
+            <a href="index.html#programacao">Programação</a>
+            <a href="index.html#material">Manual da Feira</a>
+            <a href="index.html#local">Local</a>
+          </div>
+        </div>
+        <a href="galeria.html" class="active">Galeria</a>
+        <a href="contato.html">Contato</a>
+      </nav>
+      
+      <div class="auth-buttons">
+        <a href="cadastro.html" class="btn btn-outline">Cadastre-se</a>
+        <a href="login.html" class="btn btn-solid">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-galeria">
+    <section class="intro-galeria">
+      <div class="titulo-galeria">
+        <h1>Galeria de Fotos por Ano</h1>
+      </div>
+      <div class="texto-galeria">
+        <p>
+          Reviva os momentos mais memoráveis das edições anteriores do Agronegócios Copercana em nossa galeria. Explore imagens que capturam a inovação, o entusiasmo e a colaboração que marcam nosso evento ao longo dos anos.
+          Inspire-se com as conquistas passadas enquanto nos preparamos para celebrar mais um ano de sucesso e avanços no setor agropecuário.
+        </p>
+      </div>
+    </section>
+
+    <!-- Container principal da galeria -->
+    <section class="galeria-container">
+      <!-- Galerias serão carregadas dinamicamente aqui pelo galeria-dinamica.js -->
+      <!-- Estrutura esperada:
+      <div class="galeria-item-wrapper">
+        <div class="galeria-item">
+          <img src="..." alt="...">
+        </div>
+        <div class="ano-bloco"><h2>2024</h2></div>
+      </div>
+      -->
+    </section>
+
+    <!-- Setas para navegação -->
+    <div class="setas-container">
+      <button class="seta esquerda" id="seta-esquerda">&#10094;</button>
+      <button class="seta direita" id="seta-direita">&#10095;</button>
+    </div>
+    
+  </main>
+
+
+
+
+  <script src="assets/js/galeria-dinamica.js"></script>
+
+  <!-- =====================
+       FOOTER
+       ===================== -->
+  <footer class="footer">
+    <!-- Linha 1: Logos centralizadas -->
+    <div class="footer-logo-wrapper">
+      <div class="footer-logo">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo Agronegócios Copercana" />
+        <img src="assets/img/Copercana_Horizontal.png" alt="Logo Realização" class="footer-partner-logo" />
+        <img src="assets/img/rovista.png" alt="Logo Imprensa" class="footer-partner-logo" />
+      </div>
+    </div>
+
+    <!-- Menu Mobile Overflow (visível apenas no mobile) -->
+    <div class="footer-mobile-menu">
+      <button class="footer-mobile-toggle" id="footerMobileToggle" aria-expanded="false" aria-controls="footerMobileContent" title="Menu de informações">
+      </button>
+      <div class="footer-mobile-content" id="footerMobileContent" role="region" aria-labelledby="footerMobileToggle">
+        
+        <!-- Seção Informações -->
+        <div class="footer-mobile-section">
+          <h4>📅 Informações</h4>
+          <ul>
+            <li>
+              <img src="assets/img/calendario.png" alt="Ícone Calendário" class="footer-info-icon" />
+              16 a 27 de Junho de 2025
+            </li>
+            <li>
+              <img src="assets/img/Modo.png" alt="Ícone Localização" class="footer-info-icon" />
+              Centro de Eventos Copercana - Sertãozinho, SP
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Seção Links Úteis -->
+        <div class="footer-mobile-section">
+          <h4>🔗 Links Úteis</h4>
+          <ul>
+            <li><a href="cadastro.html">Cadastramento</a></li>
+            <li><a href="index.html#mapa">Mapa da Feira</a></li>
+            <li><a href="index.html#programacao">Programação</a></li>
+            <li><a href="index.html#material">Materiais Oficiais</a></li>
+          </ul>
+        </div>
+        
+        <!-- Seção Contato -->
+        <div class="footer-mobile-section">
+          <h4>📞 Contato</h4>
+          <ul>
+            <li>
+              <img src="assets/img/email.png" alt="Ícone Email" class="footer-contact-icon" />
+              <a href="mailto:marketing@copercana.com.br">marketing@copercana.com.br</a>
+            </li>
+            <li>
+              <img src="assets/img/fone.png" alt="Ícone Telefone" class="footer-contact-icon" />
+              <a href="tel:+551639463300">(16) 3946-3300</a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Seção Redes Sociais -->
+        <div class="footer-mobile-section">
+          <h4>📱 Redes Sociais</h4>
+          <div class="footer-mobile-social">
+            <a href="#" aria-label="Facebook"><img src="assets/img/face.png" alt="Facebook" /></a>
+            <a href="#" aria-label="Instagram"><img src="assets/img/Insta.png" alt="Instagram" /></a>
+            <a href="#" aria-label="YouTube"><img src="assets/img/youtube.png" alt="YouTube" /></a>
+            <a href="#" aria-label="LinkedIn"><img src="assets/img/link.png" alt="LinkedIn" /></a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Linha 2: Seções (Desktop) -->
+    <div class="container-footer">
+      <div class="footer-section">
+        <h4>Informações</h4>
+        <ul>
+          <li><img src="assets/img/calendario.png" alt="Ícone Calendário" class="footer-info-icon" /> 16 a 27 de Junho de 2025</li>
+          <li><img src="assets/img/Modo.png" alt="Ícone Localização" class="footer-info-icon" /> Centro de Eventos Copercana - Sertãozinho, SP</li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Links úteis</h4>
+        <ul>
+          <li><a href="cadastro.html">Cadastramento</a></li>
+          <li><a href="index.html#mapa">Mapa da Feira</a></li>
+          <li><a href="index.html#programacao">Programação</a></li>
+          <li><a href="index.html#material">Materiais Oficiais</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Contato</h4>
+        <ul>
+          <li><img src="assets/img/email.png" alt="Ícone Email" class="footer-contact-icon" /> marketing@copercana.com.br</li>
+          <li><img src="assets/img/fone.png" alt="Ícone Telefone" class="footer-contact-icon" /> (16) 3946-3300</li>
+        </ul>
+      </div>
+      <div class="footer-section social-icons">
+        <h4>Redes Sociais</h4>
+        <a href="#"><img src="assets/img/face.png" alt="Facebook" /></a>
+        <a href="#"><img src="assets/img/Insta.png" alt="Instagram" /></a>
+        <a href="#"><img src="assets/img/youtube.png" alt="YouTube" /></a>
+        <a href="#"><img src="assets/img/link.png" alt="LinkedIn" /></a>
+      </div>
+    </div>
+
+    <!-- Linha 3: Rodapé inferior -->
+    <div class="footer-bottom">
+      <a href="#">Política de Privacidade</a> | <a href="#">Política de Cookies</a><br />
+      © 2025 Agronegócios Copercana. Todos os direitos reservados.
+    </div>
+    
+    <!-- Script para funcionalidade do menu mobile do footer -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const toggle = document.getElementById('footerMobileToggle');
+        const content = document.getElementById('footerMobileContent');
+        
+        if (toggle && content) {
+          toggle.addEventListener('click', function() {
+            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+              // Fechar menu
+              content.classList.remove('show');
+              toggle.classList.remove('active');
+              toggle.setAttribute('aria-expanded', 'false');
+            } else {
+              // Abrir menu
+              content.classList.add('show');
+              toggle.classList.add('active');
+              toggle.setAttribute('aria-expanded', 'true');
+            }
+          });
+          
+          // Fechar menu ao clicar fora (apenas no mobile)
+          document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 768 && 
+                !toggle.contains(event.target) && 
+                !content.contains(event.target) && 
+                toggle.getAttribute('aria-expanded') === 'true') {
+              toggle.click();
+            }
+          });
+          
+          // Melhor acessibilidade - fechar com ESC
+          document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+              toggle.click();
+            }
+          });
+        }
+      });
+    </script>
+
+    <link rel="stylesheet" href="assets/css/footer.css" />
+  </footer>
+  
+  <!-- Script do menu lateral para mobile -->
+  <script src="assets/js/menu-lateral.js"></script>
+</body>
+</html>
+
