@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copernitro - Calculadora & Pódio dos Postos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+    }
+    .main-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      padding: 32px 24px 40px 24px;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #1e3d59;
+    }
+    .copernitro-info {
+      background: #e6f7ff;
+      border-left: 6px solid #1e90ff;
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin-bottom: 32px;
+      font-size: 17px;
+      color: #1e3d59;
+    }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: space-between;
+    }
+    .calc-section, .podio-section {
+      flex: 1 1 320px;
+      min-width: 320px;
+      background: #f9fbfd;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(30,61,89,0.04);
+      padding: 24px 18px 28px 18px;
+    }
+    .calc-section h2, .podio-section h2 {
+      color: #1e90ff;
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #1e90ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      transition: 0.3s;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #005cbf;
+    }
+    #resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f9ff;
+      border-left: 5px solid #1e90ff;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .podio-list {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 32px;
+      margin-top: 24px;
+    }
+    .podio-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      width: 120px;
+      background: #e6f7ff;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 2px 8px rgba(30,61,89,0.06);
+      padding: 0 10px 0 10px;
+      position: relative;
+    }
+    .podio-item .pos {
+      font-size: 32px;
+      font-weight: bold;
+      color: #fff;
+      background: #1e90ff;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 2px 8px rgba(30,61,89,0.10);
+    }
+    .podio-item.gold { background: #ffe066; }
+    .podio-item.gold .pos { background: #ffd700; color: #b8860b; }
+    .podio-item.silver { background: #e6e6e6; }
+    .podio-item.silver .pos { background: #c0c0c0; color: #555; }
+    .podio-item.bronze { background: #f7c59f; }
+    .podio-item.bronze .pos { background: #cd7f32; color: #fff; }
+    .podio-nome {
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 38px;
+      color: #1e3d59;
+      text-align: center;
+    }
+    .podio-cidade {
+      font-size: 15px;
+      color: #1e90ff;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .podio-mes {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .podio-pontuacao {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      .flex-row { flex-direction: column; gap: 24px; }
+      .main-container { padding: 18px 4px 32px 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <h1>Copernitro - Economia e Qualidade</h1>
+    <div class="copernitro-info">
+      <strong>Copernitro</strong> é o combustível aditivado da Copercana, desenvolvido para oferecer maior desempenho, economia de até 5% e redução de emissões de CO₂. Disponível em diversos postos da rede, proporciona mais proteção ao motor e menor impacto ambiental.
+    </div>
+    <div class="flex-row">
+      <div class="calc-section">
+        <h2>Calculadora de Economia Copernitro</h2>
+        <p>Descubra a economia e a redução de CO₂ usando Copernitro.</p>
+        <label for="combustivel">Escolha o combustível:</label>
+        <select id="combustivel">
+          <option value="gasolina">Gasolina Copernitro</option>
+          <option value="diesel">Diesel Copernitro</option>
+        </select>
+        <label for="litros">Quantidade (litros):</label>
+        <input type="number" id="litros" placeholder="Ex: 50" min="1">
+        <button onclick="calcular()">Calcular</button>
+        <div id="resultado"></div>
+      </div>
+      <div class="podio-section">
+        <h2>Pódio dos Postos - Setembro/2025</h2>
+        <div class="podio-list">
+          <div class="podio-item gold">
+            <div class="pos">1º</div>
+            <div class="podio-nome">Posto Copercana<br>Barretos</div>
+            <div class="podio-cidade">Barretos/SP</div>
+            <div class="podio-mes">Setembro/2025</div>
+            <div class="podio-pontuacao">Pontuação: 98</div>
+          </div>
+          <div class="podio-item silver">
+            <div class="pos">2º</div>
+            <div class="podio-nome">Posto Copercana<br>Ribeirão Preto III</div>
+            <div class="podio-cidade">Ribeirão Preto/SP</div>
+            <div class="podio-mes">Setembro/2025</div>
+            <div class="podio-pontuacao">Pontuação: 95</div>
+          </div>
+          <div class="podio-item bronze">
+            <div class="pos">3º</div>
+            <div class="podio-nome">Posto Copercana<br>Sertãozinho I</div>
+            <div class="podio-cidade">Sertãozinho/SP</div>
+            <div class="podio-mes">Setembro/2025</div>
+            <div class="podio-pontuacao">Pontuação: 93</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function calcular() {
+      const combustivel = document.getElementById("combustivel").value;
+      const litros = parseFloat(document.getElementById("litros").value);
+      if (isNaN(litros) || litros <= 0) {
+        alert("Por favor, insira uma quantidade válida de litros.");
+        return;
+      }
+      // Fatores de emissão em kg de CO₂ por litro
+      const fatores = {
+        gasolina: 2.31,
+        diesel: 2.68
+      };
+      // Economia de até 5%
+      const economiaLitros = litros * 0.05;
+      // Redução CO₂
+      const fator = fatores[combustivel];
+      const reducaoCO2 = economiaLitros * fator;
+      document.getElementById("resultado").innerHTML = `
+        <p><strong>Economia estimada:</strong> ${economiaLitros.toFixed(2)} litros</p>
+        <p><strong>Redução de emissões de CO₂:</strong> ${reducaoCO2.toFixed(2)} kg</p>
+      `;
+    }
+  </script>
+</body>
+</html>

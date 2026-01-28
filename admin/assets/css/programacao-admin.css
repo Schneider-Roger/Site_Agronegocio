@@ -32,8 +32,8 @@
 /* Responsividade para telas menores */
 @media (max-width: 900px) {
   .programacao-admin-flex { flex-direction: column; gap: 0; }
-  .programacao-col { 
-    width: 100%; 
+  .programacao-col {
+    width: 100%;
     margin-bottom: 24px;
     max-width: calc(100% - 40px);
     padding: 20px;
@@ -61,7 +61,7 @@
   gap: 10px;
 }
 
-/* Input para data do dia - visual mais moderno e alinhado */
+/* Input para data do dia */
 .input-dia-data {
   width: 100%;
   font-size: 16px;
@@ -100,7 +100,7 @@
 .remover-dia-btn:hover {
   background: #994C11;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(190, 94, 20, 0.4);
+  
 }
 
 /* Lista de eventos de cada dia */
@@ -109,7 +109,7 @@
   margin-bottom: 10px;
 }
 
-/* Cartão de cada evento - agora em coluna */
+/* Cartão de cada evento */
 .evento-programacao-admin {
   display: flex;
   flex-direction: column;
@@ -129,10 +129,26 @@
   width: 100%;
   margin-bottom: 12px;
 }
+
 .input-evento-hora {
-  width: 120px;
-  min-width: 100px;
-  max-width: 150px;
+  width: 10px !important;              /* reduz largura fixa */
+  min-width: 80px;
+  max-width: 100px;
+  box-sizing: border-box;
+  border: 2px solid rgba(153, 76, 17, 0.2);
+  border-radius: 12px;
+  padding: 10px 8px;        /* padding menor nas laterais */
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  flex: 0 0 auto;           /* impede que o flex aumente */
+}
+
+.input-evento-titulo {
+  flex: 1;           /* ocupa todo o espaço restante */
   box-sizing: border-box;
   border: 2px solid rgba(153, 76, 17, 0.2);
   border-radius: 12px;
@@ -180,7 +196,7 @@
 .remover-evento-btn:hover {
   background: #994C11;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(190, 94, 20, 0.4);
+
 }
 
 /* Container dos botões de adicionar dia/evento */
@@ -208,7 +224,7 @@
   background: #994C11;
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(153, 76, 17, 0.4);
+  
 }
 
 /* Botão principal de submit - centralizado */
@@ -237,7 +253,7 @@ button[type="submit"]:hover {
   box-shadow: 0 8px 24px rgba(0, 85, 35, 0.4);
 }
 
-/* Caixa principal do formulário - seguindo padrão das outras seções */
+/* Caixa principal do formulário */
 .form-box {
   background: #fff;
   border: 2px solid #fff;
@@ -251,7 +267,7 @@ button[type="submit"]:hover {
   overflow: hidden;
 }
 
-/* Título principal do formulário */
+/* Títulos */
 .form-section h2 {
   color: #994C11;
   font-size: 28px;
@@ -262,8 +278,6 @@ button[type="submit"]:hover {
   gap: 12px;
   font-family: 'Montserrat', sans-serif;
 }
-
-/* Título das colunas (Online/Presencial) */
 .form-section h3 {
   color: #994C11;
   font-size: 20px;
@@ -273,28 +287,36 @@ button[type="submit"]:hover {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Responsividade adicional para form-box */
-@media (max-width: 480px) {
-  .form-box {
-    padding: 16px;
-    border-radius: 16px;
-    max-width: calc(100% - 20px);
-    margin: 0 auto 24px auto;
-  }
-  
-  .form-section h2 {
-    font-size: 20px;
-  }
-  
-  .input-evento-hora,
-  .input-evento-titulo {
-    width: 100%;
-    padding: 12px;
-    font-size: 14px;
-  }
-  
-  .evento-inputs-row {
-    flex-direction: column;
-    gap: 12px;
-  }
+/* Acessibilidade de foco */
+:focus-visible {
+  outline: 2px solid #994C11;
+  outline-offset: 2px;
+}
+
+/* Toggle Online/Presencial */
+.prog-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0 12px 0;
+}
+.toggle-btn {
+  border: 2px solid #994C11;
+  background: #fff;
+  color: #994C11;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+.toggle-btn:hover { transform: translateY(-1px); }
+.toggle-btn.active { background: #994C11; color: #fff; }
+
+/* Helper para ocultar a outra coluna */
+.is-hidden { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
 }

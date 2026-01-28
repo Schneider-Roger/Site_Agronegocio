@@ -25,22 +25,34 @@
         <a href="/logout" class="logout-btn">Desconectar</a>
       </div>
     </aside>
+
     <main class="main-content">
       <h1>Editar Programação da Feira</h1>
+
       <div class="form-box">
         <form id="form-editar-programacao">
           <div class="form-section">
             <h2 style="margin-top:32px;color:#005523;font-size:22px;font-weight:700;"></h2>
           </div>
+
+          <!-- TOGGLE -->
+          <div class="prog-toggle">
+            <button type="button" class="toggle-btn active" data-target="online">Online</button>
+            <button type="button" class="toggle-btn" data-target="presencial">Presencial</button>
+          </div>
+
           <div class="programacao-admin-flex">
-            <div class="form-section programacao-col">
+            <!-- COLUNA ONLINE -->
+            <div class="form-section programacao-col" data-col="online">
               <h3 style="color:#005523;font-size:18px;font-weight:600;">Feira Online</h3>
               <div id="programacao-admin-online" class="programacao-admin-lista"></div>
               <div class="programacao-admin-botoes-add">
                 <button type="button" id="add-dia-online" class="btn btn-outline">Adicionar Dia Online</button>
               </div>
             </div>
-            <div class="form-section programacao-col">
+
+            <!-- COLUNA PRESENCIAL -->
+            <div class="form-section programacao-col is-hidden" data-col="presencial">
               <h3 style="color:#994C11;font-size:18px;font-weight:600;">Feira Presencial</h3>
               <div id="programacao-admin-presencial" class="programacao-admin-lista"></div>
               <div class="programacao-admin-botoes-add">
@@ -48,85 +60,195 @@
               </div>
             </div>
           </div>
+
           <button type="submit">Salvar Programação</button>
         </form>
       </div>
     </main>
   </div>
+
   <!-- Templates para dia e evento -->
   <template id="tpl-dia-programacao">
     <div class="dia-programacao-admin">
-      <input type="text" class="input-dia-data" placeholder="Data (ex: 10/08/2025)">
+      <input type="text" class="input-dia-data" placeholder="Data (ex: 10/08/2025)" aria-label="Data do dia (dd/mm/aaaa)">
       <button type="button" class="remover-dia-btn">Remover Dia</button>
       <div class="eventos-dia-lista"></div>
       <button type="button" class="adicionar-evento-btn btn btn-outline" style="margin-top:8px;">Adicionar Evento</button>
     </div>
   </template>
+
   <template id="tpl-evento-programacao">
     <div class="evento-programacao-admin">
       <div class="evento-inputs-row">
-        <input type="text" class="input-evento-hora" placeholder="Hora (ex: 14:00)">
-        <input type="text" class="input-evento-titulo" placeholder="Nome do Evento">
+        <input type="text" class="input-evento-hora" placeholder="Hora (ex: 14:00)" aria-label="Horário do evento (HH:mm)">
+        <input type="text" class="input-evento-titulo" placeholder="Nome do Evento" aria-label="Título do evento">
+      </div>
+      <div class="evento-desc-row">
+        <textarea class="input-evento-desc" placeholder="Descrição do Evento" aria-label="Descrição do evento" rows="2" style="width:100%;resize:vertical;"></textarea>
       </div>
       <button type="button" class="remover-evento-btn" style="margin-top:10px;width:100%;">Remover</button>
     </div>
   </template>
+
   <script>
-    // Estado local da programação
+    // =========================
+    // Estado local e bootstrap
+    // =========================
     let programacao = { online: [], presencial: [] };
+
+    // =========================
+    // Utilidades de Data (normalização dd/mm/aaaa)
+    // =========================
+    /** Verifica se string está no formato dd/mm/aaaa válido */
+    function isDataBRValida(str) {
+      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(str)) return false;
+      const [d,m,a] = str.split('/').map(Number);
+      if (a < 1900 || a > 2100) return false;
+      if (m < 1 || m > 12) return false;
+      if (d < 1 || d > 31) return false;
+      const data = new Date(a, m-1, d);
+      return data.getFullYear() === a && data.getMonth() === m-1 && data.getDate() === d;
+    }
+    /** Detecta padrão MM/DD/AAAA (primeiro <=12 e segundo >12) e converte para DD/MM/AAAA */
+    function corrigirFormatoAmericanoPossivel(str) {
+      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(str)) return str;
+      const [p1,p2,ano] = str.split('/').map(Number);
+      if (p1 >=1 && p1 <=12 && p2 >=13 && p2 <=31) {
+        const dd = String(p2).padStart(2,'0');
+        const mm = String(p1).padStart(2,'0');
+        return dd + '/' + mm + '/' + ano;
+      }
+      return str;
+    }
+    /** Normaliza uma data para dd/mm/aaaa se for detectado MM/DD/AAAA */
+    function normalizarData(str) {
+      if (!str) return str;
+      const corrigida = corrigirFormatoAmericanoPossivel(str.trim());
+      return corrigida;
+    }
+    function normalizarColecaoProgramacao(arr) {
+      if (!Array.isArray(arr)) return;
+      arr.forEach(dia => {
+        if (dia && typeof dia.data === 'string') {
+          const antes = dia.data;
+            dia.data = normalizarData(dia.data);
+            if (antes !== dia.data) {
+              console.log('[DEBUG] Data normalizada (MM/DD -> DD/MM):', antes, '=>', dia.data);
+            }
+        }
+      });
+    }
+
     // Carregar programação existente do backend
     fetch('http://localhost:3000/api/home')
       .then(res => res.json())
       .then(data => {
-        if (data.programacao_online) programacao.online = data.programacao_online;
-        if (data.programacao_presencial) programacao.presencial = data.programacao_presencial;
+        // Garante que os campos sejam arrays, mesmo se vierem como null/undefined
+        programacao.online = Array.isArray(data.programacao_online) ? data.programacao_online : [];
+        programacao.presencial = Array.isArray(data.programacao_presencial) ? data.programacao_presencial : [];
+  // Normaliza datas possivelmente salvas em formato MM/DD/AAAA
+  normalizarColecaoProgramacao(programacao.online);
+  normalizarColecaoProgramacao(programacao.presencial);
         renderProgramacao('online');
         renderProgramacao('presencial');
       });
-    // Adicionar dia
+
+    // Botões "Adicionar dia"
     document.getElementById('add-dia-online').onclick = () => { addDia('online'); };
     document.getElementById('add-dia-presencial').onclick = () => { addDia('presencial'); };
+
     function addDia(tipo) {
-      programacao[tipo].push({ data: '', eventos: [] });
+      // Preenche automaticamente a próxima data disponível ou a data atual
+      let novaData = '';
+      const hoje = new Date();
+      const pad = n => n.toString().padStart(2, '0');
+      if (programacao[tipo].length > 0) {
+        // Tenta incrementar 1 dia da última data cadastrada
+        const ultDia = programacao[tipo][programacao[tipo].length - 1].data;
+        const partes = ultDia.split('/');
+        if (partes.length === 3) {
+          const d = new Date(Number(partes[2]), Number(partes[1]) - 1, Number(partes[0]));
+          if (!isNaN(d.getTime())) {
+            d.setDate(d.getDate() + 1);
+            novaData = `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+          }
+        }
+      }
+      if (!novaData) {
+        novaData = `${pad(hoje.getDate())}/${pad(hoje.getMonth() + 1)}/${hoje.getFullYear()}`;
+      }
+      programacao[tipo].push({ data: novaData, eventos: [] });
       renderProgramacao(tipo);
     }
-    // Função utilitária para formatar data no formato "23 de janeiro" e retornar o dia da semana
+
+    // =========================
+    // Utilitários
+    // =========================
+    // Máscara simples HH:mm
+    function aplicarMascaraHora(input) {
+      input.addEventListener('input', () => {
+        let v = input.value.replace(/\D/g, '').slice(0,4);
+        if (v.length >= 3) v = v.slice(0,2) + ':' + v.slice(2);
+        input.value = v;
+      });
+    }
+
+    // Formata "dd/mm/aaaa" => { diaSemana, diaMes }
     function formatarDataComDiaSemana(dataStr) {
       if (!dataStr) return '';
-      // Espera data no formato dd/mm/yyyy
       const partes = dataStr.split('/');
       if (partes.length !== 3) return dataStr;
       const [dia, mes, ano] = partes;
       const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-      const data = new Date(`${ano}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`);
+      // Date local para evitar UTC shift
+      const data = new Date(Number(ano), Number(mes)-1, Number(dia));
       if (isNaN(data.getTime())) return dataStr;
       const diaSemana = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'][data.getDay()];
-      return { diaSemana, diaMes: `${parseInt(dia)} de ${meses[data.getMonth()]}` };
+      return { diaSemana, diaMes: `${parseInt(dia,10)} de ${meses[data.getMonth()]}` };
     }
-    // Renderizar programação
+
+    // =========================
+    // Renderização (sem mudar layout)
+    // =========================
     function renderProgramacao(tipo) {
       const lista = document.getElementById('programacao-admin-' + tipo);
       lista.innerHTML = '';
+
       if (!programacao[tipo] || programacao[tipo].length === 0) {
         lista.innerHTML = `<div style='color:#888;text-align:center;padding:24px;'>Nenhum dia cadastrado.</div>`;
         return;
       }
+
       programacao[tipo].forEach((dia, diaIdx) => {
         const tpl = document.getElementById('tpl-dia-programacao').content.cloneNode(true);
         const inputData = tpl.querySelector('.input-dia-data');
         inputData.value = dia.data;
         inputData.oninput = e => { programacao[tipo][diaIdx].data = e.target.value; };
-        // Exibe dia da semana e dia do mês formatado
-        const dataFormatada = formatarDataComDiaSemana(dia.data);
-        if (dataFormatada && dataFormatada.diaSemana && dataFormatada.diaMes) {
+        inputData.addEventListener('blur', () => {
+          const original = inputData.value;
+          const normal = normalizarData(original);
+          if (normal !== original) {
+            inputData.value = normal;
+            programacao[tipo][diaIdx].data = normal;
+          }
+          if (inputData.value && !isDataBRValida(inputData.value)) {
+            alert('Data inválida. Use o formato DD/MM/AAAA.');
+            inputData.focus();
+          }
+        });
+
+        // Mostra "Dia da semana" e "dia de mês"
+        const fmt = formatarDataComDiaSemana(dia.data);
+        if (fmt && fmt.diaSemana && fmt.diaMes) {
           const infoData = document.createElement('div');
           infoData.className = 'info-dia-formatada';
           infoData.innerHTML = `
-            <div style='font-weight:bold;color:#994C11;font-size:1.12em;margin-bottom:2px;'>${dataFormatada.diaSemana}</div>
-            <div style='color:#005523;font-size:1.05em;'>${dataFormatada.diaMes}</div>
+            <div style='font-weight:bold;color:#994C11;font-size:1.12em;margin-bottom:2px;'>${fmt.diaSemana}</div>
+            <div style='color:#005523;font-size:1.05em;'>${fmt.diaMes}</div>
           `;
           inputData.parentNode.insertBefore(infoData, inputData.nextSibling);
         }
+
         // Remover dia
         tpl.querySelector('.remover-dia-btn').onclick = () => {
           if (confirm('Remover este dia e todos os eventos?')) {
@@ -134,6 +256,7 @@
             renderProgramacao(tipo);
           }
         };
+
         // Eventos
         const eventosLista = tpl.querySelector('.eventos-dia-lista');
         if (!dia.eventos) dia.eventos = [];
@@ -145,73 +268,156 @@
           vazio.textContent = 'Nenhum evento cadastrado.';
           eventosLista.appendChild(vazio);
         }
+
         dia.eventos.forEach((ev, evIdx) => {
           const tplEv = document.getElementById('tpl-evento-programacao').content.cloneNode(true);
-          tplEv.querySelector('.input-evento-hora').value = ev.hora || '';
-          tplEv.querySelector('.input-evento-hora').oninput = e => { programacao[tipo][diaIdx].eventos[evIdx].hora = e.target.value; };
-          tplEv.querySelector('.input-evento-titulo').value = ev.titulo || '';
-          tplEv.querySelector('.input-evento-titulo').oninput = e => { programacao[tipo][diaIdx].eventos[evIdx].titulo = e.target.value; };
+          const horaEl = tplEv.querySelector('.input-evento-hora');
+          const titEl  = tplEv.querySelector('.input-evento-titulo');
+          const descEl = tplEv.querySelector('.input-evento-desc');
+
+          horaEl.value = typeof ev.hora === 'string' ? ev.hora : '';
+          titEl.value  = typeof ev.titulo === 'string' ? ev.titulo : '';
+          descEl.value = typeof ev.desc === 'string' ? ev.desc : '';
+
+          horaEl.oninput = e => {
+            programacao[tipo][diaIdx].eventos[evIdx].hora = e.target.value;
+          };
+          titEl.oninput  = e => {
+            programacao[tipo][diaIdx].eventos[evIdx].titulo = e.target.value;
+          };
+          descEl.oninput = e => {
+            programacao[tipo][diaIdx].eventos[evIdx].desc = e.target.value;
+          };
+
+          aplicarMascaraHora(horaEl);
+
           tplEv.querySelector('.remover-evento-btn').onclick = () => {
             programacao[tipo][diaIdx].eventos.splice(evIdx, 1);
             renderProgramacao(tipo);
           };
+
           eventosLista.appendChild(tplEv);
         });
+
         // Adicionar evento
         tpl.querySelector('.adicionar-evento-btn').onclick = () => {
           if (!dia.eventos) dia.eventos = [];
           programacao[tipo][diaIdx].eventos.push({ hora: '', titulo: '' });
           renderProgramacao(tipo);
         };
+
         lista.appendChild(tpl);
       });
     }
-    // SUBMIT
+
+    // =========================
+    // SUBMIT (com refetch pós-salvar)
+    // =========================
     document.getElementById('form-editar-programacao').addEventListener('submit', function(e) {
       e.preventDefault();
-      // Validação básica da programação
+
+      // Validação
       for (const tipo of ['online','presencial']) {
         for (const dia of programacao[tipo]) {
-          if (!dia.data.trim()) {
+          if (!dia.data || !dia.data.trim()) {
             alert('Preencha a data de todos os dias da programação.');
             return;
           }
+          // Normaliza antes de validar
+          dia.data = normalizarData(dia.data.trim());
+          if (!isDataBRValida(dia.data)) {
+            alert('Formato de data inválido: ' + dia.data + '. Use DD/MM/AAAA.');
+            return;
+          }
           for (const ev of dia.eventos) {
-            if (!ev.hora.trim() || !ev.titulo.trim()) {
+            if (!ev.hora || !ev.hora.trim() || !ev.titulo || !ev.titulo.trim()) {
               alert('Preencha horário e título de todos os eventos.');
               return;
             }
           }
         }
       }
-      // Remove campos ocultos antigos
+
+      // Ordena por data (dd/mm/aaaa) — ordem lógica
+      const keyData = (d) => {
+        const [dia, mes, ano] = (d || '').split('/').map(Number);
+        return new Date(ano || 0, (mes||1)-1, dia||1).getTime();
+      };
+      ['online','presencial'].forEach(tipo => {
+        programacao[tipo].sort((a, b) => keyData(a.data) - keyData(b.data));
+      });
+
+      // Garante que todos os eventos estejam como array antes de enviar
+      ['online','presencial'].forEach(tipo => {
+        programacao[tipo].forEach(dia => {
+          if (!Array.isArray(dia.eventos)) dia.eventos = [];
+        });
+      });
+
+      // Campos ocultos JSON
       document.querySelectorAll('.input-programacao-json').forEach(el => el.remove());
-      // Cria campos ocultos para programação
       ['online','presencial'].forEach(tipo => {
         const input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'programacao_' + tipo;
         input.className = 'input-programacao-json';
-        input.value = JSON.stringify(programacao[tipo]);
-        this.appendChild(input);
+        // Garante que eventos e hora estejam presentes
+        input.value = JSON.stringify(programacao[tipo].map(dia => ({
+          data: dia.data,
+          eventos: Array.isArray(dia.eventos) ? dia.eventos.map(ev => ({
+            hora: typeof ev.hora === 'string' ? ev.hora : '',
+            titulo: typeof ev.titulo === 'string' ? ev.titulo : '',
+            desc: typeof ev.desc === 'string' ? ev.desc : ''
+          })) : []
+        })));
+        e.target.appendChild(input);
       });
-      // Envia o formulário
-      const form = e.target;
-      const formData = new FormData(form);
+
+      // Enviar
+      const formData = new FormData(e.target);
       fetch('http://localhost:3000/api/home', {
         method: 'POST',
-        body: formData
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
       })
       .then(res => res.json())
-      .then(data => {
+      .then(() => {
         alert('Programação salva com sucesso!');
-        if (data.data.programacao_online) programacao.online = data.data.programacao_online;
-        if (data.data.programacao_presencial) programacao.presencial = data.data.programacao_presencial;
+        // Recarrega para refletir o que o site público enxerga
+        return fetch('http://localhost:3000/api/home').then(r => r.json());
+      })
+      .then(dataAtualizada => {
+        // Garante que os campos sejam arrays, mesmo se vierem como null/undefined
+        programacao.online = Array.isArray(dataAtualizada.programacao_online) ? dataAtualizada.programacao_online : [];
+        programacao.presencial = Array.isArray(dataAtualizada.programacao_presencial) ? dataAtualizada.programacao_presencial : [];
+  normalizarColecaoProgramacao(programacao.online);
+  normalizarColecaoProgramacao(programacao.presencial);
         renderProgramacao('online');
         renderProgramacao('presencial');
       })
       .catch(() => alert('Erro ao salvar programação!'));
     });
+
+    // =========================
+    // TOGGLE Online / Presencial
+    // =========================
+    function setActiveTipo(tipo) {
+      document.querySelectorAll('.toggle-btn')
+        .forEach(btn => btn.classList.toggle('active', btn.dataset.target === tipo));
+
+      const colOnline = document.querySelector('[data-col="online"]');
+      const colPres  = document.querySelector('[data-col="presencial"]');
+
+      colOnline.classList.toggle('is-hidden', tipo !== 'online');
+      colPres.classList.toggle('is-hidden',  tipo !== 'presencial');
+    }
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => setActiveTipo(btn.dataset.target));
+    });
+    // Estado inicial
+    setActiveTipo('online');
   </script>
 </body>
 </html>

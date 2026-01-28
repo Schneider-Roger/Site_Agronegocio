@@ -1,23 +1,103 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gerenciar Galeria</title>
+  <!-- Estilos globais do projeto -->
   <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Estilos desta página (mesmo padrão das “sessões”) -->
+  <link rel="stylesheet" href="assets/css/gerenciar-galeria.css">
 </head>
 <body>
-  <h1>Adicionar Nova Galeria</h1>
-  <form id="form-galeria" enctype="multipart/form-data">
-    <label for="ano">Ano:</label>
-    <input type="number" id="ano" name="ano" required min="2000" max="2100">
-    <br><br>
-    <label for="imagem">Imagem da Galeria:</label>
-    <input type="file" id="imagem" name="imagem" accept="image/*" required>
-    <br><br>
-    <button type="submit">Adicionar Galeria</button>
-  </form>
-  <p id="status-galeria" style="color: green;"></p>
+  <div class="admin-layout">
+    <!-- Menu lateral (mesmo padrão das outras páginas do admin) -->
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
+      </div>
+      <nav>
+        <a href="dashboard.html">Painel</a>
+        <a href="editar-home.html">Editar Home</a>
+        <a href="editar-programacao.html">Programação</a>
+        <a href="gerenciar-galeria.html" class="active">Galeria</a>
+        <a href="expositores.html">Expositores</a>
+        <a href="mensagens.html">Mensagens</a>
+      </nav>
+      <div class="logout-footer">
+        <a href="/logout" class="logout-btn">Desconectar</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- Header simples da página -->
+      <header class="page-header">
+        <h1>Gerenciar Galeria</h1>
+      </header>
+
+      <div class="form-box">
+        <h2>Adicionar Nova Galeria</h2>
+
+        <form id="form-galeria" enctype="multipart/form-data" class="galeria-form">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="ano" class="modern-label">Ano</label>
+              <input type="number" id="ano" name="ano" class="modern-text-input" required min="2000" max="2100" placeholder="Ex.: 2025">
+            </div>
+
+            <div class="form-field">
+              <label for="imagem" class="modern-label">Imagem da Galeria (capa)</label>
+              <input type="file" id="imagem" name="imagem" class="modern-file-input" accept="image/*" required>
+              <div class="modern-preview" id="preview-imagem"></div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Adicionar Galeria</button>
+          </div>
+
+          <p id="status-galeria" class="status-msg"></p>
+        </form>
+      </div>
+
+      <!-- Lista/grade das galerias já existentes (opcional – markup preparado) -->
+      <section class="form-box">
+        <h2>Galerias Existentes</h2>
+        <div id="galerias-grid" class="galerias-grid">
+          <!-- Cards de galerias serão inseridos via JS, mantendo padrão do admin -->
+        </div>
+      </section>
+
+      <!-- Rodapé do admin -->
+      <footer class="page-footer">
+        <small>&copy; <span id="year"></span> Feira — Painel Administrativo</small>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Seu JS específico para esta página -->
   <script src="assets/js/gerenciar-galeria.js"></script>
+
+  <!-- Scriptzinho só para preview e ano do footer (não mexe no seu JS principal) -->
+  <script>
+    // Atualiza ano do footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Preview da imagem selecionada (capa)
+    const inputImg = document.getElementById('imagem');
+    const preview = document.getElementById('preview-imagem');
+    if (inputImg && preview) {
+      inputImg.addEventListener('change', () => {
+        preview.innerHTML = '';
+        const file = inputImg.files && inputImg.files[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Pré-visualização da capa';
+        preview.appendChild(img);
+      });
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gerenciar Fotos da Galeria</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/gerenciar-galeria.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
+      </div>
+      <nav>
+        <a href="dashboard.html">Painel</a>
+        <a href="editar-home.html">Editar Home</a>
+        <a href="editar-programacao.html">Programação</a>
+        <a href="gerenciar-galeria.html">Galeria</a>
+        <a href="expositores.html">Expositores</a>
+        <a href="mensagens.html">Mensagens</a>
+      </nav>
+      <div class="logout-footer">
+        <a href="/logout" class="logout-btn">Desconectar</a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header">
+        <h1 id="galeria-titulo">Gerenciar Fotos</h1>
+      </header>
+
+      <div class="form-box">
+        <h2>Fotos da Galeria</h2>
+        <form id="form-fotos" enctype="multipart/form-data">
+          <div class="form-field">
+            <label for="fotos" class="modern-label">Adicionar fotos (até 40 no total)</label>
+            <input type="file" id="fotos" name="fotos" accept="image/*" multiple>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Enviar Fotos</button>
+          </div>
+          <p id="status-fotos" class="status-msg"></p>
+        </form>
+      </div>
+
+      <section class="form-box">
+        <h2>Fotos Existentes</h2>
+        <div id="fotos-grid" class="galerias-grid"></div>
+      </section>
+
+      <footer class="page-footer">
+        <small>&copy; <span id="year"></span> Feira — Painel Administrativo</small>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/gerenciar-fotos.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

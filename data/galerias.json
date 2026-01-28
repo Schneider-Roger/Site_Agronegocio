@@ -1,18 +1,11 @@
 [
   {
-    "ano": "2023",
-    "imagem": "/uploads/galeria_1753377092726.png"
-  },
-  {
-    "ano": "2022",
-    "imagem": "/uploads/galeria_1753301801601.png"
-  },
-  {
-    "ano": "2021",
-    "imagem": "/uploads/galeria_1753301362764.jpeg"
-  },
-  {
-    "ano": "2020",
-    "imagem": "/uploads/galeria_1753301344219.jpeg"
+    "id": 1755180776338,
+    "ano": "2025",
+    "imagem": "/uploads/galeria_1755180776304.jpg",
+    "fotos": [
+      "/uploads/galeria_1755180776304.jpg",
+      "/uploads/gal_1755180776338_1755180907093-431465213.png"
+    ]
   }
 ]

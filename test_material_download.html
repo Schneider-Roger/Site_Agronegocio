@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Material Oficial</title>
+</head>
+<body>
+    <h1>Teste de Download Material Oficial</h1>
+    
+    <h2>Links Diretos:</h2>
+    <p><a href="http://localhost:3000/uploads/material_manual-1754656820531-800781360.pdf" target="_blank">Manual do Expositor (PDF)</a></p>
+    <p><a href="http://localhost:3000/uploads/material_release-1754656820534-285943867.docx" target="_blank">Release de Imprensa (DOCX)</a></p>
+    
+    <h2>Teste da API:</h2>
+    <button onclick="testarAPI()">Carregar dados da API</button>
+    <div id="resultado"></div>
+    
+    <script>
+    function testarAPI() {
+        fetch('http://localhost:3000/api/home')
+        .then(res => res.json())
+        .then(data => {
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = `
+                <h3>Dados da API:</h3>
+                <p><strong>Manual:</strong> ${data.material_manual}</p>
+                <p><strong>Release:</strong> ${data.material_release}</p>
+                <p><strong>Manual URL:</strong> <a href="http://localhost:3000${data.material_manual}" target="_blank">http://localhost:3000${data.material_manual}</a></p>
+                <p><strong>Release URL:</strong> <a href="http://localhost:3000${data.material_release}" target="_blank">http://localhost:3000${data.material_release}</a></p>
+            `;
+        })
+        .catch(err => {
+            document.getElementById('resultado').innerHTML = `<p style="color:red;">Erro: ${err}</p>`;
+        });
+    }
+    </script>
+</body>
+</html>

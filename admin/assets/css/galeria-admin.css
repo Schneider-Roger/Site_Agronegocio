@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+/* ========= Layout base do admin (segue o padrão das “sessões”) ========= */
+
+.page-header h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: #005523;
+  font-size: 28px;
+  margin: 0 0 12px 0;
+}
+
+.page-footer {
+  margin: 24px 0 8px 0;
+  text-align: center;
+  color: #666;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Caixa padrão de seção (mesma “caixa” das outras páginas) */
+.form-box {
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin: 0 0 24px 0;
+  box-sizing: border-box;
+}
+
+.form-box h2 {
+  color: #994C11;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ========= Formulário ========= */
+
+.galeria-form { width: 100%; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.form-field { width: 100%; }
+
+/* Labels e inputs (mesmo “tom” dos outros) */
+.modern-label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.modern-text-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.modern-text-input:focus {
+  outline: none;
+  border-color: #994C11;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(153, 76, 17, 0.1);
+}
+
+/* Input de arquivo com o mesmo visual */
+.modern-file-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed #994C11;
+  border-radius: 12px;
+  background: rgba(153, 76, 17, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+.modern-file-input:hover {
+  background: rgba(153, 76, 17, 0.1);
+  border-color: #7a3c0e;
+}
+
+/* Preview da imagem (mesmo padrão usado nas outras páginas) */
+.modern-preview {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.modern-preview img {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Botões (cores/hover iguais ao padrão) */
+.btn {
+  display: inline-block;
+  border-radius: 12px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  padding: 12px 24px;
+  border: none;
+}
+
+.btn-primary {
+  background: #005523;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.btn-primary:hover {
+  background: #004419;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 85, 35, 0.4);
+}
+
+/* Mensagem de status */
+.status-msg {
+  margin-top: 10px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  color: #2e7d32; /* verde suave */
+}
+
+/* ========= Grade de cards para galerias existentes ========= */
+
+.galerias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.galeria-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.galeria-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 25px rgba(0,0,0,0.12);
+  border-color: #994C11;
+}
+
+.galeria-card__media {
+  aspect-ratio: 4/3;
+  background: #f3f3f3;
+  overflow: hidden;
+}
+.galeria-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+}
+
+.galeria-card__body {
+  padding: 12px 14px;
+  font-family: 'Montserrat', sans-serif;
+}
+.galeria-card__title {
+  margin: 0 0 6px 0;
+  font-weight: 700;
+  color: #994C11;
+}
+.galeria-card__meta {
+  color: #555;
+  font-size: 13px;
+}
+
+/* ========= Responsividade ========= */
+
+@media (max-width: 768px) {
+  .form-box { padding: 20px; }
+  .form-grid { grid-template-columns: 1fr; gap: 12px; }
+  .page-header h1 { font-size: 24px; }
+}
+
+@media (max-width: 480px) {
+  .form-box { padding: 16px; border-radius: 16px; }
+  .btn { width: 100%; }
+}

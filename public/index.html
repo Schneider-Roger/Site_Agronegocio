@@ -429,14 +429,154 @@
             console.log('[DEBUG] ✅ Endereço local atualizado:', data.local_endereco);
           }
           
-          if (data.local_maps_url) {
-            const localMapaLink = document.getElementById('local-mapa-link');
+          // Configurar mapa e link do Google Maps
+          const localMapaLink = document.getElementById('local-mapa-link');
+          const localMapaIframe = document.querySelector('#local-mapa-iframe-wrapper iframe');
+          
+          if (data.local_maps_url && data.local_maps_url.trim() !== '') {
+            console.log('[DEBUG] Configurando mapa personalizado:', data.local_maps_url);
+            
+            // Configurar botão "Ver no Google Maps" - converter embed URL para URL regular
             if (localMapaLink) {
-              localMapaLink.href = data.local_maps_url;
+              let regularMapsUrl = data.local_maps_url;
+              
+              // Se é uma URL de embed, converter para URL regular do Google Maps
+              if (data.local_maps_url.includes('google.com/maps/embed')) {
+                // Extrair coordenadas da URL embed usando regex mais específico
+                const coordsMatch = data.local_maps_url.match(/!3d(-?\d+\.?\d*)[^!]*!2d(-?\d+\.?\d*)/);
+                if (coordsMatch) {
+                  const lat = coordsMatch[1];
+                  const lng = coordsMatch[2];
+                  // Criar URL regular do Google Maps com as coordenadas
+                  regularMapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+                  console.log('[DEBUG] URL embed convertida para URL regular:', regularMapsUrl);
+                } else {
+                  // Fallback para coordenadas do Centro de Eventos Copercana
+                  regularMapsUrl = 'https://www.google.com/maps?q=-21.13868844841832,-48.01983643048648';
+                  console.log('[DEBUG] Usando coordenadas padrão do Centro de Eventos Copercana');
+                }
+              }
+              
+              localMapaLink.href = regularMapsUrl;
               localMapaLink.style.display = 'inline-block';
-              console.log('[DEBUG] ✅ Link do Google Maps atualizado');
+              console.log('[DEBUG] ✅ Link do Google Maps atualizado:', regularMapsUrl);
+            }
+            
+            // Atualizar iframe do mapa - usar método sem API key
+            if (localMapaIframe) {
+              let embedUrl = '';
+              const originalUrl = data.local_maps_url;
+              
+              // Se já é uma URL de embed válida, usa diretamente
+              if (originalUrl.includes('google.com/maps/embed')) {
+                embedUrl = originalUrl;
+                console.log('[DEBUG] URL já é embed válida');
+              }
+              // Para qualquer outro tipo de link, usar fallback com coordenadas conhecidas
+              else {
+                console.log('[DEBUG] Convertendo para embed sem API key');
+                // Usar as coordenadas conhecidas do Centro de Eventos Copercana
+                // Este método sempre funcionará sem precisar de API key
+                embedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.2956387449887!2d-48.01983643048648!3d-21.13868844841832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94b99ec005ebdf23%3A0xf1e6033652b3d72c!2sCentro%20de%20Eventos%20Copercana!5e1!3m2!1spt-BR!2sbr';
+                
+                // Tentar extrair coordenadas se disponível para personalizar
+                if (originalUrl.includes('/@')) {
+                  const coordsMatch = originalUrl.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+                  if (coordsMatch) {
+                    const lat = coordsMatch[1];
+                    const lng = coordsMatch[2];
+                    // Construir URL embed com coordenadas personalizadas
+                    embedUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1spt-BR!2sbr`;
+                    console.log('[DEBUG] URL embed com coordenadas personalizadas');
+                  }
+                }
+              }
+              
+              localMapaIframe.src = embedUrl;
+              console.log('[DEBUG] ✅ Iframe do mapa atualizado');
+            }
+          } else {
+            console.log('[DEBUG] Usando mapa padrão (Centro de Eventos Copercana)');
+            
+            // Configurar botão com link padrão
+            if (localMapaLink) {
+              localMapaLink.href = 'https://maps.google.com/maps?q=Centro+de+Eventos+Copercana,+Sert%C3%A3ozinho,+SP';
+              localMapaLink.style.display = 'inline-block';
+              console.log('[DEBUG] ✅ Link padrão do Google Maps configurado');
+            }
+            
+            // Manter iframe padrão (já está configurado no HTML)
+            console.log('[DEBUG] ✅ Mantendo iframe padrão do mapa');
+          }
+          
+          // =====================
+          // SESSÃO MAPA DA FEIRA
+          // =====================
+          console.log('[DEBUG] === PROCESSANDO MAPA DA FEIRA ===');
+          if (data.mapa_imagem) {
+            const mapaWrapper = document.getElementById('mapa-imagem-wrapper');
+            const btnDownloadMapa = document.getElementById('btn-download-mapa');
+            
+            if (mapaWrapper) {
+              console.log('[DEBUG] Mapa encontrado:', data.mapa_imagem);
+              mapaWrapper.innerHTML = '';
+              
+              const mapaUrl = 'http://localhost:3000' + data.mapa_imagem;
+              const fileExtension = data.mapa_imagem.split('.').pop().toLowerCase();
+              
+              if (fileExtension === 'pdf') {
+                // Se for PDF, exibir link para download
+                mapaWrapper.innerHTML = `
+                  <div class="pdf-preview">
+                    <div class="pdf-icon">📋</div>
+                    <p>Mapa da Feira (PDF)</p>
+                    <a href="${mapaUrl}" target="_blank" class="btn btn-solid">Ver Mapa</a>
+                  </div>
+                `;
+              } else {
+                // Se for imagem, exibir a imagem
+                const mapaImg = document.createElement('img');
+                mapaImg.src = mapaUrl;
+                mapaImg.alt = 'Mapa da Feira';
+                mapaImg.className = 'mapa-imagem-zoom';
+                mapaImg.style.maxWidth = '100%';
+                mapaImg.style.height = 'auto';
+                mapaImg.style.maxHeight = '700px';
+                mapaImg.style.width = 'auto';
+                mapaImg.style.display = 'block';
+                mapaImg.style.margin = '0 auto';
+                mapaImg.style.borderRadius = '16px';
+                mapaImg.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
+                mapaImg.style.objectFit = 'contain';
+                mapaImg.style.cursor = 'zoom-in';
+                
+                mapaImg.onerror = function() {
+                  console.error('[DEBUG] ❌ Erro ao carregar mapa:', data.mapa_imagem);
+                  mapaWrapper.innerHTML = '<p style="text-align:center;color:#666;">Erro ao carregar o mapa</p>';
+                };
+                
+                mapaImg.onload = function() {
+                  console.log('[DEBUG] ✅ Mapa carregado com sucesso');
+                };
+                
+                mapaWrapper.appendChild(mapaImg);
+              }
+              
+              // Configurar botão de download
+              if (btnDownloadMapa) {
+                btnDownloadMapa.href = mapaUrl;
+                btnDownloadMapa.style.display = 'inline-block';
+                console.log('[DEBUG] ✅ Botão de download do mapa configurado');
+              }
+            }
+          } else {
+            console.log('[DEBUG] ⚠️ Nenhum mapa encontrado nos dados');
+            const mapaWrapper = document.getElementById('mapa-imagem-wrapper');
+            if (mapaWrapper) {
+              mapaWrapper.innerHTML = '<p style="text-align:center;color:#666;">Mapa ainda não disponível</p>';
             }
           }
+          console.log('[DEBUG] === FIM PROCESSAMENTO MAPA ===');
           
           // =====================
           // SESSÃO EXPOSITOR DINÂMICA
@@ -804,7 +944,7 @@
       .then(data => {
         // DEBUG: Dados de programação recebidos
         console.log('[DEBUG] Dados de programação:', data.programacao_online, data.programacao_presencial);
-        // Função para renderizar programação
+
         function renderProgramacao(tipo, containerId) {
           const lista = (tipo === 'online' ? data.programacao_online : data.programacao_presencial) || [];
           const container = document.getElementById(containerId).querySelector('.programacao-menu-lista');
@@ -814,7 +954,6 @@
           }
           var html = '<ul class="programacao-menu-lista">';
           lista.forEach((dia, idx) => {
-            // Formata data para dia da semana e dia do mês
             let dataFormatada = null;
             if (dia.data && typeof dia.data === 'string') {
               try {
@@ -833,11 +972,26 @@
                 </div>
                 <button class='btn-toggle-eventos' data-dia-idx='${idx}'>▼</button>
               </div>
-              <div class='programacao-eventos-wrapper' style='display:none;'></div>
+              <div class='programacao-eventos-wrapper' style='display:block;'></div>
             </li>`;
           });
           html += '</ul>';
           container.innerHTML = html;
+
+          // Renderiza eventos abertos por padrão
+          lista.forEach((dia, idx) => {
+            const eventosWrapper = container.querySelectorAll('.programacao-eventos-wrapper')[idx];
+            eventosWrapper.innerHTML = '';
+            const eventosUl = document.createElement('ul');
+            eventosUl.className = 'programacao-eventos-lista';
+            eventosWrapper.appendChild(eventosUl);
+            (dia.eventos||[]).forEach(ev => {
+              const li = document.createElement('li');
+              li.className = 'programacao-evento-item';
+              li.innerHTML = `${ev.hora ? `<span class='evento-hora'>${ev.hora}</span>` : ''}${ev.hora && ev.titulo ? ' : ' : ''}${ev.titulo ? `<span class='evento-titulo'>${ev.titulo}</span>` : ''}${ev.desc ? `<br><span class='evento-desc'>${ev.desc}</span>` : ''}`;
+              eventosUl.appendChild(li);
+            });
+          });
 
           // Adiciona eventos de clique para expandir/colapsar eventos
           container.querySelectorAll('.btn-toggle-eventos').forEach(btn => {
@@ -848,25 +1002,13 @@
                 eventosWrapper.style.display = 'none';
                 btn.textContent = '▼';
               } else {
-                // Renderiza eventos
-                const dia = lista[idx];
-                eventosWrapper.innerHTML = '';
-                const eventosUl = document.createElement('ul');
-                eventosUl.className = 'programacao-eventos-lista';
-                eventosWrapper.appendChild(eventosUl);
-                (dia.eventos||[]).forEach(ev => {
-                  const li = document.createElement('li');
-                  li.className = 'programacao-evento-item';
-                  // Renderiza "hora : nome" na mesma linha
-                  li.innerHTML = `${ev.hora ? `<span class='evento-hora'>${ev.hora}</span>` : ''}${ev.hora && ev.titulo ? ' : ' : ''}${ev.titulo ? `<span class='evento-titulo'>${ev.titulo}</span>` : ''}${ev.desc ? ` <span style='color:#555;'>(${ev.desc})</span>` : ''}`;
-                  eventosUl.appendChild(li);
-                });
                 eventosWrapper.style.display = 'block';
                 btn.textContent = '▲';
               }
             });
           });
         }
+
         // Botões de alternância
         var btnOnline = document.getElementById('btn-feira-online');
         var menuOnline = document.getElementById('programacao-menu-online');
@@ -874,7 +1016,6 @@
         var menuPresencial = document.getElementById('programacao-menu-presencial');
         var tipoTitulo = document.getElementById('programacao-tipo-titulo');
         btnOnline.addEventListener('click', function() {
-          // DEBUG: Botão FEIRA ONLINE clicado
           renderProgramacao('online', 'programacao-menu-online');
           menuOnline.style.display = 'block';
           menuPresencial.style.display = 'none';
@@ -883,7 +1024,6 @@
           btnPresencial.classList.remove('ativo');
         });
         btnPresencial.addEventListener('click', function() {
-          // DEBUG: Botão FEIRA PRESENCIAL clicado
           renderProgramacao('presencial', 'programacao-menu-presencial');
           menuPresencial.style.display = 'block';
           menuOnline.style.display = 'none';
@@ -902,8 +1042,15 @@
         // =====================
         // SESSÃO MATERIAL OFICIAL DINÂMICA
         // =====================
+        console.log('[DEBUG] === PROCESSANDO MATERIAL OFICIAL ===');
+        console.log('[DEBUG] data.material_manual:', data.material_manual);
+        console.log('[DEBUG] data.material_release:', data.material_release);
+        
         const btnDownloadManual = document.getElementById('btn-download-manual');
         const btnDownloadRelease = document.getElementById('btn-download-release');
+        
+        console.log('[DEBUG] btnDownloadManual elemento:', btnDownloadManual);
+        console.log('[DEBUG] btnDownloadRelease elemento:', btnDownloadRelease);
         
         // Configura botão do Manual do Expositor
         if (data.material_manual && data.material_manual.length > 0) {
@@ -915,6 +1062,7 @@
           console.log('[DEBUG] Manual do Expositor configurado:', manualUrl);
         } else {
           btnDownloadManual.style.display = 'none';
+          console.log('[DEBUG] Manual do Expositor NÃO configurado - dados:', data.material_manual);
         }
         
         // Configura botão do Release de Imprensa
@@ -927,6 +1075,7 @@
           console.log('[DEBUG] Release de Imprensa configurado:', releaseUrl);
         } else {
           btnDownloadRelease.style.display = 'none';
+          console.log('[DEBUG] Release de Imprensa NÃO configurado - dados:', data.material_release);
         }
         
         // Se nenhum arquivo estiver disponível, mostra mensagem
@@ -942,12 +1091,23 @@
       // Espera data no formato dd/mm/yyyy
       const partes = dataStr.split('/');
       if (partes.length !== 3) return dataStr;
-      const [dia, mes, ano] = partes;
+      let [p1, p2, ano] = partes;
+      // Detectar possível formato MM/DD/AAAA (p1 <=12 e p2 > 12)
+      if (/^\d{2}$/.test(p1) && /^\d{2}$/.test(p2) && /^\d{4}$/.test(ano)) {
+        const n1 = parseInt(p1,10), n2 = parseInt(p2,10);
+        if (n1 >=1 && n1 <=12 && n2 >=13 && n2 <=31) {
+          // Inverte para DD/MM/AAAA
+          console.log('[DEBUG] Corrigindo data possivelmente em formato MM/DD/AAAA:', dataStr);
+          [p1, p2] = [p2, p1];
+        }
+      }
+      const dia = p1.padStart(2,'0');
+      const mes = p2.padStart(2,'0');
       const meses = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-      const data = new Date(`${ano}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`);
+      const data = new Date(`${ano}-${mes}-${dia}`);
       if (isNaN(data.getTime())) return dataStr;
       const diaSemana = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'][data.getDay()];
-      return { diaSemana, diaMes: `${parseInt(dia)} de ${meses[data.getMonth()]}` };
+      return { diaSemana, diaMes: `${parseInt(dia,10)} de ${meses[data.getMonth()]}` };
     }
   </script>
 
@@ -1138,4 +1298,5 @@
   </script>
   
   <link rel="stylesheet" href="assets/css/footer.css">
+</html>
 </html>

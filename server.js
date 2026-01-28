@@ -11,6 +11,16 @@ const { getHomeData, saveHomeData, DATA_PATH } = require('./db');
 const app = express();
 app.use(cors());
 
+// DEBUG: log simples para todas as requisições (ajuda a identificar rotas que chegam ao servidor)
+app.use((req, res, next) => {
+  try {
+    console.log(`[REQ] ${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
+  } catch (e) {
+    // ignore logging errors
+  }
+  next();
+});
+
 // Configurações para uploads grandes
 // IMPORTANTE: express.json() removido globalmente para evitar conflito com multer
 // Será aplicado apenas nas rotas que não usam multipart/form-data
@@ -43,16 +53,73 @@ const storageGalerias = multer.diskStorage({
 });
 const uploadGalerias = multer({ storage: storageGalerias });
 
+// storage para fotos internas da galeria (reescreve nome para galeriaId_index.ext)
+const storageGaleriaFotos = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dest = path.join(__dirname, 'uploads');
+    fs.mkdirSync(dest, { recursive: true });
+    cb(null, dest);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    const galId = req.params.id || 'gal';
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, `gal_${galId}_${unique}${ext}`);
+  }
+});
+const uploadGaleriaFotos = multer({ storage: storageGaleriaFotos, limits: { files: 40, fileSize: 10 * 1024 * 1024 } });
+
 // GET /api/galerias - lista todas as galerias
 app.get('/api/galerias', (req, res) => {
   try {
-    const galerias = fs.existsSync(galeriasDataPath)
+    let galerias = fs.existsSync(galeriasDataPath)
       ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
       : [];
+
+    // Normaliza: garante id e fotos para compatibilidade com versões antigas
+    let changed = false;
+    galerias = galerias.map((g, idx) => {
+      const copy = Object.assign({}, g);
+      if (typeof copy.id === 'undefined' || copy.id === null) {
+        copy.id = Date.now() + idx; // atribui id único
+        changed = true;
+      }
+      if (!Array.isArray(copy.fotos)) {
+        copy.fotos = copy.imagem ? [copy.imagem] : [];
+        changed = true;
+      }
+      return copy;
+    });
+
+    if (changed) {
+      try {
+        fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
+        console.log('[DEBUG] galerias.json normalizado e salvo');
+      } catch (e) {
+        console.error('[DEBUG] Erro ao salvar galerias normalizadas:', e);
+      }
+    }
+
     res.json(galerias);
   } catch (err) {
     console.error('[DEBUG] Erro ao ler galerias:', err);
     res.status(500).json({ error: 'Erro ao ler galerias.' });
+  }
+});
+
+// GET /api/galerias/:id - retorna uma galeria específica
+app.get('/api/galerias/:id', (req, res) => {
+  try {
+    const id = req.params.id;
+    const galerias = fs.existsSync(galeriasDataPath)
+      ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
+      : [];
+    const gal = galerias.find(g => String(g.id) === String(id));
+    if (!gal) return res.status(404).json({ success: false, error: 'Galeria não encontrada.' });
+    res.json(gal);
+  } catch (err) {
+    console.error('[DEBUG] Erro ao ler galeria por id:', err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -67,8 +134,11 @@ app.post('/api/galerias', uploadGalerias.single('imagem'), (req, res) => {
       ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
       : [];
     const novaGaleria = {
+      id: Date.now(),
       ano: ano,
-      imagem: '/uploads/' + req.file.filename
+      imagem: '/uploads/' + req.file.filename,
+      // fotos armazena as imagens desta galeria (capa incluída)
+      fotos: ['/uploads/' + req.file.filename]
     };
     galerias.push(novaGaleria);
     fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
@@ -77,6 +147,199 @@ app.post('/api/galerias', uploadGalerias.single('imagem'), (req, res) => {
   } catch (err) {
     console.error('[DEBUG] Erro ao adicionar galeria:', err);
     res.status(500).json({ error: 'Erro ao adicionar galeria.' });
+  }
+});
+
+// POST /api/galerias/:id/fotos - adiciona fotos à galeria (máx 40 por requisição / acúmulo)
+app.post('/api/galerias/:id/fotos', uploadGaleriaFotos.array('fotos', 40), (req, res) => {
+  try {
+    const id = req.params.id;
+    let galerias = fs.existsSync(galeriasDataPath)
+      ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
+      : [];
+    const idx = galerias.findIndex(g => String(g.id) === String(id));
+    if (idx === -1) return res.status(404).json({ success: false, error: 'Galeria não encontrada.' });
+
+    const files = req.files || [];
+    const caminhos = files.map(f => '/uploads/' + f.filename);
+
+    // Acumula sem ultrapassar 40 fotos
+    galerias[idx].fotos = galerias[idx].fotos || [];
+    const totalAfter = galerias[idx].fotos.length + caminhos.length;
+    if (totalAfter > 40) {
+      return res.status(400).json({ success: false, error: 'Limite de 40 fotos por galeria.' });
+    }
+    galerias[idx].fotos = [...galerias[idx].fotos, ...caminhos];
+    fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
+    res.json({ success: true, fotos: galerias[idx].fotos });
+  } catch (err) {
+    console.error('[DEBUG] Erro ao adicionar fotos à galeria:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE /api/galerias/:id/fotos - remover foto específica (body: { foto })
+app.delete('/api/galerias/:id/fotos', express.json({ limit: '50mb' }), (req, res) => {
+  try {
+    const id = req.params.id;
+    const { foto } = req.body;
+    if (!foto) return res.status(400).json({ success: false, error: 'Campo foto obrigatório.' });
+    let galerias = fs.existsSync(galeriasDataPath)
+      ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
+      : [];
+    const idx = galerias.findIndex(g => String(g.id) === String(id));
+    if (idx === -1) return res.status(404).json({ success: false, error: 'Galeria não encontrada.' });
+
+    galerias[idx].fotos = galerias[idx].fotos || [];
+    galerias[idx].fotos = galerias[idx].fotos.filter(f => f !== foto);
+
+    // Remove arquivo do disco
+    let filePath = foto;
+    if (filePath.startsWith('/')) filePath = filePath.substring(1);
+    filePath = path.join(__dirname, filePath.replace(/\//g, path.sep));
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log('[DEBUG] Foto removida do disco:', filePath);
+      }
+    } catch (e) {
+      console.error('[DEBUG] Erro ao remover foto do disco:', e);
+    }
+
+    fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
+    res.json({ success: true, fotos: galerias[idx].fotos });
+  } catch (err) {
+    console.error('[DEBUG] Erro ao deletar foto da galeria:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE /api/galerias - remove uma galeria por id (body JSON: { id })
+app.delete('/api/galerias', (req, res) => {
+  try {
+    const { id } = req.body;
+    if (typeof id === 'undefined') return res.status(400).json({ success: false, error: 'id é obrigatório.' });
+
+    const galerias = fs.existsSync(galeriasDataPath)
+      ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
+      : [];
+
+    const idx = galerias.findIndex(g => g.id === id || String(g.id) === String(id));
+    if (idx === -1) return res.status(404).json({ success: false, error: 'Galeria não encontrada.' });
+
+    const [removida] = galerias.splice(idx, 1);
+
+    // Remove arquivos físicos associados (se existirem)
+    if (removida && Array.isArray(removida.fotos)) {
+      removida.fotos.forEach(f => {
+        if (!f) return;
+        let filePath = f;
+        if (filePath.startsWith('/')) filePath = filePath.substring(1);
+        filePath = path.join(__dirname, filePath.replace(/\//g, path.sep));
+        try {
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log('[DEBUG] Arquivo de galeria removido do disco:', filePath);
+          }
+        } catch (e) {
+          console.error('[DEBUG] Erro ao remover arquivo de galeria:', filePath, e);
+        }
+      });
+    }
+
+    fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[DEBUG] Erro ao deletar galeria:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE /api/galerias/:id - alternativa que aceita id via URL
+app.delete('/api/galerias/:id', (req, res) => {
+  try {
+    const id = req.params.id;
+    if (typeof id === 'undefined') return res.status(400).json({ success: false, error: 'id é obrigatório.' });
+
+    const galerias = fs.existsSync(galeriasDataPath)
+      ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
+      : [];
+
+    const idx = galerias.findIndex(g => g.id === id || String(g.id) === String(id));
+    if (idx === -1) return res.status(404).json({ success: false, error: 'Galeria não encontrada.' });
+
+    const [removida] = galerias.splice(idx, 1);
+
+    if (removida && Array.isArray(removida.fotos)) {
+      removida.fotos.forEach(f => {
+        if (!f) return;
+        let filePath = f;
+        if (filePath.startsWith('/')) filePath = filePath.substring(1);
+        filePath = path.join(__dirname, filePath.replace(/\//g, path.sep));
+        try {
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log('[DEBUG] Arquivo de galeria removido do disco:', filePath);
+          }
+        } catch (e) {
+          console.error('[DEBUG] Erro ao remover arquivo de galeria:', filePath, e);
+        }
+      });
+    }
+
+    fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[DEBUG] Erro ao deletar galeria (by id):', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// POST /api/galerias/remover - fallback para remover galeria por id ou por propriedade (ano/imagem)
+app.post('/api/galerias/remover', express.json({ limit: '50mb' }), (req, res) => {
+  try {
+    const { id, ano, imagem } = req.body || {};
+    let galerias = fs.existsSync(galeriasDataPath)
+      ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
+      : [];
+
+    let idx = -1;
+    if (typeof id !== 'undefined' && id !== null) {
+      idx = galerias.findIndex(g => g.id === id || String(g.id) === String(id));
+    }
+    // if id not provided or not found, try to match by imagem (best) or ano
+    if (idx === -1 && imagem) {
+      idx = galerias.findIndex(g => g.imagem === imagem || (g.fotos && g.fotos.includes(imagem)));
+    }
+    if (idx === -1 && ano) {
+      idx = galerias.findIndex(g => String(g.ano) === String(ano));
+    }
+
+    if (idx === -1) return res.status(404).json({ success: false, error: 'Galeria não encontrada (fallback).' });
+
+    const [removida] = galerias.splice(idx, 1);
+    if (removida && Array.isArray(removida.fotos)) {
+      removida.fotos.forEach(f => {
+        if (!f) return;
+        let filePath = f;
+        if (filePath.startsWith('/')) filePath = filePath.substring(1);
+        filePath = path.join(__dirname, filePath.replace(/\//g, path.sep));
+        try {
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            console.log('[DEBUG] Arquivo de galeria removido do disco (fallback):', filePath);
+          }
+        } catch (e) {
+          console.error('[DEBUG] Erro ao remover arquivo de galeria (fallback):', filePath, e);
+        }
+      });
+    }
+
+    fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[DEBUG] Erro no POST /api/galerias/remover:', err);
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
@@ -159,12 +422,54 @@ const upload = multer({
     fieldSize: 10 * 1024 * 1024, // 10MB por campo
     fieldNameSize: 300, // tamanho máximo do nome do campo
     fields: 100 // número máximo de campos não-arquivo
+  },
+  fileFilter: function (req, file, cb) {
+    // DEBUG: Verificando tipo de arquivo
+    console.log('[DEBUG] Verificando arquivo:', file.fieldname, file.originalname, file.mimetype);
+    
+    // Permitir todos os tipos de arquivo para flexibilidade
+    // O frontend já faz a validação de tipos na interface
+    cb(null, true);
   }
 });
 app.get('/api/home', (req, res) => {
   // DEBUG: GET /api/home chamado
   console.log('[DEBUG] GET /api/home');
   const data = getHomeData() || {};
+  // =====================
+  // Normalização de datas da programação (MM/DD/AAAA -> DD/MM/AAAA)
+  // =====================
+  function maybeNormalizeDate(str) {
+    if (typeof str !== 'string') return str;
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(str)) return str; // formato não padrão
+    const [p1, p2, ano] = str.split('/').map(Number);
+    // Heurística: se p1 é mês válido e p2 > 12 interpretamos como MM/DD/AAAA
+    if (p1 >= 1 && p1 <= 12 && p2 >= 13 && p2 <= 31) {
+      const dd = String(p2).padStart(2,'0');
+      const mm = String(p1).padStart(2,'0');
+      const normal = `${dd}/${mm}/${ano}`;
+      if (normal !== str) {
+        console.log('[DEBUG] Normalizando data programação:', str, '->', normal);
+      }
+      return normal;
+    }
+    return str;
+  }
+  function normalizeProgramacaoArray(arr) {
+    if (!Array.isArray(arr)) return arr;
+    return arr.map(dia => {
+      if (dia && typeof dia.data === 'string') {
+        dia.data = maybeNormalizeDate(dia.data);
+      }
+      return dia;
+    });
+  }
+  if (data.programacao_online) {
+    data.programacao_online = normalizeProgramacaoArray(data.programacao_online);
+  }
+  if (data.programacao_presencial) {
+    data.programacao_presencial = normalizeProgramacaoArray(data.programacao_presencial);
+  }
   
   // Garantir dados padrão para os expositores
   if (!data.expositor_titulo) {
@@ -485,6 +790,47 @@ app.post('/api/home', (req, res) => {
       console.error('[DEBUG] Erro ao parsear programação presencial:', e);
     }
   }
+
+  // Material Oficial
+  console.log('[DEBUG] === PROCESSANDO MATERIAL OFICIAL ===');
+  console.log('[DEBUG] All req.files:', req.files ? req.files.map(f => `${f.fieldname}:${f.originalname}`) : 'No files');
+  
+  const materialManualFile = req.files && req.files.find(f => f.fieldname === 'material_manual');
+  console.log('[DEBUG] materialManualFile encontrado:', materialManualFile ? `${materialManualFile.fieldname}:${materialManualFile.originalname}` : 'Não encontrado');
+  
+  if (materialManualFile) {
+    console.log('[DEBUG] ANTES - data.material_manual:', data.material_manual);
+    data.material_manual = `/uploads/${materialManualFile.filename}`;
+    console.log('[DEBUG] DEPOIS - data.material_manual:', data.material_manual);
+    console.log('[DEBUG] Manual do Expositor salvo:', data.material_manual);
+  }
+  // Se não houver upload novo, mantém o arquivo antigo
+  else if (!data.material_manual) {
+    console.log('[DEBUG] Nenhum material_manual novo, definindo como vazio');
+    data.material_manual = '';
+  } else {
+    console.log('[DEBUG] Mantendo material_manual existente:', data.material_manual);
+  }
+
+  const materialReleaseFile = req.files && req.files.find(f => f.fieldname === 'material_release');
+  console.log('[DEBUG] materialReleaseFile encontrado:', materialReleaseFile ? `${materialReleaseFile.fieldname}:${materialReleaseFile.originalname}` : 'Não encontrado');
+  
+  if (materialReleaseFile) {
+    console.log('[DEBUG] ANTES - data.material_release:', data.material_release);
+    data.material_release = `/uploads/${materialReleaseFile.filename}`;
+    console.log('[DEBUG] DEPOIS - data.material_release:', data.material_release);
+    console.log('[DEBUG] Release de Imprensa salvo:', data.material_release);
+  }
+  // Se não houver upload novo, mantém o arquivo antigo
+  else if (!data.material_release) {
+    console.log('[DEBUG] Nenhum material_release novo, definindo como vazio');
+    data.material_release = '';
+  } else {
+    console.log('[DEBUG] Mantendo material_release existente:', data.material_release);
+  }
+  console.log('[DEBUG] === FIM PROCESSAMENTO MATERIAL OFICIAL ===');
+  console.log('[DEBUG] FINAL - data.material_manual:', data.material_manual);
+  console.log('[DEBUG] FINAL - data.material_release:', data.material_release);
 
   // Salva os dados no arquivo JSON
   console.log('[DEBUG] ========== SALVANDO DADOS ==========');

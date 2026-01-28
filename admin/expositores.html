@@ -43,7 +43,7 @@
               <div class="setores-admin-header">
                 <p>Gerencie os setores de expositores da feira</p>
                 <button type="button" class="btn-adicionar-setor" id="btn-adicionar-setor">
-                  ➕ Adicionar Nova Seção de Expositor
+                  Adicionar Nova Seção de Expositor
                 </button>
               </div>
               <div class="expositor-setores-admin" id="expositor-setores-admin-grid">
@@ -54,18 +54,16 @@
                   <div class="setor-header">
                     <input type="text" class="setor-nome-input" maxlength="60" placeholder="Nome do Setor (ex: ESPAÇO LEGADO)">
                     <button type="button" class="btn-remover-setor" title="Remover esta sessão">
-                      🗑️ Remover Seção
+                       Remover Seção
                     </button>
                   </div>
                   <div class="logos-admin-wrapper">
                     <label>Logos do Setor</label>
                     <div class="instrucoes-acumulo">
                       <div class="alerta-sucesso">
-                        ✅ <strong>ACÚMULO AUTOMÁTICO:</strong> Novas logos são <strong>ADICIONADAS</strong> às existentes (não substituídas)
+                    
                       </div>
-                      <small style="color: #666; font-size: 11px; display: block; margin-top: 4px;">
-                        � Para adicionar mais logos: selecione apenas as <strong>NOVAS</strong> imagens e clique em "Salvar"
-                      </small>
+                      
                     </div>
                     <div class="logos-salvas-grid"></div>
                     <div class="logos-preview"></div>
@@ -164,7 +162,7 @@
             // Contador de logos salvas
             const contadorSalvas = document.createElement('div');
             contadorSalvas.className = 'contador-logos-salvas';
-            contadorSalvas.innerHTML = `📁 <strong>${setor.logos.length}</strong> logo${setor.logos.length !== 1 ? 's' : ''} salva${setor.logos.length !== 1 ? 's' : ''}`;
+            contadorSalvas.innerHTML = ` <strong>${setor.logos.length}</strong> logo${setor.logos.length !== 1 ? 's' : ''} salva${setor.logos.length !== 1 ? 's' : ''}`;
             
             const btnLeft = document.createElement('button');
             btnLeft.className = 'carousel-nav-btn';
@@ -398,11 +396,11 @@
         }
         
         if (totalNovasLogos > 0) {
-          btn.innerHTML = `💾 Salvar Expositores (+${totalNovasLogos} nova${totalNovasLogos !== 1 ? 's' : ''} logo${totalNovasLogos !== 1 ? 's' : ''})`;
+          btn.innerHTML = ` Salvar Expositores (+${totalNovasLogos} nova${totalNovasLogos !== 1 ? 's' : ''} logo${totalNovasLogos !== 1 ? 's' : ''})`;
           btn.style.background = '#ff6b35';
           btn.style.animation = 'pulse-save 1.5s infinite';
         } else {
-          btn.innerHTML = '💾 Salvar Expositores';
+          btn.innerHTML = ' Salvar Expositores';
           btn.style.background = '#005523';
           btn.style.animation = 'none';
         }
@@ -444,7 +442,7 @@
         // Mostra loading no botão
         const btn = this;
         const textoOriginal = btn.innerHTML;
-        btn.innerHTML = '⏳ Salvando...';
+        btn.innerHTML = ' Salvando...';
         btn.disabled = true;
         
         // Envia dados da seção Expositor para o servidor
@@ -494,27 +492,6 @@
                 detalhePorSetor.push(`• ${nomeSetor}: +${logosAdicionadasSetor} logo${logosAdicionadasSetor !== 1 ? 's' : ''}`);
               }
             }
-            
-            let mensagemDetalhada = `🎉 EXPOSITORES SALVOS COM SUCESSO!\n\n`;
-            
-            if (totalLogosAdicionadas > 0) {
-              mensagemDetalhada += `✅ ACÚMULO CONFIRMADO:\n`;
-              mensagemDetalhada += `📊 ${totalLogosAdicionadas} nova${totalLogosAdicionadas !== 1 ? 's' : ''} logo${totalLogosAdicionadas !== 1 ? 's' : ''} adicionada${totalLogosAdicionadas !== 1 ? 's' : ''}\n`;
-              if (detalhePorSetor.length > 0) {
-                mensagemDetalhada += detalhePorSetor.join('\n') + '\n';
-              }
-              mensagemDetalhada += `🏆 Total de logos no sistema: ${totalLogosNoSistema}\n`;
-              mensagemDetalhada += `❌ NENHUMA logo foi substituída ou perdida\n\n`;
-              mensagemDetalhada += `💡 PRÓXIMA VEZ:\n`;
-              mensagemDetalhada += `• Selecione apenas as logos NOVAS que deseja adicionar\n`;
-              mensagemDetalhada += `• O sistema sempre mantém as logos anteriores`;
-            } else {
-              mensagemDetalhada += `📝 Textos dos setores atualizados com sucesso\n`;
-              mensagemDetalhada += `📊 Total de logos no sistema: ${totalLogosNoSistema}\n`;
-              mensagemDetalhada += `💡 Para adicionar logos, use o botão "➕ Adicionar mais logos"`;
-            }
-            
-            alert(mensagemDetalhada);
             
             // LIMPA os arrays de preview após salvamento - força o usuário a adicionar apenas novas logos
             // O backend automaticamente acumula as novas com as já salvas
