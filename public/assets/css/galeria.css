@@ -1,34 +1,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
 
+
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: #fff;
 }
+
 
 main {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 
 footer {
   margin-top: auto;
+  width: 100vw;
+  max-width: 100vw;
+  position: relative;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
 }
 
 /* =============================
    Seção principal da galeria
    ============================= */
 .main-galeria {
-  width: 100%;
-  position: relative; /* Permite posicionamento absoluto das setas */
-  padding: 50px 0 0 0; /* 50px em cima, 0 nas laterais, sem padding embaixo para não empurrar o footer */
+  width: 100vw;
+  max-width: 100vw;
+  position: relative;
+  padding: 50px 0 0 0;
   background-image: url('../img/Group 24.png');
   background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  min-height: 600px;
 }
 
 /* =============================
@@ -70,33 +93,37 @@ footer {
    ============================= */
 .texto-galeria{
   margin: 0 auto 100px auto;
-  width: 50%;
+  width: 60%;
   font-family: 'Montserrat', sans-serif;
   font-size: 20px;
   font-weight: 200;
   color: #fff;
-  text-align: justify;
+  text-align: center;
   line-height: 1.5;
+  background: rgba(0,0,0,0.25);
+  border-radius: 18px;
+  padding: 24px 18px;
+  box-sizing: border-box;
 }
 
 /* Responsividade para o texto da galeria */
-@media (max-width: 768px) {
+
+@media (max-width: 900px) {
   .texto-galeria {
     width: 90%;
     font-size: 18px;
-    text-align: center;
     margin: 0 auto 60px auto;
-    padding: 0 20px;
+    padding: 10px 10px;
   }
 }
 
 @media (max-width: 480px) {
   .texto-galeria {
-    width: 95%;
+    width: 98%;
     font-size: 16px;
     line-height: 1.6;
     margin: 0 auto 40px auto;
-    padding: 0 15px;
+    padding: 6px 4px;
   }
 }
 
@@ -104,17 +131,18 @@ footer {
    Container dos cards da galeria
    ============================= */
 .galeria-container {
-  width: 100%;
+  width: 100vw;
+  max-width: 100vw;
   margin-bottom: 0;
   background-color: #fff;
-  padding: 60px 16px 20px 16px; /* Adiciona padding inferior para espaçamento das setas */
+  padding: 60px 16px 20px 16px;
   display: flex;
-  flex-wrap: wrap; /* Permite quebra de linha dos cards */
-  justify-content: center; /* Centraliza os itens horizontalmente */
-  gap: 32px; /* Espaçamento uniforme entre os cards */
-  overflow-x: hidden; /* Evita rolagem horizontal */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+  overflow-x: hidden;
   min-height: 300px;
-  box-sizing: border-box; /* Inclui padding no cálculo da largura */
+  box-sizing: border-box;
 }
 
 /* =============================

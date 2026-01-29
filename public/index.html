@@ -78,57 +78,52 @@
   
   <!-- Script para funcionalidade do menu mobile do header -->
   <script>
+    // =====================
+    // MENU MOBILE DO HEADER
+    // =====================
     document.addEventListener('DOMContentLoaded', function() {
       const headerToggle = document.getElementById('headerMobileToggle');
       const headerMenu = document.getElementById('headerMobileMenu');
       const headerClose = document.getElementById('headerMobileClose');
-      
+
       if (headerToggle && headerMenu && headerClose) {
-        
-        // Função centralizada para fechar o menu
+        /**
+         * Fecha o menu mobile do header e restaura o scroll da página
+         */
         function closeHeaderMenu() {
           headerMenu.classList.remove('show');
           headerToggle.classList.remove('active');
           headerToggle.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = ''; // Restaura scroll da página
+          document.body.style.overflow = '';
         }
-        
-        // Abrir menu
+
+        // Abre o menu mobile
         headerToggle.addEventListener('click', function() {
           headerMenu.classList.add('show');
           headerToggle.classList.add('active');
           headerToggle.setAttribute('aria-expanded', 'true');
-          document.body.style.overflow = 'hidden'; // Previne scroll da página
+          document.body.style.overflow = 'hidden';
         });
-        
-        // Fechar menu - botão X
-        headerClose.addEventListener('click', function() {
-          closeHeaderMenu();
-        });
-        
-        // Fechar menu - clique no overlay
+
+        // Fecha o menu ao clicar no botão X
+        headerClose.addEventListener('click', closeHeaderMenu);
+
+        // Fecha o menu ao clicar fora do conteúdo
         headerMenu.addEventListener('click', function(event) {
-          if (event.target === headerMenu) {
-            closeHeaderMenu();
-          }
+          if (event.target === headerMenu) closeHeaderMenu();
         });
-        
-        // Fechar menu - tecla ESC
+
+        // Fecha o menu ao pressionar ESC
         document.addEventListener('keydown', function(event) {
-          if (event.key === 'Escape' && headerMenu.classList.contains('show')) {
-            closeHeaderMenu();
-          }
+          if (event.key === 'Escape' && headerMenu.classList.contains('show')) closeHeaderMenu();
         });
-        
-        // Fechar menu ao clicar em links (para navegação suave)
+
+        // Fecha o menu ao clicar em qualquer link do menu mobile
         const mobileLinks = headerMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
           link.addEventListener('click', function() {
-            // Fecha imediatamente para links internos
             if (link.getAttribute('href').startsWith('#') || link.getAttribute('href').indexOf('.html') > -1) {
-              setTimeout(() => {
-                closeHeaderMenu();
-              }, 100); // Delay reduzido para melhor responsividade
+              setTimeout(closeHeaderMenu, 100);
             }
           });
         });
@@ -166,59 +161,41 @@
     let contadorInterval = null;
     let dataFeiraGlobal = null;
     
+    /**
+     * Carrega a data do contador regressivo do backend e exibe a seção se estiver ativa
+     */
     function carregarContadorDinamico() {
       fetch('http://localhost:3000/api/home')
         .then(res => res.json())
         .then(data => {
-          console.log('[DEBUG] Dados do contador carregados:', {
-            contador_data_feira: data.contador_data_feira,
-            contador_data_ativo: data.contador_data_ativo
-          });
-          
           const secaoContador = document.getElementById('contador-dinamico-section');
-          
-          // Verifica se a seção está ativa
+          // Verifica se a seção está ativa e a data é válida
           if (data.contador_data_ativo && data.contador_data_feira) {
-            // Mostra a seção
             secaoContador.style.display = 'block';
-            
-            // Define a data da feira
             dataFeiraGlobal = new Date(data.contador_data_feira);
-            
-            // Verifica se a data é válida
             if (isNaN(dataFeiraGlobal.getTime())) {
-              console.error('[DEBUG] Data inválida do contador:', data.contador_data_feira);
               secaoContador.style.display = 'none';
               return;
             }
-            
-            // Para qualquer contador anterior
-            if (contadorInterval) {
-              clearInterval(contadorInterval);
-            }
-            
-            // Inicia novo contador
+            if (contadorInterval) clearInterval(contadorInterval);
             iniciarContadorDinamico();
           } else {
-            // Esconde a seção se não estiver ativa
             secaoContador.style.display = 'none';
-            console.log('[DEBUG] Seção contador desativada ou sem data');
           }
         })
-        .catch(error => {
-          console.error('[DEBUG] Erro ao carregar dados do contador:', error);
-          // Em caso de erro, esconde a seção
+        .catch(() => {
           document.getElementById('contador-dinamico-section').style.display = 'none';
         });
     }
     
+    /**
+     * Inicia o contador regressivo, atualizando a cada segundo
+     */
     function iniciarContadorDinamico() {
       function atualizarContador() {
         if (!dataFeiraGlobal) return;
-        
         const agora = new Date();
         const diff = dataFeiraGlobal - agora;
-        
         if (diff <= 0) {
           document.getElementById('contador').innerHTML = "<span style='color:#BE5E14;'>A feira já começou!</span>";
           if (contadorInterval) {
@@ -227,27 +204,22 @@
           }
           return;
         }
-        
+        // Calcula dias, horas, minutos e segundos restantes
         const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
         const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutos = Math.floor((diff / (1000 * 60)) % 60);
         const segundos = Math.floor((diff / 1000) % 60);
-        
+        // Atualiza elementos do DOM
         const diasEl = document.getElementById('dias');
         const horasEl = document.getElementById('horas');
         const minutosEl = document.getElementById('minutos');
         const segundosEl = document.getElementById('segundos');
-        
         if (diasEl) diasEl.textContent = dias.toString().padStart(2, '0');
         if (horasEl) horasEl.textContent = horas.toString().padStart(2, '0');
         if (minutosEl) minutosEl.textContent = minutos.toString().padStart(2, '0');
         if (segundosEl) segundosEl.textContent = segundos.toString().padStart(2, '0');
       }
-      
-      // Atualiza imediatamente
       atualizarContador();
-      
-      // Continua atualizando a cada segundo
       contadorInterval = setInterval(atualizarContador, 1000);
     }
     
@@ -257,47 +229,26 @@
     // =====================
     // CARREGAMENTO DE DADOS DA HOME
     // =====================
+    /**
+     * Carrega os dados dinâmicos da home (banner, faixas, sessões, etc.)
+     */
     function carregarDadosHome() {
-      console.log('[DEBUG] *** INICIANDO CARREGAMENTO DOS DADOS DA HOME ***');
-      console.log('[TESTE] Função carregarDadosHome executada!');
       fetch('http://localhost:3000/api/home')
-        .then(res => {
-          console.log('[DEBUG] Resposta recebida, status:', res.status);
-          return res.json();
-        })
+        .then(res => res.json())
         .then(data => {
-          console.log('[DEBUG] *** DADOS DA HOME CARREGADOS COM SUCESSO ***');
-          console.log('[DEBUG] Dados recebidos:', data);
-          
-          // Banner
+          // Banner principal
           if (data.banner) {
             const bannerImg = document.getElementById('banner-img');
-            console.log('[DEBUG] Banner encontrado:', data.banner, 'Element:', bannerImg);
-            if (bannerImg) {
-              bannerImg.src = 'http://localhost:3000' + data.banner;
-              console.log('[DEBUG] ✅ Banner atualizado');
-            }
+            if (bannerImg) bannerImg.src = 'http://localhost:3000' + data.banner;
           }
-          
           // Faixa abaixo do banner
-          console.log('[DEBUG] Verificando faixa_titulo:', data.faixa_titulo);
           if (data.faixa_titulo) {
             const faixaTitulo = document.getElementById('faixa-titulo');
-            console.log('[DEBUG] Elemento faixa-titulo encontrado:', faixaTitulo);
-            if (faixaTitulo) {
-              faixaTitulo.textContent = data.faixa_titulo;
-              console.log('[DEBUG] ✅ Faixa título atualizado para:', data.faixa_titulo);
-            }
+            if (faixaTitulo) faixaTitulo.textContent = data.faixa_titulo;
           }
-          
-          console.log('[DEBUG] Verificando faixa_texto:', data.faixa_texto);
           if (data.faixa_texto) {
             const faixaTexto = document.getElementById('faixa-texto');
-            console.log('[DEBUG] Elemento faixa-texto encontrado:', faixaTexto);
-            if (faixaTexto) {
-              faixaTexto.textContent = data.faixa_texto;
-              console.log('[DEBUG] ✅ Faixa texto atualizado');
-            }
+            if (faixaTexto) faixaTexto.textContent = data.faixa_texto;
           }
           
           // Botão da faixa
@@ -721,31 +672,8 @@
     
     // Carrega dados da home quando a página for carregada
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('[TESTE] DOMContentLoaded executado!');
-      
-      // Teste direto sem fetch
-      const faixaTitulo = document.getElementById('faixa-titulo');
-      if (faixaTitulo) {
-        faixaTitulo.textContent = 'TESTE DIRETO FUNCIONOU!';
-        console.log('[TESTE] Elemento encontrado e texto definido!');
-      } else {
-        console.log('[TESTE] Elemento NÃO encontrado!');
-      }
-      
-      // Carregamento imediato
+      // Carregamento imediato dos dados da home
       carregarDadosHome();
-      
-      // Segundo carregamento após delay (para garantir)
-      setTimeout(() => {
-        console.log('[DEBUG] === SEGUNDO CARREGAMENTO (FORÇADO) ===');
-        carregarDadosHome();
-      }, 2000);
-      
-      // Terceiro carregamento após mais delay
-      setTimeout(() => {
-        console.log('[DEBUG] === TERCEIRO CARREGAMENTO (FINAL) ===');
-        carregarDadosHome();
-      }, 5000);
     });
   </script>
 <!-- ...existing code... -->
@@ -1143,6 +1071,11 @@
 <!-- Dynamic local script removed to prevent header overlap; static HTML now handles map -->
 
   <!-- Footer -->
+  <!-- Botão flutuante do WhatsApp -->
+  <a href="https://wa.me/5516999999999" class="whatsapp-float" target="_blank" rel="noopener" title="Fale conosco pelo WhatsApp" aria-label="Fale conosco pelo WhatsApp">
+    <img src="assets/img/whatsapp.png" alt="WhatsApp" style="width:48px;height:48px;" />
+  </a>
+
   <footer class="footer">
   <!-- Linha 1: Logos centralizadas -->
   <div class="footer-logo-wrapper">
@@ -1298,5 +1231,45 @@
   </script>
   
   <link rel="stylesheet" href="assets/css/footer.css">
+
+  <style>
+    /* Botão flutuante do WhatsApp */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 99999;
+      background: #25d366;
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+      border: none;
+    }
+    .whatsapp-float:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+      transform: scale(1.08);
+      background: #1ebe57;
+    }
+    .whatsapp-float img {
+      display: block;
+      width: 48px;
+      height: 48px;
+    }
+    @media (max-width: 600px) {
+      .whatsapp-float {
+        bottom: 16px;
+        right: 16px;
+        padding: 6px;
+      }
+      .whatsapp-float img {
+        width: 38px;
+        height: 38px;
+      }
+    }
+  </style>
 </html>
 </html>
