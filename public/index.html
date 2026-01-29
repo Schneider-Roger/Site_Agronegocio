@@ -142,7 +142,7 @@
        CONTADOR REGRESSIVO DINÂMICO
        ===================== -->
 <link rel="stylesheet" href="assets/css/contador.css">
-<section class="contador-banner" id="contador-dinamico-section" style="display:none;">
+<section class="contador-banner" id="contador-dinamico-section" style="display:block;">
   <h2> Em breve, a feira que movimenta o agro estará de volta</h2>
   <div id="contador">
     <div><span id="dias" class="contador-numero">00</span><span class="contador-label">dias</span></div>
@@ -169,10 +169,14 @@
         .then(res => res.json())
         .then(data => {
           const secaoContador = document.getElementById('contador-dinamico-section');
-          // Verifica se a seção está ativa e a data é válida
-          if (data.contador_data_ativo && data.contador_data_feira) {
+          // Forçar exibição para teste local se não vier do backend
+          let ativo = data.contador_data_ativo;
+          let dataFeira = data.contador_data_feira;
+          if (typeof ativo === 'undefined') ativo = true;
+          if (!dataFeira) dataFeira = '2026-06-16T13:00:00.000Z';
+          if (ativo && dataFeira) {
             secaoContador.style.display = 'block';
-            dataFeiraGlobal = new Date(data.contador_data_feira);
+            dataFeiraGlobal = new Date(dataFeira);
             if (isNaN(dataFeiraGlobal.getTime())) {
               secaoContador.style.display = 'none';
               return;
@@ -184,7 +188,12 @@
           }
         })
         .catch(() => {
-          document.getElementById('contador-dinamico-section').style.display = 'none';
+          // Se o backend não responder, exibe contador para teste local
+          const secaoContador = document.getElementById('contador-dinamico-section');
+          secaoContador.style.display = 'block';
+          dataFeiraGlobal = new Date('2026-06-16T13:00:00.000Z');
+          if (contadorInterval) clearInterval(contadorInterval);
+          iniciarContadorDinamico();
         });
     }
     
@@ -566,16 +575,20 @@
             
             // Renderizar cada setor
             for (let i = 1; i <= totalSetores; i++) {
-              const textoSetor = data[`expositor_setor${i}_texto`] || `Setor ${i}`;
+              // Usar o valor do backend, mas se for vazio, nulo ou só espaços, exibir 'Setor X' como fallback
+              let textoSetor = data[`expositor_setor${i}_texto`];
+              if (typeof textoSetor === 'undefined' || textoSetor === null || (typeof textoSetor === 'string' && textoSetor.trim() === '')) {
+                textoSetor = `Setor ${i}`;
+              }
               const logosSetor = data[`expositor_setor${i}_logos`] || [];
-              
+
               console.log(`[DEBUG] Setor ${i}: "${textoSetor}" - ${logosSetor.length} logos`);
-              
+
               // Criar elemento do setor
               const setorCard = document.createElement('div');
               setorCard.className = 'expositor-setor-card';
               setorCard.setAttribute('data-setor', `setor${i}`);
-              
+
               // Nome do setor
               const nomeSetor = document.createElement('div');
               nomeSetor.className = 'setor-nome';
@@ -813,11 +826,26 @@
       @media (max-width: 900px) {
         #mapa-magnifier { display: none !important; }
       }
+          /* EFEITO GRAYSCALE NOS CARDS DOS SETORES */
+          .expositor-setor-card {
+            filter: grayscale(100%);
+            transition: filter 0.4s, box-shadow 0.4s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          }
+          .expositor-setor-card:hover, .expositor-setor-card:focus {
+            filter: grayscale(0%);
+            box-shadow: 0 4px 16px rgba(190,94,20,0.18);
+            z-index: 2;
+          }
+          /* Opcional: destaque no nome do setor ao passar o mouse */
+          .expositor-setor-card:hover .setor-nome {
+            color: #BE5E14;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+          }
     </style>
 
-  <!-- =====================
-     SESSÃO PROGRAMAÇÃO
-     ===================== -->
+ 
   <!-- =====================
      SESSÃO PROGRAMAÇÃO
      ===================== -->
