@@ -64,23 +64,32 @@
 }
 
 /* Checkbox especial */
-.contador-data-section input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  margin-right: 12px;
-  accent-color: #994C11;
-  cursor: pointer;
-  align-items: center;
+.contador-data-section .form-section label {
+  display: block;
 }
 
-.contador-data-section label[for="contador_data_ativo"] {
-  display: flex !important;
-  margin-left: 0px;
+.contador-data-section .checkbox-inline {
+  display: flex;
   align-items: center;
+  gap: 12px;
   cursor: pointer;
-  padding: 16px;
-  transition: all 0.3s ease;
-  margin-top: -20px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(153, 76, 17, 0.04);
+  transition: background 0.2s ease;
+}
+
+.contador-data-section .checkbox-inline:hover {
+  background: rgba(153, 76, 17, 0.08);
+}
+
+.contador-data-section .checkbox-inline input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: #994C11;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 
@@ -107,6 +116,12 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+}
+
+.zerar-contador-container button:hover {
+  background: #a65112;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(190, 94, 20, 0.35);
 }
 
 
@@ -204,7 +219,7 @@
   
   .contador-data-section input[type="date"],
   .contador-data-section input[type="datetime-local"] {
-    width: 90%;
+    width: 100%;
     padding: 14px;
     font-size: 14px;
   }
@@ -231,7 +246,7 @@
   
   .contador-data-section input[type="date"],
   .contador-data-section input[type="datetime-local"] {
-    width: 85%;
+    width: 100%;
     padding: 12px;
     font-size: 14px;
   }

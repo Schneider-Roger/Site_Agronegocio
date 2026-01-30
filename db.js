@@ -29,8 +29,16 @@ function saveHomeData(data) {
   try {
     // DEBUG: Salvando dados no arquivo JSON
     console.log('[DEBUG] Salvando dados no arquivo:', DATA_PATH, data);
+    // Validação: verifica se os dados são serializáveis
+    let jsonString;
+    try {
+      jsonString = JSON.stringify(data, null, 2);
+    } catch (validationError) {
+      console.error('[DEBUG] Erro de validação dos dados antes de salvar:', validationError);
+      throw new Error('Os dados enviados possuem estrutura inválida para salvar. Verifique se não há referências circulares ou valores não suportados.');
+    }
     fs.mkdirSync(path.dirname(DATA_PATH), { recursive: true });
-    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2), 'utf8');
+    fs.writeFileSync(DATA_PATH, jsonString, 'utf8');
   } catch (error) {
     console.error('[DEBUG] Erro ao salvar dados:', error);
     throw error;

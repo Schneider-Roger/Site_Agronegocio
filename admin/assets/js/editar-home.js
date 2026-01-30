@@ -4,12 +4,30 @@
  */
 
 // ===== TOGGLE MODO LISTA/CARROSSEL =====
+const API_BASE = getApiBase();
+
 document.addEventListener('DOMContentLoaded', function() {
   initToggleViewMode();
   initImagePreviews();
   initFormSubmission();
   loadHomeData();
 });
+
+function getApiBase() {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (isLocalhost && window.location.port && window.location.port !== '3000') {
+    return 'http://localhost:3000';
+  }
+  return '';
+}
+
+function buildApiUrl(path) {
+  return `${API_BASE}${path}`;
+}
+
+function buildAssetUrl(path) {
+  return `${API_BASE}${path}`;
+}
 
 /**
  * Inicializa o toggle entre modo lista e carrossel
@@ -242,11 +260,23 @@ function initFormSubmission() {
     console.log('[DEBUG] === FIM DOS DADOS ===');
     
     // Enviar dados para o backend
-    fetch('http://localhost:3000/api/home', {
+    fetch(buildApiUrl('/api/home'), {
       method: 'POST',
       body: formData
     })
-    .then(response => response.json())
+    .then(async response => {
+      const contentType = response.headers.get('content-type') || '';
+      const rawText = await response.text();
+      let data = null;
+      if (contentType.includes('application/json') && rawText) {
+        data = JSON.parse(rawText);
+      }
+      if (!response.ok) {
+        const message = (data && data.error) ? data.error : (rawText || 'Erro ao salvar dados');
+        throw new Error(message);
+      }
+      return data || {};
+    })
     .then(data => {
       console.log('[DEBUG] Resposta do backend:', data);
       
@@ -256,7 +286,7 @@ function initFormSubmission() {
       // Verificação: recarregar dados do servidor para confirmar persistência
       setTimeout(() => {
         console.log('[DEBUG] === VERIFICANDO PERSISTÊNCIA ===');
-        fetch('http://localhost:3000/api/home')
+        fetch(buildApiUrl('/api/home'))
           .then(res => res.json())
           .then(dadosVerificacao => {
             console.log('[DEBUG] Dados recarregados do servidor:', Object.keys(dadosVerificacao));
@@ -301,7 +331,7 @@ function initFormSubmission() {
                   if (bannerItems[index] && banner.src) {
                     const preview = bannerItems[index].querySelector('.banner-preview-item');
                     if (preview) {
-                      preview.innerHTML = `<img src="http://localhost:3000${banner.src}" alt="Banner ${index+1}" style="max-width:100%;height:auto;max-height:200px;object-fit:contain;border-radius:4px;">`;
+                      preview.innerHTML = `<img src="${buildAssetUrl(banner.src)}" alt="Banner ${index+1}" style="max-width:100%;height:auto;max-height:200px;object-fit:contain;border-radius:4px;">`;
                       console.log(`[DEBUG] ✅ Preview do banner ${index+1} atualizado`);
                     }
                   }
@@ -353,7 +383,7 @@ function syncSetorFiles() {
  * Carrega dados atuais da home
  */
 function loadHomeData() {
-  fetch('http://localhost:3000/api/home')
+  fetch(buildApiUrl('/api/home'))
     .then(res => res.json())
     .then(data => {
       console.log('[DEBUG] Dados carregados do backend:', data);
@@ -391,7 +421,7 @@ function loadBanners(data) {
   // Atualiza o preview do banner se houver imagem
   const preview = document.getElementById('banner-preview');
   if (preview && bannerSrc) {
-    preview.innerHTML = `<img src="http://localhost:3000${bannerSrc}" alt="Banner" style="max-width:100%;height:auto;max-height:200px;object-fit:contain;border-radius:4px;">`;
+    preview.innerHTML = `<img src="${buildAssetUrl(bannerSrc)}" alt="Banner" style="max-width:100%;height:auto;max-height:200px;object-fit:contain;border-radius:4px;">`;
     console.log('[DEBUG] Preview do banner atualizado');
   } else if (preview) {
     preview.innerHTML = '';
@@ -549,7 +579,7 @@ function updateCurrentPreviews(data) {
     if (cardImg) {
       const preview = document.getElementById(`oqueesperar_card${i}_preview`);
       if (preview) {
-        preview.innerHTML = `<img src="http://localhost:3000${cardImg}" alt="Imagem do Card ${i}">`;
+        preview.innerHTML = `<img src="${buildAssetUrl(cardImg)}" alt="Imagem do Card ${i}">`;
       }
     }
   }
@@ -580,7 +610,7 @@ function updateAfeiraIndividualPreviews(images) {
       // Se há uma imagem para esta posição, mostra ela
       if (images && images[i-1]) {
         const img = document.createElement('img');
-        img.src = `http://localhost:3000${images[i-1]}`;
+        img.src = `${buildAssetUrl(images[i-1])}`;
         img.alt = `Imagem ${i} da Sessão A Feira`;
         preview.appendChild(img);
         console.log(`[DEBUG] ✅ Preview ${i} atualizado com:`, images[i-1]);
@@ -623,9 +653,9 @@ function updateMapaPreview(mapaImagem) {
   if (!preview) return;
   
   if (mapaImagem.endsWith('.pdf')) {
-    preview.innerHTML = `<a href="http://localhost:3000${mapaImagem}" download style="color:#994C11;font-weight:bold;">Download do Mapa (PDF)</a>`;
+    preview.innerHTML = `<a href="${buildAssetUrl(mapaImagem)}" download style="color:#994C11;font-weight:bold;">Download do Mapa (PDF)</a>`;
   } else {
-    preview.innerHTML = `<img src="http://localhost:3000${mapaImagem}" alt="Mapa da Feira" style="max-width:100%;height:auto;max-height:700px;width:auto;display:block;margin:0 auto;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);object-fit:contain;">`;
+    preview.innerHTML = `<img src="${buildAssetUrl(mapaImagem)}" alt="Mapa da Feira" style="max-width:100%;height:auto;max-height:700px;width:auto;display:block;margin:0 auto;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);object-fit:contain;">`;
   }
 }
 
@@ -672,9 +702,9 @@ function updateMapaPreview(mapaPath) {
   if (!preview) return;
   
   if (mapaPath.endsWith('.pdf')) {
-    preview.innerHTML = `<a href="http://localhost:3000${mapaPath}" download style="color:#994C11;font-weight:bold;">Download do Mapa (PDF)</a>`;
+    preview.innerHTML = `<a href="${buildAssetUrl(mapaPath)}" download style="color:#994C11;font-weight:bold;">Download do Mapa (PDF)</a>`;
   } else {
-    preview.innerHTML = `<img src="http://localhost:3000${mapaPath}" alt="Mapa da Feira" style="max-width:100%;height:auto;max-height:700px;width:auto;display:block;margin:0 auto;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);object-fit:contain;">`;
+    preview.innerHTML = `<img src="${buildAssetUrl(mapaPath)}" alt="Mapa da Feira" style="max-width:100%;height:auto;max-height:700px;width:auto;display:block;margin:0 auto;border-radius:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08);object-fit:contain;">`;
   }
 }
 

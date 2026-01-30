@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
+  const apiBase = (function getApiBase() {
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (window.location.protocol === 'file:' || (isLocalhost && window.location.port && window.location.port !== '3000')) {
+      return 'http://localhost:3000';
+    }
+    return '';
+  })();
+
+  function buildApiUrl(path) {
+    return `${apiBase}${path}`;
+  }
+
+  function buildAssetUrl(path) {
+    return `${apiBase}${path}`;
+  }
+
+  function resolveAssetUrl(value) {
+    if (!value) return value;
+    if (value.startsWith('http://') || value.startsWith('https://')) return value;
+    if (value.startsWith('/')) return buildAssetUrl(value);
+    return value;
+  }
   // =====================
   // INFINITE LOGO CAROUSEL LOOP (mantido do site)
   // =====================
@@ -93,8 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
     idx: 0
   };
 
-  // Carrega o JSON de galerias
-  fetch('/data/galerias.json')
+  // Carrega galerias via API
+  fetch(buildApiUrl('/api/galerias'))
     .then(r => r.json())
     .then(data => {
       galeriaData = Array.isArray(data) ? data : [];
@@ -119,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const capa = document.createElement('div');
       capa.className = 'galeria-item galeria-capa-ano';
       const img = document.createElement('img');
-      img.src = gal.imagem || (gal.fotos && gal.fotos[0]) || '';
+      img.src = resolveAssetUrl(gal.imagem || (gal.fotos && gal.fotos[0]) || '');
       img.alt = `Galeria ${gal.ano}`;
       img.loading = 'lazy';
       img.tabIndex = 0;
@@ -212,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
       <div class="galeria-grid">
         ${(gal.fotos||[]).map(foto => `
-          <div class="galeria-grid-item"><img src="${foto}" alt="Foto ${gal.ano}" loading="lazy"></div>
+          <div class="galeria-grid-item"><img src="${resolveAssetUrl(foto)}" alt="Foto ${gal.ano}" loading="lazy"></div>
         `).join('')}
       </div>
     `;
@@ -262,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   function showModalImg() {
     if (!currentModal.fotos.length) return;
-    modalImg.src = currentModal.fotos[currentModal.idx];
+    modalImg.src = resolveAssetUrl(currentModal.fotos[currentModal.idx]);
     modalImg.alt = `Foto ${currentModal.idx + 1} - ${currentModal.ano}`;
   }
   function prevModalImg() {

@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Aplicar express.json() apenas nas rotas específicas que não usam multer
-app.use('/api/galerias', express.json({ limit: '50mb' }));
+// app.use('/api/galerias', express.json({ limit: '50mb' })); // Removido para evitar conflito com multer
 app.use('/api/home/remover-logo', express.json({ limit: '50mb' }));
 app.use('/api/home/remover-setor', express.json({ limit: '50mb' }));
 // Servir arquivos estáticos do frontend
@@ -35,6 +35,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 // Servir arquivos de upload de imagens
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Logout simples (redireciona para a tela de login do admin)
+app.get('/logout', (req, res) => {
+  res.redirect('/admin/login.html');
+});
+
+// Login simples do admin (sem autenticação real - fluxo legado)
+app.post('/admin/login', express.urlencoded({ extended: true }), (req, res) => {
+  res.redirect('/admin/editar-home.html');
+});
+
+// Formulário legado do dashboard
+app.post('/admin/salvar-home', express.urlencoded({ extended: true }), (req, res) => {
+  res.redirect('/admin/editar-home.html');
+});
 
 // =====================
 // GALERIAS API
@@ -215,7 +230,7 @@ app.delete('/api/galerias/:id/fotos', express.json({ limit: '50mb' }), (req, res
 });
 
 // DELETE /api/galerias - remove uma galeria por id (body JSON: { id })
-app.delete('/api/galerias', (req, res) => {
+app.delete('/api/galerias', express.json({ limit: '50mb' }), (req, res) => {
   try {
     const { id } = req.body;
     if (typeof id === 'undefined') return res.status(400).json({ success: false, error: 'id é obrigatório.' });
@@ -848,14 +863,18 @@ app.post('/api/home', (req, res) => {
   
   // DEBUG: Verifica se os dados foram salvos corretamente
   const dadosSalvos = getHomeData();
-  console.log('[DEBUG] Logos após salvar (verificação):');
-  for (let i = 1; i <= 4; i++) {
-    const logosKey = `expositor_setor${i}_logos`;
-    const logos = dadosSalvos[logosKey];
-    console.log(`[DEBUG] - ${logosKey}: ${logos ? logos.length : 0} logos`);
-    if (logos && logos.length > 0) {
-      console.log(`[DEBUG]   Logos: ${logos.join(', ')}`);
+  if (dadosSalvos) {
+    console.log('[DEBUG] Logos após salvar (verificação):');
+    for (let i = 1; i <= 4; i++) {
+      const logosKey = `expositor_setor${i}_logos`;
+      const logos = dadosSalvos[logosKey];
+      console.log(`[DEBUG] - ${logosKey}: ${logos ? logos.length : 0} logos`);
+      if (logos && logos.length > 0) {
+        console.log(`[DEBUG]   Logos: ${logos.join(', ')}`);
+      }
     }
+  } else {
+    console.warn('[DEBUG] Não foi possível recarregar dados após salvar (arquivo inválido ou ausente).');
   }
   console.log('[DEBUG] ========== DADOS SALVOS ==========');
   

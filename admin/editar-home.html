@@ -2,19 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Editar Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Home</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/editar-home.css">
   <link rel="stylesheet" href="assets/css/sessao-banner.css">
   <link rel="stylesheet" href="assets/css/sessao-faixa.css">
   <link rel="stylesheet" href="assets/css/sessao-afeira.css">
+  <link rel="stylesheet" href="assets/css/sessao-contador-data.css">
   <link rel="stylesheet" href="assets/css/sessao-oqueesperar.css">
   <link rel="stylesheet" href="assets/css/sessao-mapa.css">
   <link rel="stylesheet" href="assets/css/sessao-material.css">
   <link rel="stylesheet" href="assets/css/sessao-local.css">
-
-  
 </head>
 <body>
   <div class="admin-layout">
@@ -23,12 +22,12 @@
         <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
       </div>
       <nav>
-        <a href="dashboard.html"> Painel</a>
-        <a href="editar-home.html"> Editar Home</a>
-        <a href="editar-programacao.html"> Programação</a>
-        <a href="gerenciar-galeria.html"> Galeria</a>
-        <a href="expositores.html"> Expositores</a>
-        <a href="mensagens.html"> Mensagens</a>
+        
+        <a href="editar-home.html" aria-current="page">Editar Home</a>
+        <a href="editar-programacao.html">Programação</a>
+        <a href="gerenciar-galeria.html">Galeria</a>
+        <a href="expositores.html">Expositores</a>
+        <a href="mensagens.html">Mensagens</a>
       </nav>
       <div class="logout-footer">
         <a href="/logout" class="logout-btn">Desconectar</a>
@@ -37,55 +36,46 @@
     <main class="main-content">
       <h1>Editar Página Inicial</h1>
       <div class="form-box">
-        <form id="form-editar-home">
-          <!-- ===================== Sessão Banner ===================== -->
-          <div class="banner-section">
+        <form id="form-editar-home" novalidate>
+          <!-- Sessão Banner -->
+          <section class="section-container banner-section">
             <h2>Banner</h2>
             <div class="form-group">
               <label for="banner">Imagem do Banner</label>
               <input type="file" id="banner" name="banner" accept="image/*">
-              <div id="banner-preview" class="image-preview"></div>
+              <div id="banner-preview" class="image-preview" aria-live="polite"></div>
             </div>
+          </section>
 
-          </div>
-          <link rel="stylesheet" href="assets/css/sessao-banner.css">
-
-          <!-- ===================== Sessão Contador Data ===================== -->
-          <div class="contador-data-section">
+          <!-- Sessão Contador Data -->
+          <section class="section-container contador-data-section">
             <h2>Contador com Data</h2>
             <div class="form-section">
               <label for="contador_data_feira">Data da Feira</label>
-              <input type="datetime-local" id="contador_data_feira" name="contador_data_feira">
+              <input type="datetime-local" id="contador_data_feira" name="contador_data_feira" required>
             </div>
             <div class="form-section">
-              <label for="contador_data_ative">
+              <label class="checkbox-inline">
                 <input type="checkbox" id="contador_data_ativo" name="contador_data_ativo" checked>
                 Exibir seção contador na página inicial
               </label>
             </div>
-            <!-- Botão para zerar contador -->
             <div class="zerar-contador-container">
-              <button type="button" id="zerar-contador-btn">
-                Zerar Contador
-              </button>
+              <button type="button" id="zerar-contador-btn">Zerar Contador</button>
             </div>
+            <div id="contador-data-status" class="contador-data-status" aria-live="polite"></div>
+          </section>
 
-            <!-- Status de sucesso/erro -->
-            <div id="contador-data-status" class="contador-data-status"></div>
-          </div>
-
-          <link rel="stylesheet" href="assets/css/sessao-contador-data.css">
-        
-          <!-- ===================== Sessão Faixa Abaixo do Banner ===================== -->
-          <div class="faixa-section">
+          <!-- Sessão Faixa Abaixo do Banner -->
+          <section class="section-container faixa-section">
             <h2>Faixa abaixo do Banner</h2>
             <div class="form-section">
               <label for="faixa_titulo">Título da Faixa</label>
-              <input type="text" id="faixa_titulo" name="faixa_titulo" maxlength="100">
+              <input type="text" id="faixa_titulo" name="faixa_titulo" maxlength="100" required>
             </div>
             <div class="form-section">
               <label for="faixa_texto">Texto da Faixa</label>
-              <textarea id="faixa_texto" name="faixa_texto" rows="3" maxlength="300"></textarea>
+              <textarea id="faixa_texto" name="faixa_texto" rows="3" maxlength="300" required></textarea>
             </div>
             <div class="form-section">
               <label for="faixa_botao_texto">Texto do Botão</label>
@@ -93,389 +83,172 @@
             </div>
             <div class="form-section">
               <label for="faixa_botao_url">URL do Botão</label>
-              <input type="text" id="faixa_botao_url" name="faixa_botao_url" maxlength="200">
+              <input type="url" id="faixa_botao_url" name="faixa_botao_url" maxlength="200">
             </div>
             <div class="form-section">
-              <label for="faixa_botao_ativo">
+              <label>
                 <input type="checkbox" id="faixa_botao_ativo" name="faixa_botao_ativo" checked>
                 Exibir botão na faixa
               </label>
             </div>
+          </section>
 
-          </div>
-
-          <link rel="stylesheet" href="assets/css/sessao-faixa.css">
-
-          
-
-
-          <!-- ===================== Sessão A Feira ===================== -->
-          <div class="afeira-section">
+          <!-- Sessão A Feira -->
+          <section class="section-container afeira-section">
             <h2>Sessão "A Feira"</h2>
             <div class="form-section">
               <label for="afeira_titulo">Título da Sessão "A Feira"</label>
-              <input type="text" id="afeira_titulo" name="afeira_titulo" maxlength="100">
+              <input type="text" id="afeira_titulo" name="afeira_titulo" maxlength="100" required>
             </div>
             <div class="form-section">
               <label for="afeira_texto">Texto da Sessão "A Feira"</label>
-              <textarea id="afeira_texto" name="afeira_texto" rows="6" maxlength="1500"></textarea>
+              <textarea id="afeira_texto" name="afeira_texto" rows="6" maxlength="1500" required></textarea>
             </div>
             <div class="form-section">
-              <label>Imagem 1 da Sessão "A Feira" <span id="afeira-status-1" class="image-status"></span></label>
+              <label for="afeira_imagem1">Imagem 1 da Sessão "A Feira"</label>
               <input type="file" id="afeira_imagem1" name="afeira_imagem1" accept="image/*">
-              <div class="afeira-imagem-preview" id="afeira-imagem1-preview"></div>
+              <div class="afeira-imagem-preview" id="afeira-imagem1-preview" aria-live="polite"></div>
             </div>
             <div class="form-section">
-              <label>Imagem 2 da Sessão "A Feira" <span id="afeira-status-2" class="image-status"></span></label>
+              <label for="afeira_imagem2">Imagem 2 da Sessão "A Feira"</label>
               <input type="file" id="afeira_imagem2" name="afeira_imagem2" accept="image/*">
-              <div class="afeira-imagem-preview" id="afeira-imagem2-preview"></div>
+              <div class="afeira-imagem-preview" id="afeira-imagem2-preview" aria-live="polite"></div>
             </div>
             <div class="form-section">
-              <label>Imagem 3 da Sessão "A Feira" <span id="afeira-status-3" class="image-status"></span></label>
+              <label for="afeira_imagem3">Imagem 3 da Sessão "A Feira"</label>
               <input type="file" id="afeira_imagem3" name="afeira_imagem3" accept="image/*">
-              <div class="afeira-imagem-preview" id="afeira-imagem3-preview"></div>
+              <div class="afeira-imagem-preview" id="afeira-imagem3-preview" aria-live="polite"></div>
             </div>
-          </div>
-          <!-- ===================== Sessão O QUE ESPERAR ===================== -->
-          <div class="oqueesperar-section">
+          </section>
+
+          <!-- Sessão O QUE ESPERAR -->
+          <section class="section-container oqueesperar-section">
             <h2>Sessão "O QUE ESPERAR"</h2>
             <div class="form-section">
               <label for="oqueesperar_titulo">Título da Sessão "O QUE ESPERAR"</label>
-              <input type="text" id="oqueesperar_titulo" name="oqueesperar_titulo" maxlength="100">
+              <input type="text" id="oqueesperar_titulo" name="oqueesperar_titulo" maxlength="100" required>
             </div>
             <div class="form-section">
               <label>Cards da Sessão "O QUE ESPERAR"</label>
               <div class="oqueesperar-cards-admin">
-                <!-- 8 cards -->
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card1_texto" id="oqueesperar_card1_texto" placeholder="Texto do Card 1" maxlength="250">
-                  <input type="file" name="oqueesperar_card1_img" id="oqueesperar_card1_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card1_preview"></div>
+                  <label for="oqueesperar_card1_texto">Card 1 - Texto</label>
+                  <input type="text" id="oqueesperar_card1_texto" name="oqueesperar_card1_texto" maxlength="150" required>
+                  <label for="oqueesperar_card1_img">Card 1 - Imagem</label>
+                  <input type="file" id="oqueesperar_card1_img" name="oqueesperar_card1_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card1_preview" aria-live="polite"></div>
                 </div>
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card2_texto" id="oqueesperar_card2_texto" placeholder="Texto do Card 2" maxlength="250">
-                  <input type="file" name="oqueesperar_card2_img" id="oqueesperar_card2_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card2_preview"></div>
+                  <label for="oqueesperar_card2_texto">Card 2 - Texto</label>
+                  <input type="text" id="oqueesperar_card2_texto" name="oqueesperar_card2_texto" maxlength="150" required>
+                  <label for="oqueesperar_card2_img">Card 2 - Imagem</label>
+                  <input type="file" id="oqueesperar_card2_img" name="oqueesperar_card2_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card2_preview" aria-live="polite"></div>
                 </div>
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card3_texto" id="oqueesperar_card3_texto" placeholder="Texto do Card 3" maxlength="250">
-                  <input type="file" name="oqueesperar_card3_img" id="oqueesperar_card3_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card3_preview"></div>
+                  <label for="oqueesperar_card3_texto">Card 3 - Texto</label>
+                  <input type="text" id="oqueesperar_card3_texto" name="oqueesperar_card3_texto" maxlength="150" required>
+                  <label for="oqueesperar_card3_img">Card 3 - Imagem</label>
+                  <input type="file" id="oqueesperar_card3_img" name="oqueesperar_card3_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card3_preview" aria-live="polite"></div>
                 </div>
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card4_texto" id="oqueesperar_card4_texto" placeholder="Texto do Card 4" maxlength="250">
-                  <input type="file" name="oqueesperar_card4_img" id="oqueesperar_card4_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card4_preview"></div>
+                  <label for="oqueesperar_card4_texto">Card 4 - Texto</label>
+                  <input type="text" id="oqueesperar_card4_texto" name="oqueesperar_card4_texto" maxlength="150" required>
+                  <label for="oqueesperar_card4_img">Card 4 - Imagem</label>
+                  <input type="file" id="oqueesperar_card4_img" name="oqueesperar_card4_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card4_preview" aria-live="polite"></div>
                 </div>
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card5_texto" id="oqueesperar_card5_texto" placeholder="Texto do Card 5" maxlength="250">
-                  <input type="file" name="oqueesperar_card5_img" id="oqueesperar_card5_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card5_preview"></div>
+                  <label for="oqueesperar_card5_texto">Card 5 - Texto</label>
+                  <input type="text" id="oqueesperar_card5_texto" name="oqueesperar_card5_texto" maxlength="150" required>
+                  <label for="oqueesperar_card5_img">Card 5 - Imagem</label>
+                  <input type="file" id="oqueesperar_card5_img" name="oqueesperar_card5_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card5_preview" aria-live="polite"></div>
                 </div>
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card6_texto" id="oqueesperar_card6_texto" placeholder="Texto do Card 6" maxlength="250">
-                  <input type="file" name="oqueesperar_card6_img" id="oqueesperar_card6_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card6_preview"></div>
+                  <label for="oqueesperar_card6_texto">Card 6 - Texto</label>
+                  <input type="text" id="oqueesperar_card6_texto" name="oqueesperar_card6_texto" maxlength="150" required>
+                  <label for="oqueesperar_card6_img">Card 6 - Imagem</label>
+                  <input type="file" id="oqueesperar_card6_img" name="oqueesperar_card6_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card6_preview" aria-live="polite"></div>
                 </div>
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card7_texto" id="oqueesperar_card7_texto" placeholder="Texto do Card 7" maxlength="250">
-                  <input type="file" name="oqueesperar_card7_img" id="oqueesperar_card7_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card7_preview"></div>
+                  <label for="oqueesperar_card7_texto">Card 7 - Texto</label>
+                  <input type="text" id="oqueesperar_card7_texto" name="oqueesperar_card7_texto" maxlength="150" required>
+                  <label for="oqueesperar_card7_img">Card 7 - Imagem</label>
+                  <input type="file" id="oqueesperar_card7_img" name="oqueesperar_card7_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card7_preview" aria-live="polite"></div>
                 </div>
                 <div class="oqueesperar-card-admin">
-                  <input type="text" name="oqueesperar_card8_texto" id="oqueesperar_card8_texto" placeholder="Texto do Card 8" maxlength="250">
-                  <input type="file" name="oqueesperar_card8_img" id="oqueesperar_card8_img" accept="image/*">
-                  <div class="oqueesperar-card-preview" id="oqueesperar_card8_preview"></div>
+                  <label for="oqueesperar_card8_texto">Card 8 - Texto</label>
+                  <input type="text" id="oqueesperar_card8_texto" name="oqueesperar_card8_texto" maxlength="150" required>
+                  <label for="oqueesperar_card8_img">Card 8 - Imagem</label>
+                  <input type="file" id="oqueesperar_card8_img" name="oqueesperar_card8_img" accept="image/*">
+                  <div class="oqueesperar-card-preview" id="oqueesperar_card8_preview" aria-live="polite"></div>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- ===================== Sessão Mapa da Feira ===================== -->
-          <div class="mapa-section">
+          </section>
+
+          <!-- Sessão Mapa da Feira -->
+          <section class="section-container mapa-section">
             <h2>Mapa da Feira</h2>
             <div class="form-section">
               <label for="mapa_imagem">Imagem do Mapa</label>
               <input type="file" id="mapa_imagem" name="mapa_imagem" accept="image/*,application/pdf">
-              <div class="mapa-preview" id="mapa-preview"></div>
+              <div class="mapa-preview" id="mapa-preview" aria-live="polite"></div>
               <small>Você pode enviar uma imagem (JPG, PNG) ou PDF. O arquivo será exibido e disponibilizado para download no site.</small>
             </div>
-          </div>
+          </section>
 
-          <!-- ===================== Sessão Material Oficial ===================== -->
-          <div class="material-section">
+          <!-- Sessão Material Oficial -->
+          <section class="section-container material-section">
             <h2>Material Oficial</h2>
             <div class="form-section">
               <label for="material_manual">Manual do Expositor</label>
               <input type="file" id="material_manual" name="material_manual" accept=".pdf,.doc,.docx,.zip,.rar">
-              <div class="material-preview" id="material-manual-preview"></div>
+              <div class="material-preview" id="material-manual-preview" aria-live="polite"></div>
               <small>Arquivo do Manual do Expositor (PDF, DOC, DOCX, ZIP, RAR). Será disponibilizado para download no site.</small>
             </div>
             <div class="form-section">
               <label for="material_release">Release de Imprensa</label>
               <input type="file" id="material_release" name="material_release" accept=".pdf,.doc,.docx,.zip,.rar">
-              <div class="material-preview" id="material-release-preview"></div>
+              <div class="material-preview" id="material-release-preview" aria-live="polite"></div>
               <small>Arquivo do Release de Imprensa (PDF, DOC, DOCX, ZIP, RAR). Será disponibilizado para download no site.</small>
             </div>
-          </div>
-          <!-- ===================== Sessão LOCAL ===================== -->
-          <div class="local-section">
+          </section>
+
+          <!-- Sessão LOCAL -->
+          <section class="section-container local-section">
             <h2>Local</h2>
             <div class="form-section">
               <label for="local_endereco">Endereço do Evento</label>
-              <input type="text" id="local_endereco" name="local_endereco" maxlength="200" placeholder="Digite o endereço completo do evento">
+              <input type="text" id="local_endereco" name="local_endereco" maxlength="200" placeholder="Digite o endereço completo do evento" required>
             </div>
             <div class="form-section">
               <label for="local_maps_url">Link do Google Maps</label>
               <input type="url" id="local_maps_url" name="local_maps_url" maxlength="300" placeholder="Cole aqui o link do Google Maps">
               <small>
                 <strong>📍 Como obter o link correto:</strong><br>
-                1. Acesse <a href="https://maps.google.com" target="_blank">Google Maps</a><br>
+                1. Acesse <a href="https://maps.google.com" target="_blank" rel="noopener">Google Maps</a><br>
                 2. Pesquise o local desejado<br>
                 3. Clique em "Compartilhar" → "Incorporar um mapa"<br>
-                4. Copie apenas a URL do <code>src=""</code> (sem as aspas)<br>
+                4. Copie apenas a URL do <code>src=\"\"</code> (sem as aspas)<br>
                 <strong>Ou</strong> cole qualquer link do Google Maps - o sistema convertará automaticamente.
               </small>
             </div>
-          </div>
+          </section>
 
-          <!-- ===================== Botão Final - Salvar Todas as Alterações ===================== -->
-          <div style="text-align:center; margin: 32px 0 0 0;">
-            <button type="submit" class="btn btn-solid" style="font-size:1.2em;padding:14px 40px;">Salvar Alterações</button>
+          <!-- Botão Final -->
+          <div class="form-actions">
+            <button type="submit" class="btn btn-solid">Salvar Alterações</button>
+            <span id="form-status" class="form-status" aria-live="polite"></span>
           </div>
-          </div>
-          <!-- Sessão Programação -->
-          <!-- ATENÇÃO: A sessão de programação foi removida deste formulário.
-               A edição da programação será feita em uma nova página dedicada (ex: editar-programacao.html).
-               O backend e o restante do admin permanecem funcionando normalmente. -->
-          <!-- (toda a estrutura HTML e JS da programação foi removida deste arquivo) -->
-          <!-- =====================
-          PREVIEW DE IMAGENS
-          ===================== -->
-          <script>
-          // DEBUG: Preview do banner
-          console.log('[DEBUG] Script de preview de imagens carregado');
-          
-          // Preview para arquivos da seção "Material Oficial"
-          document.getElementById('material_manual').addEventListener('change', function(e) {
-            console.log('[DEBUG] Manual do Expositor alterado:', this.files);
-            const preview = document.getElementById('material-manual-preview');
-            preview.innerHTML = '';
-            if (this.files && this.files[0]) {
-              const file = this.files[0];
-              const fileSize = (file.size / 1024 / 1024).toFixed(2);
-              const fileExtension = file.name.split('.').pop().toLowerCase();
-              
-              let fileIcon = '📄';
-              if (fileExtension === 'pdf') fileIcon = '📋';
-              else if (['doc', 'docx'].includes(fileExtension)) fileIcon = '📝';
-              else if (['zip', 'rar'].includes(fileExtension)) fileIcon = '📦';
-              
-              preview.innerHTML = `
-                <div class="file-info">
-                  <div class="file-icon">${fileIcon}</div>
-                  <div class="file-details">
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${fileSize} MB</div>
-                  </div>
-                </div>
-              `;
-            }
-          });
-          
-          document.getElementById('material_release').addEventListener('change', function(e) {
-            console.log('[DEBUG] Release de Imprensa alterado:', this.files);
-            const preview = document.getElementById('material-release-preview');
-            preview.innerHTML = '';
-            if (this.files && this.files[0]) {
-              const file = this.files[0];
-              const fileSize = (file.size / 1024 / 1024).toFixed(2);
-              const fileExtension = file.name.split('.').pop().toLowerCase();
-              
-              let fileIcon = '📄';
-              if (fileExtension === 'pdf') fileIcon = '📋';
-              else if (['doc', 'docx'].includes(fileExtension)) fileIcon = '📝';
-              else if (['zip', 'rar'].includes(fileExtension)) fileIcon = '📦';
-              
-              preview.innerHTML = `
-                <div class="file-info">
-                  <div class="file-icon">${fileIcon}</div>
-                  <div class="file-details">
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${fileSize} MB</div>
-                  </div>
-                </div>
-              `;
-            }
-          });
-          
-          // Preview para imagens da sessão "A Feira"
-          // Adiciona listeners para cada input individual
-          document.getElementById('afeira_imagem1').addEventListener('change', function(e) {
-            console.log('[DEBUG] Imagem 1 da Feira alterada:', this.files);
-            const preview = document.getElementById('afeira-imagem1-preview');
-            preview.innerHTML = '';
-            if (this.files && this.files[0]) {
-              const img = document.createElement('img');
-              img.src = URL.createObjectURL(this.files[0]);
-              preview.appendChild(img);
-            }
-          });
-          
-          document.getElementById('afeira_imagem2').addEventListener('change', function(e) {
-            console.log('[DEBUG] Imagem 2 da Feira alterada:', this.files);
-            const preview = document.getElementById('afeira-imagem2-preview');
-            preview.innerHTML = '';
-            if (this.files && this.files[0]) {
-              const img = document.createElement('img');
-              img.src = URL.createObjectURL(this.files[0]);
-              preview.appendChild(img);
-            }
-          });
-          
-          document.getElementById('afeira_imagem3').addEventListener('change', function(e) {
-            console.log('[DEBUG] Imagem 3 da Feira alterada:', this.files);
-            const preview = document.getElementById('afeira-imagem3-preview');
-            preview.innerHTML = '';
-            if (this.files && this.files[0]) {
-              const img = document.createElement('img');
-              img.src = URL.createObjectURL(this.files[0]);
-              preview.appendChild(img);
-            }
-          });
-          // Preview para os cards da sessão "O QUE ESPERAR"
-          for (let i = 1; i <= 8; i++) {
-            document.getElementById(`oqueesperar_card${i}_img`).addEventListener('change', function(e) {
-              // DEBUG: Preview do card alterado
-              console.log(`[DEBUG] Card ${i} alterado:`, this.files);
-              const preview = document.getElementById(`oqueesperar_card${i}_preview`);
-              preview.innerHTML = '';
-              if (this.files && this.files[0]) {
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(this.files[0]);
-                preview.appendChild(img);
-              }
-            });
-          }
-          // Preview do mapa da feira
-          // DEBUG: Preview do mapa
-
-          document.getElementById('mapa_imagem').addEventListener('change', function(e) {
-            // DEBUG: Preview do mapa alterado
-            console.log('[DEBUG] Mapa alterado:', this.files);
-            const preview = document.getElementById('mapa-preview');
-            preview.innerHTML = '';
-            if (this.files && this.files[0]) {
-              const file = this.files[0];
-              if (file.type === 'application/pdf') {
-                preview.innerHTML = `<span style='color:#994C11;font-weight:bold;'>Arquivo PDF selecionado: ${file.name}</span>`;
-              } else {
-                const img = document.createElement('img');
-                img.src = URL.createObjectURL(file);
-                img.style.maxWidth = '100%';
-                img.style.height = 'auto';
-                img.style.maxHeight = '700px';
-                img.style.width = 'auto';
-                img.style.display = 'block';
-                img.style.margin = '0 auto';
-                img.style.borderRadius = '16px';
-                img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
-                img.style.objectFit = 'contain';
-                preview.appendChild(img);
-              }
-            }
-          });
-          // =====================
-          // INTEGRAÇÃO COM BACKEND
-          // =====================
-          // O carregamento de dados foi movido para editar-home.js para evitar duplicação
-          // O submit também foi movido para editar-home.js para evitar conflitos
-          // =====================
-// Função utilitária para adicionar preview de imagem a um input file
-// Função utilitária para adicionar preview de imagem a um input file
-function addImagePreview(inputId, previewId, options = {}) {
-  const input = document.getElementById(inputId);
-  const preview = document.getElementById(previewId);
-  if (!input || !preview) return;
-  input.addEventListener('change', function(e) {
-    preview.innerHTML = '';
-    if (this.files && this.files.length > 0) {
-      // Caso especial para preview de PDF (usado no mapa)
-      if (options.allowPdf && this.files[0].type === 'application/pdf') {
-        preview.innerHTML = `<span style='color:#994C11;font-weight:bold;'>Arquivo PDF selecionado: ${this.files[0].name}</span>`;
-        return;
-      }
-      Array.from(this.files).forEach(file => {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        if (options.mapaStyle) {
-          img.style.maxWidth = '100%';
-          img.style.height = 'auto';
-          img.style.maxHeight = '700px';
-          img.style.width = 'auto';
-          img.style.display = 'block';
-          img.style.margin = '0 auto';
-          img.style.borderRadius = '16px';
-          img.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)';
-          img.style.objectFit = 'contain';
-        }
-        preview.appendChild(img);
-      });
-    }
-  });
-}
-
-// Aplicar preview modularizado
-addImagePreview('banner', 'banner-preview');
-// Preview para os cards da sessão "O QUE ESPERAR"
-for (let i = 1; i <= 8; i++) {
-  addImagePreview(`oqueesperar_card${i}_img`, `oqueesperar_card${i}_preview`);
-}
-// Preview do mapa da feira (imagem ou PDF)
-addImagePreview('mapa_imagem', 'mapa-preview', { allowPdf: true, mapaStyle: true });
-        </script>
+        </form>
       </div>
     </main>
   </div>
-  <!-- Script inline deve ser carregado ANTES do arquivo externo -->
-  <script>
-    // Fazer as funções globais disponíveis para o arquivo externo
-    window.bannersCount = 0;
-
-    // =====================================================
-    // FUNCIONALIDADE CONTADOR DATA
-    // =====================================================
-    document.addEventListener('DOMContentLoaded', function() {
-      const zerarContadorBtn = document.getElementById('zerar-contador-btn');
-      const contadorDataStatus = document.getElementById('contador-data-status');
-
-      /**
-       * Mostra status de sucesso ou erro
-       * @param {string} message - Mensagem a ser exibida
-       * @param {string} type - Tipo do status ('success' ou 'error')
-       */
-      function mostrarStatus(message, type) {
-        contadorDataStatus.textContent = message;
-        contadorDataStatus.className = `contador-data-status ${type}`;
-        contadorDataStatus.style.display = 'block';
-        
-        setTimeout(() => {
-          contadorDataStatus.style.display = 'none';
-        }, 3000);
-      }
-
-      /**
-       * Zera o contador definindo a data atual
-       */
-      if (zerarContadorBtn) {
-        zerarContadorBtn.addEventListener('click', function() {
-          const agora = new Date();
-          const dataFormatada = agora.toISOString().slice(0, 16); // YYYY-MM-DDThh:mm
-          document.getElementById('contador_data_feira').value = dataFormatada;
-          mostrarStatus('Contador zerado para a data atual!', 'success');
-        });
-      }
-    });
-  </script>
   <script src="assets/js/editar-home.js"></script>
 </body>
 </html>

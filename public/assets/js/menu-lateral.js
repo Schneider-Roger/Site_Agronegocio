@@ -23,13 +23,13 @@ function createMobileSidebar() {
         </div>
         <div class="menu-sidebar-content">
             <a href="index.html">Home</a>
-            <a href="#afeira">A Feira</a>
-            <a href="#sobre" class="submenu-item">→ Sobre a Feira</a>
-            <a href="#expositores" class="submenu-item">→ Expositores</a>
-            <a href="#mapa" class="submenu-item">→ Mapa da Feira</a>
-            <a href="#programacao" class="submenu-item">→ Programação</a>
-            <a href="#manual" class="submenu-item">→ Manual da Feira</a>
-            <a href="#local" class="submenu-item">→ Local</a>
+            <a href="index.html#afeira">A Feira</a>
+            <a href="index.html#afeira" class="submenu-item">→ Sobre a Feira</a>
+            <a href="index.html#expositor" class="submenu-item">→ Expositores</a>
+            <a href="index.html#mapa" class="submenu-item">→ Mapa da Feira</a>
+            <a href="index.html#programacao" class="submenu-item">→ Programação</a>
+            <a href="index.html#material" class="submenu-item">→ Manual da Feira</a>
+            <a href="index.html#local" class="submenu-item">→ Local</a>
             <a href="galeria.html">Galeria</a>
             <a href="contato.html">Contato</a>
         </div>

@@ -78,6 +78,21 @@
   
   <!-- Script para funcionalidade do menu mobile do header -->
   <script>
+    const apiBase = (function getApiBase() {
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (window.location.protocol === 'file:' || (isLocalhost && window.location.port && window.location.port !== '3000')) {
+        return 'http://localhost:3000';
+      }
+      return '';
+    })();
+
+    function buildApiUrl(path) {
+      return `${apiBase}${path}`;
+    }
+
+    function buildAssetUrl(path) {
+      return `${apiBase}${path}`;
+    }
     // =====================
     // MENU MOBILE DO HEADER
     // =====================
@@ -165,7 +180,7 @@
      * Carrega a data do contador regressivo do backend e exibe a seção se estiver ativa
      */
     function carregarContadorDinamico() {
-      fetch('http://localhost:3000/api/home')
+      fetch(buildApiUrl('/api/home'))
         .then(res => res.json())
         .then(data => {
           const secaoContador = document.getElementById('contador-dinamico-section');
@@ -242,13 +257,13 @@
      * Carrega os dados dinâmicos da home (banner, faixas, sessões, etc.)
      */
     function carregarDadosHome() {
-      fetch('http://localhost:3000/api/home')
+      fetch(buildApiUrl('/api/home'))
         .then(res => res.json())
         .then(data => {
           // Banner principal
           if (data.banner) {
             const bannerImg = document.getElementById('banner-img');
-            if (bannerImg) bannerImg.src = 'http://localhost:3000' + data.banner;
+            if (bannerImg) bannerImg.src = buildAssetUrl(data.banner);
           }
           // Faixa abaixo do banner
           if (data.faixa_titulo) {
@@ -322,7 +337,7 @@
                   const imgElement = document.createElement('img');
                   // Adiciona timestamp para evitar cache
                   const timestamp = new Date().getTime();
-                  const finalUrl = 'http://localhost:3000' + img + '?t=' + timestamp;
+                  const finalUrl = buildAssetUrl(img) + '?t=' + timestamp;
                   imgElement.src = finalUrl;
                   imgElement.alt = `Imagem ${index + 1} da Feira`;
                   
@@ -371,7 +386,7 @@
                 }
                 
                 if (back && imagemCard) {
-                  back.src = 'http://localhost:3000' + imagemCard;
+                  back.src = buildAssetUrl(imagemCard);
                   back.alt = textoCard || `Item ${i}`;
                 }
               }
@@ -481,7 +496,7 @@
               console.log('[DEBUG] Mapa encontrado:', data.mapa_imagem);
               mapaWrapper.innerHTML = '';
               
-              const mapaUrl = 'http://localhost:3000' + data.mapa_imagem;
+              const mapaUrl = buildAssetUrl(data.mapa_imagem);
               const fileExtension = data.mapa_imagem.split('.').pop().toLowerCase();
               
               if (fileExtension === 'pdf') {
@@ -620,7 +635,7 @@
                 // Adicionar logos (máximo 12 para não sobrecarregar)
                 logosSetor.slice(0, 12).forEach((logoPath, logoIndex) => {
                   const logoImg = document.createElement('img');
-                  logoImg.src = `http://localhost:3000${logoPath}`;
+                  logoImg.src = buildAssetUrl(logoPath);
                   logoImg.alt = `Empresa ${logoIndex + 1} - ${textoSetor}`;
                   logoImg.className = 'logo-item';
                   
@@ -895,7 +910,7 @@
     // =====================
     // SESSÃO PROGRAMAÇÃO DINÂMICA
     // =====================
-    fetch('http://localhost:3000/api/home')
+    fetch(buildApiUrl('/api/home'))
       .then(res => res.json())
       .then(data => {
         // DEBUG: Dados de programação recebidos
@@ -1010,7 +1025,7 @@
         
         // Configura botão do Manual do Expositor
         if (data.material_manual && data.material_manual.length > 0) {
-          const manualUrl = 'http://localhost:3000' + data.material_manual;
+          const manualUrl = buildAssetUrl(data.material_manual);
           const manualFileName = data.material_manual.split('/').pop();
           btnDownloadManual.href = manualUrl;
           btnDownloadManual.style.display = 'inline-block';
@@ -1023,7 +1038,7 @@
         
         // Configura botão do Release de Imprensa
         if (data.material_release && data.material_release.length > 0) {
-          const releaseUrl = 'http://localhost:3000' + data.material_release;
+          const releaseUrl = buildAssetUrl(data.material_release);
           const releaseFileName = data.material_release.split('/').pop();
           btnDownloadRelease.href = releaseUrl;
           btnDownloadRelease.style.display = 'inline-block';

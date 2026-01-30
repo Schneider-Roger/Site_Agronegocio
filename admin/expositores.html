@@ -15,7 +15,7 @@
         <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
       </div>
       <nav>
-        <a href="dashboard.html"> Painel</a>
+     
         <a href="editar-home.html"> Editar Home</a>
         <a href="editar-programacao.html"> Programação</a>
         <a href="gerenciar-galeria.html"> Galeria</a>
@@ -83,6 +83,22 @@
         </form>
       </div>
       <script>
+      const apiBase = (function getApiBase() {
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isLocalhost && window.location.port && window.location.port !== '3000') {
+          return 'http://localhost:3000';
+        }
+        return '';
+      })();
+
+      function buildApiUrl(path) {
+        return `${apiBase}${path}`;
+      }
+
+      function buildAssetUrl(path) {
+        return `${apiBase}${path}`;
+      }
+
       console.log('[DEBUG] Script de expositor carregado');
       
       // Array para guardar os arquivos de preview de cada setor (dinâmico)
@@ -217,7 +233,7 @@
               logoDiv.style.margin = '0';
               logoDiv.style.flexShrink = '0';
               const img = document.createElement('img');
-              img.src = `http://localhost:3000${logo}`;
+              img.src = buildAssetUrl(logo);
               img.className = 'logo-salva-thumb';
               img.alt = `Logo ${lidx+1}`;
               // Botão remover
@@ -304,7 +320,7 @@
       
       // Função para remover logo (AJAX)
       function removerLogoSetor(setorIdx, logoPath) {
-        fetch('http://localhost:3000/api/home/remover-logo', {
+        fetch(buildApiUrl('/api/home/remover-logo'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ setor: setorIdx, logo: logoPath })
@@ -314,7 +330,7 @@
           if (data.success) {
             alert('Logo removida!');
             // Atualiza setores
-            fetch('http://localhost:3000/api/home')
+            fetch(buildApiUrl('/api/home'))
               .then(res => res.json())
               .then(renderSetoresExpositor);
           } else {
@@ -335,7 +351,7 @@
         console.log(`[DEBUG] Adicionando setor ${window.totalSetores}`);
         
         // Re-renderiza com o novo setor
-        fetch('http://localhost:3000/api/home')
+        fetch(buildApiUrl('/api/home'))
           .then(res => res.json())
           .then(renderSetoresExpositor)
           .then(() => atualizarBotaoSalvar());
@@ -355,7 +371,7 @@
         }
         
         // Remove do backend
-        fetch('http://localhost:3000/api/home/remover-setor', {
+        fetch(buildApiUrl('/api/home/remover-setor'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ setor: setorIdx })
@@ -369,7 +385,7 @@
             alert(`✅ Seção "${nomeSetor}" removida com sucesso!`);
             
             // Re-renderiza
-            fetch('http://localhost:3000/api/home')
+            fetch(buildApiUrl('/api/home'))
               .then(res => res.json())
               .then(renderSetoresExpositor)
               .then(() => atualizarBotaoSalvar());
@@ -446,7 +462,7 @@
         btn.disabled = true;
         
         // Envia dados da seção Expositor para o servidor
-        fetch('http://localhost:3000/api/home', {
+        fetch(buildApiUrl('/api/home'), {
           method: 'POST',
           body: formData
         })
@@ -500,7 +516,7 @@
             console.log('[DEBUG] Arrays de preview limpos - usuário deve adicionar apenas novas logos');
             
             // Recarrega os dados para atualizar as logos exibidas
-            fetch('http://localhost:3000/api/home')
+            fetch(buildApiUrl('/api/home'))
               .then(res => res.json())
               .then(renderSetoresExpositor);
           } else {
@@ -527,7 +543,7 @@
         document.getElementById('btn-adicionar-setor').addEventListener('click', adicionarNovoSetor);
         
         // Carrega dados da home para preencher os campos
-        fetch('http://localhost:3000/api/home')
+        fetch(buildApiUrl('/api/home'))
           .then(res => res.json())
           .then(data => {
             console.log('[DEBUG] Dados carregados:', data);

@@ -4,7 +4,35 @@ document.addEventListener('DOMContentLoaded', function() {
   const status = document.getElementById('status-fotos');
   const titulo = document.getElementById('galeria-titulo');
 
-  const apiBase = `${window.location.protocol}//${window.location.hostname}:3000`;
+  const apiBase = getApiBase();
+
+  function getApiBase() {
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalhost && window.location.port && window.location.port !== '3000') {
+      return 'http://localhost:3000';
+    }
+    return '';
+  }
+
+  function buildApiUrl(path) {
+    return `${apiBase}${path}`;
+  }
+
+  function buildAssetUrl(path) {
+    return `${apiBase}${path}`;
+  }
+
+  function normalizePath(value) {
+    if (!value || typeof value !== 'string') return value;
+    try {
+      if (value.startsWith('http://') || value.startsWith('https://')) {
+        return new URL(value).pathname;
+      }
+    } catch (e) {
+      // ignore parse errors
+    }
+    return value;
+  }
 
   // read galeriaId or fallback ano+imagem from query
   const params = new URLSearchParams(window.location.search);
@@ -15,12 +43,16 @@ document.addEventListener('DOMContentLoaded', function() {
   async function resolveGaleriaIfNeeded() {
     if (galeriaId) return galeriaId;
     try {
-      const resp = await fetch(apiBase + '/api/galerias');
+      const resp = await fetch(buildApiUrl('/api/galerias'));
       const all = await resp.json();
       // try to match by imagem (exact) then by ano
       if (fallbackImagem) {
-        const decodedImg = decodeURIComponent(fallbackImagem);
-        const found = all.find(g => (g.imagem === decodedImg) || (Array.isArray(g.fotos) && g.fotos.includes(decodedImg)));
+        const decodedImg = normalizePath(decodeURIComponent(fallbackImagem));
+        const found = all.find(g => {
+          const img = normalizePath(g.imagem);
+          const fotos = Array.isArray(g.fotos) ? g.fotos.map(normalizePath) : [];
+          return img === decodedImg || fotos.includes(decodedImg);
+        });
         if (found) {
           galeriaId = found.id;
           return galeriaId;
@@ -48,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
         }
       }
-      const resp = await fetch(`${apiBase}/api/galerias/${encodeURIComponent(galeriaId)}`);
+      const resp = await fetch(buildApiUrl(`/api/galerias/${encodeURIComponent(galeriaId)}`));
       if (!resp.ok) throw new Error('Galeria não encontrada');
       const gal = await resp.json();
       titulo.textContent = `Gerenciar Fotos — ${gal.ano || ''}`;
@@ -67,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const img = document.createElement('img');
       img.className = 'galeria-capa';
-      img.src = f;
+      img.src = buildAssetUrl(f);
       img.alt = '';
 
       const body = document.createElement('div');
@@ -88,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Galeria não encontrada. Atualize a página e tente novamente.');
             return;
           }
-          const r = await fetch(`${apiBase}/api/galerias/${encodeURIComponent(galeriaId)}/fotos`, {
+          const r = await fetch(buildApiUrl(`/api/galerias/${encodeURIComponent(galeriaId)}/fotos`), {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ foto: f })
@@ -123,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
           alert('Galeria não encontrada. Atualize a página e tente novamente.');
           return;
         }
-        const resp = await fetch(`${apiBase}/api/galerias/${encodeURIComponent(galeriaId)}/fotos`, {
+        const resp = await fetch(buildApiUrl(`/api/galerias/${encodeURIComponent(galeriaId)}/fotos`), {
           method: 'POST',
           body: fd
         });

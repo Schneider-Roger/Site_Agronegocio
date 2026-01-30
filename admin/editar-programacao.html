@@ -14,7 +14,7 @@
         <img src="assets/img/Modo_de_isolamento.png" alt="Logo da Feira">
       </div>
       <nav>
-        <a href="dashboard.html"> Painel</a>
+       
         <a href="editar-home.html"> Editar Home</a>
         <a href="editar-programacao.html" class="active"> Programação</a>
         <a href="gerenciar-galeria.html"> Galeria</a>
@@ -91,6 +91,18 @@
   </template>
 
   <script>
+    const apiBase = (function getApiBase() {
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isLocalhost && window.location.port && window.location.port !== '3000') {
+        return 'http://localhost:3000';
+      }
+      return '';
+    })();
+
+    function buildApiUrl(path) {
+      return `${apiBase}${path}`;
+    }
+
     // =========================
     // Estado local e bootstrap
     // =========================
@@ -140,7 +152,7 @@
     }
 
     // Carregar programação existente do backend
-    fetch('http://localhost:3000/api/home')
+    fetch(buildApiUrl('/api/home'))
       .then(res => res.json())
       .then(data => {
         // Garante que os campos sejam arrays, mesmo se vierem como null/undefined
@@ -375,7 +387,7 @@
 
       // Enviar
       const formData = new FormData(e.target);
-      fetch('http://localhost:3000/api/home', {
+      fetch(buildApiUrl('/api/home'), {
         method: 'POST',
         body: formData,
         headers: {
@@ -386,7 +398,7 @@
       .then(() => {
         alert('Programação salva com sucesso!');
         // Recarrega para refletir o que o site público enxerga
-        return fetch('http://localhost:3000/api/home').then(r => r.json());
+        return fetch(buildApiUrl('/api/home')).then(r => r.json());
       })
       .then(dataAtualizada => {
         // Garante que os campos sejam arrays, mesmo se vierem como null/undefined

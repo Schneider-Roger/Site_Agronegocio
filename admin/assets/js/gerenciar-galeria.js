@@ -7,17 +7,44 @@ document.addEventListener('DOMContentLoaded', function() {
   // one-time auto-normalize flag to avoid loops
   let attemptedNormalize = false;
 
-  // API base: aponta para o backend em mesma máquina na porta 3000
-  // (assume servidor backend roda em :3000; é robusto quando a página é servida por Live Server em :5500)
-  const apiBase = `${window.location.protocol}//${window.location.hostname}:3000`;
+  // API base: usa mesmo host quando servido pelo backend; fallback para localhost:3000 em Live Server
+  const apiBase = getApiBase();
+
+  function getApiBase() {
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocalhost && window.location.port && window.location.port !== '3000') {
+      return 'http://localhost:3000';
+    }
+    return '';
+  }
+
+  function buildApiUrl(path) {
+    return `${apiBase}${path}`;
+  }
+
+  function buildAssetUrl(path) {
+    return `${apiBase}${path}`;
+  }
+
+  function normalizePath(value) {
+    if (!value || typeof value !== 'string') return value;
+    try {
+      if (value.startsWith('http://') || value.startsWith('https://')) {
+        return new URL(value).pathname;
+      }
+    } catch (e) {
+      // ignore parse errors
+    }
+    return value;
+  }
 
   // Buscar e renderizar galerias
   async function loadGalerias() {
     if (!galeriasGrid) return;
     galeriasGrid.innerHTML = '';
     try {
-      const resp = await fetch(apiBase + '/api/galerias');
-  const galerias = await resp.json();
+        const resp = await fetch(buildApiUrl('/api/galerias'));
+      const galerias = await resp.json();
   console.log('DEBUG: galerias carregadas:', galerias);
       if (!Array.isArray(galerias) || galerias.length === 0) {
         galeriasGrid.innerHTML = '<p>Nenhuma galeria encontrada.</p>';
@@ -29,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const img = document.createElement('img');
         img.className = 'galeria-capa';
-        img.src = g.imagem || '/assets/img/placeholder.png';
+        const imgSrc = g.imagem ? buildAssetUrl(g.imagem) : 'assets/img/placeholder.png';
+        img.src = imgSrc;
         img.alt = 'Capa ' + (g.ano || '');
         // clicar na capa abre gerenciamento de fotos
         img.style.cursor = 'pointer';
@@ -71,12 +99,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
           // Try to resolve the gallery id by fetching the current list and matching ano/imagem
           try {
-            const resp = await fetch(apiBase + '/api/galerias');
+            const resp = await fetch(buildApiUrl('/api/galerias'));
             const list = await resp.json();
             if (Array.isArray(list)) {
               const found = list.find(x => {
                 const sameAno = String(x.ano || '') === String(g.ano || '');
-                const sameImagem = (x.imagem || '') === (g.imagem || '') || (x.imagem || '') === (img.src || '');
+                const imagemAtual = normalizePath(g.imagem || '') || '';
+                const imagemDom = normalizePath(img.src || '') || '';
+                const imagemApi = normalizePath(x.imagem || '') || '';
+                const sameImagem = imagemApi === imagemAtual || imagemApi === imagemDom;
                 return sameAno && sameImagem;
               });
               if (found && found.id) {
@@ -92,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
           try {
             const ano = g.ano;
             const imagem = img.src || g.imagem;
-            const resp2 = await fetch(apiBase + '/api/galerias/remover', {
+            const resp2 = await fetch(buildApiUrl('/api/galerias/remover'), {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ id: null, ano, imagem })
@@ -154,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
     try {
   console.log('DEBUG: deletando galeria id=', id);
   // Use URL param alt endpoint to avoid body-with-delete issues on some setups
-  const resp = await fetch(`${apiBase}/api/galerias/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  const resp = await fetch(buildApiUrl(`/api/galerias/${encodeURIComponent(id)}`), { method: 'DELETE' });
   const data = await resp.json();
   console.log('DEBUG: resposta exclusão', data, 'status', resp.status);
       if (data && data.success) {
@@ -185,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const ano = anoEl ? anoEl.textContent.trim() : undefined;
       const imagem = imgEl ? imgEl.src : undefined;
       console.log('DEBUG: tentando fallback remover com', { id, ano, imagem });
-      const resp2 = await fetch(apiBase + '/api/galerias/remover', {
+      const resp2 = await fetch(buildApiUrl('/api/galerias/remover'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, ano, imagem })
@@ -220,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
       statusMsg.textContent = '';
       const formData = new FormData(form);
       try {
-        const apiUrl = apiBase + '/api/galerias';
+        const apiUrl = buildApiUrl('/api/galerias');
         const resp = await fetch(apiUrl, {
           method: 'POST',
           body: formData
