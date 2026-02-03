@@ -41,6 +41,32 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+.mapa-section .checkbox-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(153, 76, 17, 0.04);
+  transition: background 0.2s ease;
+  margin-bottom: 0;
+  color: #994C11;
+}
+
+.mapa-section .checkbox-inline:hover {
+  background: rgba(153, 76, 17, 0.08);
+}
+
+.mapa-section .checkbox-inline input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: #994C11;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .mapa-section input[type="file"] {
   width: 100%;
   padding: 16px;

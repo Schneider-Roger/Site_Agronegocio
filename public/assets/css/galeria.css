@@ -10,6 +10,7 @@ body {
   padding: 0;
   box-sizing: border-box;
   background: #fff;
+  overflow-x: hidden;
 }
 
 
@@ -17,8 +18,8 @@ main {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -27,8 +28,8 @@ main {
 
 footer {
   margin-top: auto;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   position: relative;
   left: 0;
   right: 0;
@@ -39,8 +40,8 @@ footer {
    Seção principal da galeria
    ============================= */
 .main-galeria {
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   position: relative;
   padding: 50px 0 0 0;
   background-image: url('../img/Group 24.png');
@@ -131,8 +132,8 @@ footer {
    Container dos cards da galeria
    ============================= */
 .galeria-container {
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   margin-bottom: 0;
   background-color: #fff;
   padding: 60px 16px 20px 16px;
@@ -212,8 +213,8 @@ footer {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.9);
   z-index: 1000;
   opacity: 0;
@@ -246,8 +247,8 @@ footer {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: #fff;
   z-index: 1002;
   opacity: 0;

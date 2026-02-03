@@ -195,6 +195,12 @@
           <section class="section-container mapa-section">
             <h2>Mapa da Feira</h2>
             <div class="form-section">
+              <label class="checkbox-inline">
+                <input type="checkbox" id="mapa_ativo" name="mapa_ativo" checked>
+                Exibir seção mapa na página inicial
+              </label>
+            </div>
+            <div class="form-section">
               <label for="mapa_imagem">Imagem do Mapa</label>
               <input type="file" id="mapa_imagem" name="mapa_imagem" accept="image/*,application/pdf">
               <div class="mapa-preview" id="mapa-preview" aria-live="polite"></div>
@@ -205,6 +211,12 @@
           <!-- Sessão Material Oficial -->
           <section class="section-container material-section">
             <h2>Material Oficial</h2>
+            <div class="form-section">
+              <label class="checkbox-inline">
+                <input type="checkbox" id="material_ativo" name="material_ativo" checked>
+                Exibir seção materiais na página inicial
+              </label>
+            </div>
             <div class="form-section">
               <label for="material_manual">Manual do Expositor</label>
               <input type="file" id="material_manual" name="material_manual" accept=".pdf,.doc,.docx,.zip,.rar">

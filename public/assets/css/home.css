@@ -156,8 +156,8 @@ html {
 .menu-sidebar {
   position: fixed;
   top: 0;
-  right: -100vw;
-  width: 100vw;
+  right: -100%;
+  width: 100%;
   height: 100vh;
   background: linear-gradient(135deg, #005523 0%, #004419 100%);
   z-index: 99999;
@@ -372,7 +372,7 @@ html {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background-color: rgba(0,0,0,0.5);
   z-index: 99998;
@@ -398,8 +398,8 @@ html {
 
 @media (max-width: 480px) {
   .menu-sidebar {
-    width: 100vw;
-    right: -100vw;
+    width: 100%;
+    right: -100%;
   }
 }
 
@@ -516,7 +516,7 @@ html {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   z-index: 9999;
@@ -736,59 +736,51 @@ html {
    BANNER
    ===================== */
 .banner {
-  width: 100vw;
-  height: 720px;
-  max-width: 100vw;
-  min-width: 100vw;
+  width: 100%;
+  max-width: 100%; /* MUDANÇA: remover limitação */
   margin: 0;
   padding: 0;
   overflow: hidden;
   position: relative;
-  left: 50%;
-  right: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000; /* para evitar fundo branco em imagens menores */
+  display: block;
+  background: #005523; /* MUDANÇA: cor de fundo igual ao header */
+  min-height: 400px;
 }
 
 .banner img {
-  width: 100vw;
-  height: auto;
-  min-width: 100vw;
-  max-width: 100vw;
-  max-height: 720px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
 @media (max-width: 768px) {
   .banner {
-    height: 400px;
+    min-height: 300px;
   }
   
   .banner img {
-    max-height: 400px;
     object-fit: cover;
+    object-position: center;
   }
 }
 
 @media (max-width: 480px) {
   .banner {
-    height: 300px;
+    min-height: 200px;
   }
   
   .banner img {
-    max-height: 300px;
+    object-fit: cover;
+    object-position: center;
   }
 }
-
 /* =====================
    FAIXA ABAIXO DO BANNER
    ===================== */
 .faixa-abaixo-banner {
-  width: 100vw;
+  width: 100%;
   height: auto; /* ou remova */
   background: transparent; /* ou remova a linha */
   margin: 0;
@@ -1592,6 +1584,8 @@ footer {
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
   }
   
   .expositor-setor-card {
@@ -1605,11 +1599,14 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: 25px;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
   }
   
   .expositor-setor-card {
     width: 280px;
-    height: 100px;
+    height: auto;
+    padding: 14px 0 10px;
     font-size: 15px;
   }
   
@@ -1621,7 +1618,8 @@ footer {
 @media (max-width: 480px) {
   .expositor-setor-card {
     width: 250px;
-    height: 90px;
+    height: auto;
+    padding: 12px 0 8px;
     font-size: 14px;
   }
   
@@ -1819,24 +1817,29 @@ footer {
   .expositor-setor-card[data-setor="setor2"] .setor-hover-panel,
   .expositor-setor-card[data-setor="setor3"] .setor-hover-panel,
   .expositor-setor-card[data-setor="setor4"] .setor-hover-panel {
-    left: 50%;
-    transform: translateX(-50%);
-    width: 95%;
-    max-width: 500px;
+    position: static;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: 520px;
     padding: 20px;
     border-radius: 0 0 12px 12px;
-    margin-top: 20px;
+    margin: 12px auto 0;
+    opacity: 1;
+    visibility: visible;
   }
   
   .setor-hover-panel .logos-container {
-    gap: 20px;
-    max-height: 280px;
+    gap: 16px;
+    max-height: none;
+    flex-wrap: wrap;
   }
   
   .setor-hover-panel .logo-item {
     height: 100px;
     width: 100px;
     padding: 8px;
+    animation: none;
   }
 }
 
@@ -1845,18 +1848,22 @@ footer {
   .expositor-setor-card[data-setor="setor2"] .setor-hover-panel,
   .expositor-setor-card[data-setor="setor3"] .setor-hover-panel,
   .expositor-setor-card[data-setor="setor4"] .setor-hover-panel {
-    left: 50%;
-    transform: translateX(-50%);
-    width: 95%;
-    max-width: 350px;
+    position: static;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: 360px;
     padding: 15px;
     border-radius: 0 0 8px 8px;
-    margin-top: 25px;
+    margin: 10px auto 0;
+    opacity: 1;
+    visibility: visible;
   }
   
   .setor-hover-panel .logos-container {
-    gap: 15px;
-    max-height: 150px;
+    gap: 12px;
+    max-height: none;
+    flex-wrap: wrap;
   }
   
   .setor-hover-panel .logo-item {
@@ -2413,3 +2420,194 @@ footer {
   display: none;
 }
 
+/* =====================
+   SESSÃO LOCAL
+   ===================== */
+.sessao-local {
+  background: #F9FAFB;
+  padding: 60px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.container-local {
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  padding: 0 20px;
+}
+
+.container-local:last-child {
+  margin-bottom: 0;
+  max-width: 100%; /* Permite largura total */
+  padding: 0; /* Remove padding lateral */
+}
+
+.nome-sessao {
+  font-size: 28px;
+  color: #BED232;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.local-titulo {
+  font-size: 48px;
+  color: #005523;
+  font-family: 'Bungee', 'Montserrat', sans-serif;
+  font-weight: 900;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.local-desc {
+  font-size: 18px;
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+}
+
+.local-endereco {
+  font-size: 20px;
+  color: #005523;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.local-mapa-link {
+  display: inline-block;
+  padding: 14px 38px;
+  background: #BED232;
+  color: #005523;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  margin-bottom: 30px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.local-mapa-link:hover {
+  background: #a7b92b;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.local-mapa-iframe-wrapper {
+  width: 100%; /* Largura total */
+  max-width: 100%; /* Remove limitação */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  background: #ddd; /* cor de fundo caso o mapa não carregue */
+}
+
+.local-mapa-iframe-wrapper iframe {
+  display: block;
+  width: 100%;
+  min-height: 500px;
+  border: 0;
+  box-shadow: none; /* Remove sombra */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .sessao-local {
+    padding: 40px 0;
+  }
+  
+  .container-local {
+    padding: 0 15px;
+    margin-bottom: 30px;
+  }
+  
+  .container-local:last-child {
+    padding: 0;
+  }
+  
+  .nome-sessao {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+  
+  .local-titulo {
+    font-size: 36px;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+  }
+  
+  .local-desc {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .local-endereco {
+    font-size: 18px;
+    margin-bottom: 25px;
+  }
+  
+  .local-mapa-link {
+    padding: 12px 30px;
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+  
+  .local-mapa-iframe-wrapper iframe {
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sessao-local {
+    padding: 30px 0;
+  }
+  
+  .container-local {
+    padding: 0 10px;
+    margin-bottom: 25px;
+  }
+  
+  .container-local:last-child {
+    padding: 0;
+  }
+  
+  .nome-sessao {
+    font-size: 20px;
+  }
+  
+  .local-titulo {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  
+  .local-desc {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .local-endereco {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .local-mapa-link {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+  
+  .local-mapa-iframe-wrapper iframe {
+    min-height: 300px;
+  }
+}

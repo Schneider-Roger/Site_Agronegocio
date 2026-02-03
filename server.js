@@ -510,6 +510,12 @@ app.get('/api/home', (req, res) => {
       data[`expositor_setor${i}_logos`] = [];
     }
   }
+
+  if (typeof data.mapa_ativo === 'undefined') data.mapa_ativo = true;
+  if (typeof data.material_ativo === 'undefined') data.material_ativo = true;
+  // Normaliza para booleano (evita string "false")
+  data.mapa_ativo = !(data.mapa_ativo === false || data.mapa_ativo === 'false' || data.mapa_ativo === 0 || data.mapa_ativo === '0');
+  data.material_ativo = !(data.material_ativo === false || data.material_ativo === 'false' || data.material_ativo === 0 || data.material_ativo === '0');
   
   res.json(data);
 });
@@ -684,6 +690,7 @@ app.post('/api/home', (req, res) => {
     else if (!data.mapa_imagem) {
       data.mapa_imagem = '';
     }  // Textos (campos titulo e descricao removidos - não existem mais no formulário)
+  data.mapa_ativo = req.body.mapa_ativo === 'on' || req.body.mapa_ativo === true || req.body.mapa_ativo === 'true';
   // if (typeof titulo !== 'undefined') data.titulo = titulo;
   // if (typeof descricao !== 'undefined') data.descricao = descricao;
 
@@ -846,6 +853,7 @@ app.post('/api/home', (req, res) => {
   console.log('[DEBUG] === FIM PROCESSAMENTO MATERIAL OFICIAL ===');
   console.log('[DEBUG] FINAL - data.material_manual:', data.material_manual);
   console.log('[DEBUG] FINAL - data.material_release:', data.material_release);
+  data.material_ativo = req.body.material_ativo === 'on' || req.body.material_ativo === true || req.body.material_ativo === 'true';
 
   // Salva os dados no arquivo JSON
   console.log('[DEBUG] ========== SALVANDO DADOS ==========');

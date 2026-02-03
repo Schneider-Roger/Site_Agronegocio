@@ -230,6 +230,15 @@ function initFormSubmission() {
     
     // Criar FormData e enviar
     const formData = new FormData(form);
+
+    // Garantir envio de checkboxes mesmo quando desmarcados
+    const checkboxesFix = ['contador_data_ativo', 'mapa_ativo', 'material_ativo'];
+    checkboxesFix.forEach(name => {
+      if (!formData.has(name)) {
+        const el = document.getElementById(name);
+        formData.append(name, el && el.checked ? 'true' : 'false');
+      }
+    });
     
     // Debug: listar dados do FormData
     console.log('[DEBUG] === ENVIANDO DADOS ===');
