@@ -7,7 +7,7 @@
   "faixa_botao_texto": "FAÇA SEU CADASTRO ",
   "faixa_botao_url": "https://www.instagram.com/copercana/",
   "faixa_botao_ativo": false,
-  "contador_data_feira": "2026-01-31T13:00:00.000Z",
+  "contador_data_feira": "2026-02-05T13:00:00.000Z",
   "contador_data_ativo": true,
   "afeira_imagens": [
     "/uploads/afeira_imagem1-1769778925030-588899201.JPG",
@@ -83,6 +83,6 @@
   "teste_accumulo_final": 1753981155904,
   "material_manual": "/uploads/material_manual-1754661522663-791982155.docx",
   "material_release": "/uploads/material_release-1754661522665-533605945.pdf",
-  "mapa_ativo": true,
-  "material_ativo": true
+  "mapa_ativo": false,
+  "material_ativo": false
 }

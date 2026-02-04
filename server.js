@@ -6,6 +6,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const sharp = require('sharp');
 const { getHomeData, saveHomeData, DATA_PATH } = require('./db');
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // app.use('/api/galerias', express.json({ limit: '50mb' })); // Removido para evitar conflito com multer
 app.use('/api/home/remover-logo', express.json({ limit: '50mb' }));
 app.use('/api/home/remover-setor', express.json({ limit: '50mb' }));
+app.use('/api/contador', express.json({ limit: '50mb' }));
 // Servir arquivos estáticos do frontend
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
@@ -83,6 +85,99 @@ const storageGaleriaFotos = multer.diskStorage({
   }
 });
 const uploadGaleriaFotos = multer({ storage: storageGaleriaFotos, limits: { files: 40, fileSize: 10 * 1024 * 1024 } });
+
+// =====================
+// Utilitários de imagem
+// =====================
+const IMAGE_MIME_WHITELIST = new Set([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/tiff',
+  'image/avif'
+]);
+
+const RESPONSIVE_WIDTHS = [480, 768, 1024, 1440, 1920];
+
+function isConvertibleImage(file) {
+  if (!file || !file.mimetype) return false;
+  if (file.mimetype === 'image/svg+xml') return false;
+  if (file.mimetype === 'image/gif') return false;
+  if (IMAGE_MIME_WHITELIST.has(file.mimetype)) return true;
+  return file.mimetype.startsWith('image/');
+}
+
+function getSharpOptions(hasAlpha) {
+  if (hasAlpha) {
+    return {
+      webp: { lossless: true, effort: 4 },
+      avif: { lossless: true, effort: 4 }
+    };
+  }
+  return {
+    webp: { quality: 88, nearLossless: true, effort: 4 },
+    avif: { quality: 60, effort: 4 }
+  };
+}
+
+async function convertImageToVariants(file) {
+  if (!isConvertibleImage(file) || !file.path) return null;
+
+  const inputPath = file.path;
+  const ext = path.extname(file.filename);
+  const baseName = file.filename.replace(ext, '');
+  const outputBasePath = path.join(path.dirname(inputPath), baseName);
+
+  try {
+    const baseImage = sharp(inputPath, { failOn: 'none' });
+    const metadata = await baseImage.metadata();
+    const hasAlpha = metadata.format === 'png' || metadata.hasAlpha;
+    const options = getSharpOptions(hasAlpha);
+
+    await baseImage.clone().webp(options.webp).toFile(`${outputBasePath}.webp`);
+    await baseImage.clone().avif(options.avif).toFile(`${outputBasePath}.avif`);
+
+    if (metadata.width) {
+      const widths = RESPONSIVE_WIDTHS.filter(w => w < metadata.width);
+      for (const width of widths) {
+        await baseImage
+          .clone()
+          .resize({ width, withoutEnlargement: true })
+          .webp(options.webp)
+          .toFile(`${outputBasePath}-w${width}.webp`);
+
+        await baseImage
+          .clone()
+          .resize({ width, withoutEnlargement: true })
+          .avif(options.avif)
+          .toFile(`${outputBasePath}-w${width}.avif`);
+      }
+    }
+
+    if (fs.existsSync(inputPath)) {
+      fs.unlinkSync(inputPath);
+    }
+
+    file.filename = `${baseName}.webp`;
+    file.path = `${outputBasePath}.webp`;
+    file.mimetype = 'image/webp';
+    file.originalname = file.originalname.replace(ext, '.webp');
+
+    return file.filename;
+  } catch (error) {
+    console.error('[DEBUG] Erro ao converter imagem para variantes:', error);
+    return null;
+  }
+}
+
+async function convertUploadedImages(files) {
+  if (!files) return;
+  const list = Array.isArray(files) ? files : [files];
+  for (const file of list) {
+    await convertImageToVariants(file);
+  }
+}
 
 // GET /api/galerias - lista todas as galerias
 app.get('/api/galerias', (req, res) => {
@@ -139,12 +234,13 @@ app.get('/api/galerias/:id', (req, res) => {
 });
 
 // POST /api/galerias - adiciona nova galeria (ano + imagem)
-app.post('/api/galerias', uploadGalerias.single('imagem'), (req, res) => {
+app.post('/api/galerias', uploadGalerias.single('imagem'), async (req, res) => {
   try {
     const { ano } = req.body;
     if (!ano || !req.file) {
       return res.status(400).json({ error: 'Ano e imagem são obrigatórios.' });
     }
+    await convertUploadedImages(req.file);
     const galerias = fs.existsSync(galeriasDataPath)
       ? JSON.parse(fs.readFileSync(galeriasDataPath, 'utf8'))
       : [];
@@ -166,7 +262,7 @@ app.post('/api/galerias', uploadGalerias.single('imagem'), (req, res) => {
 });
 
 // POST /api/galerias/:id/fotos - adiciona fotos à galeria (máx 40 por requisição / acúmulo)
-app.post('/api/galerias/:id/fotos', uploadGaleriaFotos.array('fotos', 40), (req, res) => {
+app.post('/api/galerias/:id/fotos', uploadGaleriaFotos.array('fotos', 40), async (req, res) => {
   try {
     const id = req.params.id;
     let galerias = fs.existsSync(galeriasDataPath)
@@ -176,6 +272,7 @@ app.post('/api/galerias/:id/fotos', uploadGaleriaFotos.array('fotos', 40), (req,
     if (idx === -1) return res.status(404).json({ success: false, error: 'Galeria não encontrada.' });
 
     const files = req.files || [];
+    await convertUploadedImages(files);
     const caminhos = files.map(f => '/uploads/' + f.filename);
 
     // Acumula sem ultrapassar 40 fotos
@@ -372,11 +469,12 @@ const storageExpositores = multer.diskStorage({
 });
 const uploadExpositores = multer({ storage: storageExpositores });
 
-app.post('/api/expositores', uploadExpositores.any(), (req, res) => {
+app.post('/api/expositores', uploadExpositores.any(), async (req, res) => {
   try {
     // Organiza os dados recebidos
     const body = req.body;
     const files = req.files;
+    await convertUploadedImages(files);
     const espacos = ['logos-legado', 'logos-evolucao', 'logos-conexao', 'logos-raiz'];
     let result = { titulo: body.expositor_titulo || '', espacos: {} };
     espacos.forEach(espaco => {
@@ -521,11 +619,74 @@ app.get('/api/home', (req, res) => {
 });
 
 // =====================
+// CONTADOR API (fonte única)
+// =====================
+app.get('/api/contador', (req, res) => {
+  try {
+    const data = getHomeData() || {};
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    res.json({
+      contador_data_feira: data.contador_data_feira || '',
+      contador_data_ativo: typeof data.contador_data_ativo === 'undefined'
+        ? true
+        : !(data.contador_data_ativo === false || data.contador_data_ativo === 'false' || data.contador_data_ativo === 0 || data.contador_data_ativo === '0'),
+      server_time: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('[DEBUG] Erro no GET /api/contador:', err);
+    res.status(500).json({ success: false, error: 'Erro ao carregar contador.' });
+  }
+});
+
+app.post('/api/contador', (req, res) => {
+  try {
+    const payload = req.body || {};
+    const data = getHomeData() || {};
+
+    if (typeof payload.contador_data_feira !== 'undefined') {
+      const rawDataFeira = payload.contador_data_feira;
+      if (rawDataFeira === '' || rawDataFeira === null) {
+        data.contador_data_feira = '';
+      } else {
+        const dataFeira = new Date(rawDataFeira);
+        if (isNaN(dataFeira.getTime())) {
+          return res.status(400).json({ success: false, error: 'Data do contador inválida.' });
+        }
+        data.contador_data_feira = dataFeira.toISOString();
+      }
+    }
+
+    if (typeof payload.contador_data_ativo !== 'undefined') {
+      data.contador_data_ativo = !(payload.contador_data_ativo === false || payload.contador_data_ativo === 'false' || payload.contador_data_ativo === 0 || payload.contador_data_ativo === '0');
+    }
+
+    saveHomeData(data);
+
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    res.json({
+      success: true,
+      contador_data_feira: data.contador_data_feira || '',
+      contador_data_ativo: typeof data.contador_data_ativo === 'undefined'
+        ? true
+        : !(data.contador_data_ativo === false || data.contador_data_ativo === 'false' || data.contador_data_ativo === 0 || data.contador_data_ativo === '0'),
+      server_time: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('[DEBUG] Erro no POST /api/contador:', err);
+    res.status(500).json({ success: false, error: 'Erro ao salvar contador.' });
+  }
+});
+
+// =====================
 // POST atualizar dados da home
 // =====================
 app.post('/api/home', (req, res) => {
   // Middleware customizado para capturar erros de upload
-  upload.any()(req, res, (err) => {
+  upload.any()(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
       console.error('[DEBUG] Erro de Multer:', err.code, err.message);
       if (err.code === 'LIMIT_FILE_SIZE') {
@@ -564,6 +725,8 @@ app.post('/api/home', (req, res) => {
     // Debug específico para banners
     const bannerFiles = req.files ? req.files.filter(f => f.fieldname.includes('banners')) : [];
     console.log('[DEBUG] BANNER FILES:', bannerFiles && bannerFiles.length > 0 ? bannerFiles.map(f => `${f.fieldname} -> ${f.filename}`) : 'Nenhum banner file');
+
+    await convertUploadedImages(req.files);
     
     let data = getHomeData() || {};
     console.log('[DEBUG] ========== DADOS CARREGADOS ==========');
@@ -704,10 +867,16 @@ app.post('/api/home', (req, res) => {
   // Contador Data
   if (typeof req.body.contador_data_feira !== 'undefined') {
     // Converte para timestamp para facilitar comparações
-    const dataFeira = new Date(req.body.contador_data_feira);
-    if (!isNaN(dataFeira.getTime())) {
-      data.contador_data_feira = dataFeira.toISOString();
-      console.log('[DEBUG] Data da feira salva:', data.contador_data_feira);
+    const rawDataFeira = req.body.contador_data_feira;
+    if (rawDataFeira === '' || rawDataFeira === null) {
+      data.contador_data_feira = '';
+      console.log('[DEBUG] Data da feira limpa (vazia)');
+    } else {
+      const dataFeira = new Date(rawDataFeira);
+      if (!isNaN(dataFeira.getTime())) {
+        data.contador_data_feira = dataFeira.toISOString();
+        console.log('[DEBUG] Data da feira salva:', data.contador_data_feira);
+      }
     }
   }
   data.contador_data_ativo = req.body.contador_data_ativo === 'on' || req.body.contador_data_ativo === true || req.body.contador_data_ativo === 'true';

@@ -15,6 +15,55 @@ document.addEventListener('DOMContentLoaded', function () {
     return `${apiBase}${path}`;
   }
 
+  const RESPONSIVE_WIDTHS = [480, 768, 1024, 1440, 1920];
+
+  function stripQuery(url) {
+    if (!url) return '';
+    return url.split('?')[0];
+  }
+
+  function getImageBasePath(assetPath) {
+    if (!assetPath) return null;
+    const clean = stripQuery(assetPath);
+    if (!/\.(avif|webp)$/i.test(clean)) return null;
+    return clean.replace(/\.(avif|webp)$/i, '');
+  }
+
+  function buildVariantSrcset(basePath, ext) {
+    return RESPONSIVE_WIDTHS
+      .map(width => `${buildAssetUrl(`${basePath}-w${width}.${ext}`)} ${width}w`)
+      .join(', ');
+  }
+
+  function createResponsivePicture(assetPath, altText, className, sizes) {
+    const picture = document.createElement('picture');
+    if (className) picture.className = className;
+
+    const basePath = getImageBasePath(assetPath);
+    if (basePath) {
+      const sourceAvif = document.createElement('source');
+      sourceAvif.type = 'image/avif';
+      sourceAvif.srcset = buildVariantSrcset(basePath, 'avif');
+      if (sizes) sourceAvif.sizes = sizes;
+      picture.appendChild(sourceAvif);
+
+      const sourceWebp = document.createElement('source');
+      sourceWebp.type = 'image/webp';
+      sourceWebp.srcset = buildVariantSrcset(basePath, 'webp');
+      if (sizes) sourceWebp.sizes = sizes;
+      picture.appendChild(sourceWebp);
+    }
+
+    const img = document.createElement('img');
+    img.src = basePath ? buildAssetUrl(`${basePath}.webp`) : resolveAssetUrl(assetPath);
+    img.alt = altText || '';
+    if (sizes && basePath) img.sizes = sizes;
+    if (basePath) img.srcset = buildVariantSrcset(basePath, 'webp');
+    picture.appendChild(img);
+
+    return { picture, img };
+  }
+
   function resolveAssetUrl(value) {
     if (!value) return value;
     if (value.startsWith('http://') || value.startsWith('https://')) return value;
@@ -140,12 +189,16 @@ document.addEventListener('DOMContentLoaded', function () {
       // Card de capa do ano
       const capa = document.createElement('div');
       capa.className = 'galeria-item galeria-capa-ano';
-      const img = document.createElement('img');
-      img.src = resolveAssetUrl(gal.imagem || (gal.fotos && gal.fotos[0]) || '');
-      img.alt = `Galeria ${gal.ano}`;
+      const capaImgPath = gal.imagem || (gal.fotos && gal.fotos[0]) || '';
+      const { picture, img } = createResponsivePicture(
+        capaImgPath,
+        `Galeria ${gal.ano}`,
+        '',
+        '(max-width: 900px) 90vw, 420px'
+      );
       img.loading = 'lazy';
       img.tabIndex = 0;
-      capa.appendChild(img);
+      capa.appendChild(picture);
       // Bloco do ano
       const anoBloco = document.createElement('div');
       anoBloco.className = 'ano-bloco';
@@ -234,11 +287,23 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
       <div class="galeria-grid">
         ${(gal.fotos||[]).map(foto => `
-          <div class="galeria-grid-item"><img src="${resolveAssetUrl(foto)}" alt="Foto ${gal.ano}" loading="lazy"></div>
+          <div class="galeria-grid-item" data-foto-src="${foto}"></div>
         `).join('')}
       </div>
     `;
     expandida.classList.add('active');
+
+    expandida.querySelectorAll('.galeria-grid-item').forEach(item => {
+      const foto = item.getAttribute('data-foto-src');
+      const { picture, img } = createResponsivePicture(
+        foto,
+        `Foto ${gal.ano}`,
+        '',
+        '(max-width: 900px) 100vw, 320px'
+      );
+      img.loading = 'lazy';
+      item.appendChild(picture);
+    });
 
     // Fecha galeria expandida
     expandida.querySelector('.btn-voltar').onclick = () => {

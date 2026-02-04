@@ -93,6 +93,66 @@
     function buildAssetUrl(path) {
       return `${apiBase}${path}`;
     }
+
+    const RESPONSIVE_WIDTHS = [480, 768, 1024, 1440, 1920];
+
+    function stripQuery(url) {
+      if (!url) return '';
+      return url.split('?')[0];
+    }
+
+    function getImageBasePath(assetPath) {
+      if (!assetPath) return null;
+      const clean = stripQuery(assetPath);
+      if (!/\.(avif|webp)$/i.test(clean)) return null;
+      return clean.replace(/\.(avif|webp)$/i, '');
+    }
+
+    function buildVariantSrcset(basePath, ext) {
+      return RESPONSIVE_WIDTHS
+        .map(width => `${buildAssetUrl(`${basePath}-w${width}.${ext}`)} ${width}w`)
+        .join(', ');
+    }
+
+    function createResponsivePicture(assetPath, altText, className, sizes) {
+      const picture = document.createElement('picture');
+      if (className) picture.className = className;
+
+      const basePath = getImageBasePath(assetPath);
+      if (basePath) {
+        const sourceAvif = document.createElement('source');
+        sourceAvif.type = 'image/avif';
+        sourceAvif.srcset = buildVariantSrcset(basePath, 'avif');
+        if (sizes) sourceAvif.sizes = sizes;
+        picture.appendChild(sourceAvif);
+
+        const sourceWebp = document.createElement('source');
+        sourceWebp.type = 'image/webp';
+        sourceWebp.srcset = buildVariantSrcset(basePath, 'webp');
+        if (sizes) sourceWebp.sizes = sizes;
+        picture.appendChild(sourceWebp);
+      }
+
+      const img = document.createElement('img');
+      img.src = basePath ? buildAssetUrl(`${basePath}.webp`) : buildAssetUrl(assetPath);
+      img.alt = altText || '';
+      if (sizes && basePath) img.sizes = sizes;
+      if (basePath) img.srcset = buildVariantSrcset(basePath, 'webp');
+      picture.appendChild(img);
+
+      return { picture, img };
+    }
+
+    function replaceWithResponsivePicture(targetElement, assetPath, altText, sizes, extraClass) {
+      if (!targetElement || !assetPath) return null;
+      const { picture, img } = createResponsivePicture(assetPath, altText, extraClass, sizes);
+      if (targetElement.id) picture.id = targetElement.id;
+      if (targetElement.className) {
+        picture.className = `${targetElement.className} ${picture.className || ''}`.trim();
+      }
+      targetElement.replaceWith(picture);
+      return img;
+    }
     // =====================
     // MENU MOBILE DO HEADER
     // =====================
@@ -145,12 +205,15 @@
       }
     });
   </script>
+  <script src="assets/js/responsive-uploads.js"></script>
 
   <!-- =====================
        BANNER PRINCIPAL
        ===================== -->
   <section class="banner">
-    <img src="" alt="Banner da Feira" id="banner-img">
+    <picture id="banner-picture">
+      <img src="" alt="Banner da Feira" id="banner-img">
+    </picture>
   </section>
 
   <!-- =====================
@@ -175,12 +238,35 @@
     // =====================
     let contadorInterval = null;
     let dataFeiraGlobal = null;
+
+    function normalizarAtivo(valor) {
+      return !(valor === false || valor === 'false' || valor === 0 || valor === '0');
+    }
+
+    function parseDataFeira(raw) {
+      if (!raw) return null;
+      if (raw instanceof Date) return raw;
+      if (typeof raw === 'string') {
+        const trimmed = raw.trim();
+        const iso = new Date(trimmed);
+        if (!isNaN(iso.getTime())) return iso;
+        const match = trimmed.match(/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})$/);
+        if (match) {
+          const dia = match[1];
+          const mes = match[2];
+          const ano = match[3];
+          const parsed = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+          if (!isNaN(parsed.getTime())) return parsed;
+        }
+      }
+      return null;
+    }
     
     /**
      * Carrega a data do contador regressivo do backend e exibe a seção se estiver ativa
      */
     function carregarContadorDinamico() {
-      fetch(buildApiUrl('/api/home'))
+      fetch(buildApiUrl('/api/contador'), { cache: 'no-store' })
         .then(res => res.json())
         .then(data => {
           const secaoContador = document.getElementById('contador-dinamico-section');
@@ -188,10 +274,11 @@
           let ativo = data.contador_data_ativo;
           let dataFeira = data.contador_data_feira;
           if (typeof ativo === 'undefined') ativo = true;
+          ativo = normalizarAtivo(ativo);
           if (!dataFeira) dataFeira = '2026-06-16T13:00:00.000Z';
           if (ativo && dataFeira) {
             secaoContador.style.display = 'block';
-            dataFeiraGlobal = new Date(dataFeira);
+            dataFeiraGlobal = parseDataFeira(dataFeira) || parseDataFeira('2026-06-16T13:00:00.000Z');
             if (isNaN(dataFeiraGlobal.getTime())) {
               secaoContador.style.display = 'none';
               return;
@@ -200,13 +287,17 @@
             iniciarContadorDinamico();
           } else {
             secaoContador.style.display = 'none';
+            if (contadorInterval) {
+              clearInterval(contadorInterval);
+              contadorInterval = null;
+            }
           }
         })
         .catch(() => {
           // Se o backend não responder, exibe contador para teste local
           const secaoContador = document.getElementById('contador-dinamico-section');
           secaoContador.style.display = 'block';
-          dataFeiraGlobal = new Date('2026-06-16T13:00:00.000Z');
+          dataFeiraGlobal = parseDataFeira('2026-06-16T13:00:00.000Z');
           if (contadorInterval) clearInterval(contadorInterval);
           iniciarContadorDinamico();
         });
@@ -270,8 +361,16 @@
 
           // Banner principal
           if (data.banner) {
-            const bannerImg = document.getElementById('banner-img');
-            if (bannerImg) bannerImg.src = buildAssetUrl(data.banner);
+            const bannerPicture = document.getElementById('banner-picture');
+            if (bannerPicture) {
+              const img = replaceWithResponsivePicture(
+                bannerPicture,
+                data.banner,
+                'Banner da Feira',
+                '100vw'
+              );
+              if (img) img.id = 'banner-img';
+            }
           }
           // Faixa abaixo do banner
           if (data.faixa_titulo) {
@@ -342,21 +441,21 @@
               imagensValidas.slice(0, 3).forEach((img, index) => {
                 if (img && img.trim()) {
                   console.log('[DEBUG] Processando imagem', index + 1, ':', img);
-                  const imgElement = document.createElement('img');
-                  // Adiciona timestamp para evitar cache
-                  const timestamp = new Date().getTime();
-                  const finalUrl = buildAssetUrl(img) + '?t=' + timestamp;
-                  imgElement.src = finalUrl;
-                  imgElement.alt = `Imagem ${index + 1} da Feira`;
-                  
+                  const { picture, img: imgElement } = createResponsivePicture(
+                    img,
+                    `Imagem ${index + 1} da Feira`,
+                    '',
+                    '(max-width: 900px) 100vw, 33vw'
+                  );
+
                   imgElement.onerror = function() {
-                    console.error('[DEBUG] ❌ Erro ao carregar imagem:', img, 'URL final:', finalUrl);
+                    console.error('[DEBUG] ❌ Erro ao carregar imagem:', img);
                   };
                   imgElement.onload = function() {
                     console.log('[DEBUG] ✅ Imagem carregada com sucesso:', img, 'Dimensões:', this.naturalWidth + 'x' + this.naturalHeight);
                   };
-                  
-                  afeiraImagens.appendChild(imgElement);
+
+                  afeiraImagens.appendChild(picture);
                   console.log('[DEBUG] ✅ Imagem A Feira adicionada ao DOM:', img, 'Total de filhos agora:', afeiraImagens.children.length);
                 }
               });
@@ -394,8 +493,12 @@
                 }
                 
                 if (back && imagemCard) {
-                  back.src = buildAssetUrl(imagemCard);
-                  back.alt = textoCard || `Item ${i}`;
+                  replaceWithResponsivePicture(
+                    back,
+                    imagemCard,
+                    textoCard || `Item ${i}`,
+                    '(max-width: 900px) 80vw, 320px'
+                  );
                 }
               }
             }
@@ -518,9 +621,12 @@
                 `;
               } else {
                 // Se for imagem, exibir a imagem
-                const mapaImg = document.createElement('img');
-                mapaImg.src = mapaUrl;
-                mapaImg.alt = 'Mapa da Feira';
+                const { picture, img: mapaImg } = createResponsivePicture(
+                  data.mapa_imagem,
+                  'Mapa da Feira',
+                  '',
+                  '(max-width: 900px) 100vw, 900px'
+                );
                 mapaImg.className = 'mapa-imagem-zoom';
                 mapaImg.style.maxWidth = '100%';
                 mapaImg.style.height = 'auto';
@@ -542,7 +648,7 @@
                   console.log('[DEBUG] ✅ Mapa carregado com sucesso');
                 };
                 
-                mapaWrapper.appendChild(mapaImg);
+                mapaWrapper.appendChild(picture);
               }
               
               // Configurar botão de download
