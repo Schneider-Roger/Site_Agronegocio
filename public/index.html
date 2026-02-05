@@ -359,6 +359,15 @@
           const materialAtivo = !(data.material_ativo === false || data.material_ativo === 'false' || data.material_ativo === 0 || data.material_ativo === '0');
           if (materialSection) materialSection.style.display = materialAtivo ? '' : 'none';
 
+          function setMenuLinkVisibility(selector, visible) {
+            document.querySelectorAll(selector).forEach(link => {
+              link.style.display = visible ? '' : 'none';
+            });
+          }
+
+          setMenuLinkVisibility('a[href="#mapa"]', mapaAtivo);
+          setMenuLinkVisibility('a[href="#material"]', materialAtivo);
+
           // Banner principal
           if (data.banner) {
             const bannerPicture = document.getElementById('banner-picture');

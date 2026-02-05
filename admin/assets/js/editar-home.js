@@ -84,7 +84,7 @@ function initImagePreviews() {
   
   // Preview para os cards da sessão "O QUE ESPERAR"
   for (let i = 1; i <= 8; i++) {
-    addImagePreview(`oqueesperar_card${i}_img`, `oqueesperar_card${i}_preview`);
+    initOqueEsperarCardPreview(i);
   }
   
   // Preview do mapa da feira (imagem ou PDF)
@@ -143,6 +143,55 @@ function initImagePreviews() {
         }
       });
     }
+  }
+}
+
+function renderOqueEsperarPreview(preview, text, imgSrc) {
+  if (!preview) return;
+  preview.innerHTML = '';
+
+  if (imgSrc) {
+    const img = document.createElement('img');
+    img.src = imgSrc;
+    img.alt = 'Preview do card';
+    preview.appendChild(img);
+  }
+
+  if (text) {
+    const textEl = document.createElement('div');
+    textEl.className = 'oqueesperar-text-preview';
+    textEl.textContent = text;
+    preview.appendChild(textEl);
+  }
+}
+
+function initOqueEsperarCardPreview(index) {
+  const imgInput = document.getElementById(`oqueesperar_card${index}_img`);
+  const textInput = document.getElementById(`oqueesperar_card${index}_texto`);
+  const preview = document.getElementById(`oqueesperar_card${index}_preview`);
+
+  if (!preview) return;
+
+  function renderFromState() {
+    const text = textInput ? textInput.value.trim() : '';
+    const imgSrc = preview.dataset.imgSrc || '';
+    renderOqueEsperarPreview(preview, text, imgSrc);
+  }
+
+  if (textInput) {
+    textInput.addEventListener('input', renderFromState);
+  }
+
+  if (imgInput) {
+    imgInput.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) {
+        const url = URL.createObjectURL(this.files[0]);
+        preview.dataset.imgSrc = url;
+      } else {
+        preview.dataset.imgSrc = '';
+      }
+      renderFromState();
+    });
   }
 }
 
@@ -585,11 +634,15 @@ function updateCurrentPreviews(data) {
   // Cards da sessão "O QUE ESPERAR"
   for (let i = 1; i <= 8; i++) {
     const cardImg = data[`oqueesperar_card${i}_img`];
+    const cardText = data[`oqueesperar_card${i}_texto`];
+    const preview = document.getElementById(`oqueesperar_card${i}_preview`);
+    if (!preview) continue;
     if (cardImg) {
-      const preview = document.getElementById(`oqueesperar_card${i}_preview`);
-      if (preview) {
-        preview.innerHTML = `<img src="${buildAssetUrl(cardImg)}" alt="Imagem do Card ${i}">`;
-      }
+      preview.dataset.imgSrc = buildAssetUrl(cardImg);
+      renderOqueEsperarPreview(preview, cardText || '', preview.dataset.imgSrc);
+    } else {
+      preview.dataset.imgSrc = '';
+      renderOqueEsperarPreview(preview, cardText || '', '');
     }
   }
   

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('form-galeria');
   const statusMsg = document.getElementById('status-galeria');
   const galeriasGrid = document.getElementById('galerias-grid');
+  const modal = createImageModal();
   // one-time auto-normalize flag to avoid loops
   let attemptedNormalize = false;
 
@@ -24,6 +25,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function buildAssetUrl(path) {
     return `${apiBase}${path}`;
+  }
+
+  function createImageModal() {
+    const modalEl = document.createElement('div');
+    modalEl.className = 'galeria-modal';
+    modalEl.innerHTML = `
+      <div class="galeria-modal-content" role="dialog" aria-modal="true" aria-label="Pré-visualização da galeria">
+        <div class="galeria-modal-header">
+          <span class="galeria-modal-title">Pré-visualização</span>
+          <button class="galeria-modal-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div class="galeria-modal-body">
+          <img class="galeria-modal-img" alt="Pré-visualização da galeria" />
+          <div class="galeria-modal-meta"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalEl);
+
+    const closeBtn = modalEl.querySelector('.galeria-modal-close');
+    closeBtn.addEventListener('click', () => closeModal(modalEl));
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl) closeModal(modalEl);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal(modalEl);
+    });
+
+    return modalEl;
+  }
+
+  function openModal({ src, title, meta }) {
+    if (!modal) return;
+    const img = modal.querySelector('.galeria-modal-img');
+    const titleEl = modal.querySelector('.galeria-modal-title');
+    const metaEl = modal.querySelector('.galeria-modal-meta');
+    img.src = src;
+    img.alt = title || 'Pré-visualização da galeria';
+    titleEl.textContent = title || 'Pré-visualização';
+    metaEl.textContent = meta || '';
+    modal.classList.add('active');
+  }
+
+  function closeModal(modalEl) {
+    if (!modalEl) return;
+    modalEl.classList.remove('active');
   }
 
   function normalizePath(value) {
@@ -54,23 +101,44 @@ document.addEventListener('DOMContentLoaded', function() {
         const card = document.createElement('div');
         card.className = 'galeria-card';
 
+        const media = document.createElement('div');
+        media.className = 'galeria-media';
+
         const img = document.createElement('img');
         img.className = 'galeria-capa';
         const imgSrc = g.imagem ? buildAssetUrl(g.imagem) : 'assets/img/placeholder.png';
         img.src = imgSrc;
         img.alt = 'Capa ' + (g.ano || '');
-        // clicar na capa abre gerenciamento de fotos
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', () => {
-          if (typeof g.id !== 'undefined' && g.id !== null) {
-            window.location.href = `./gerenciar-fotos.html?galeriaId=${encodeURIComponent(g.id)}`;
-          } else {
-            // fallback: pass ano+imagem para localizar a galeria na próxima página
-            const imagem = encodeURIComponent(img.src || '');
-            const anoParam = encodeURIComponent(g.ano || '');
-            window.location.href = `./gerenciar-fotos.html?ano=${anoParam}&imagem=${imagem}`;
-          }
+        img.loading = 'lazy';
+
+        const overlay = document.createElement('div');
+        overlay.className = 'galeria-media-overlay';
+
+        const overlayTitle = document.createElement('span');
+        overlayTitle.textContent = g.ano || '';
+
+        const overlayActions = document.createElement('div');
+        overlayActions.className = 'overlay-actions';
+
+        const previewBtn = document.createElement('button');
+        previewBtn.type = 'button';
+        previewBtn.className = 'btn-preview';
+        previewBtn.textContent = 'Ver maior';
+        previewBtn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const fotosCount = Array.isArray(g.fotos) ? g.fotos.length : (g.fotos ? 1 : 0);
+          openModal({
+            src: imgSrc,
+            title: `Galeria ${g.ano || ''}`,
+            meta: `${fotosCount} foto${fotosCount === 1 ? '' : 's'}`
+          });
         });
+
+        overlayActions.appendChild(previewBtn);
+        overlay.appendChild(overlayTitle);
+        overlay.appendChild(overlayActions);
+        media.appendChild(img);
+        media.appendChild(overlay);
 
         const body = document.createElement('div');
         body.className = 'galeria-body';
@@ -86,6 +154,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const actions = document.createElement('div');
         actions.className = 'galeria-actions';
+
+        const manageBtn = document.createElement('button');
+        manageBtn.className = 'btn-gerenciar-fotos';
+        manageBtn.type = 'button';
+        manageBtn.textContent = 'Gerenciar fotos';
+        manageBtn.addEventListener('click', () => {
+          if (typeof g.id !== 'undefined' && g.id !== null) {
+            window.location.href = `./gerenciar-fotos.html?galeriaId=${encodeURIComponent(g.id)}`;
+          } else {
+            const imagem = encodeURIComponent(img.src || '');
+            const anoParam = encodeURIComponent(g.ano || '');
+            window.location.href = `./gerenciar-fotos.html?ano=${anoParam}&imagem=${imagem}`;
+          }
+        });
 
         const delBtn = document.createElement('button');
         delBtn.className = 'btn-excluir-galeria';
@@ -148,13 +230,14 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
 
+        actions.appendChild(manageBtn);
         actions.appendChild(delBtn);
 
         body.appendChild(ano);
         body.appendChild(count);
         body.appendChild(actions);
 
-        card.appendChild(img);
+        card.appendChild(media);
         card.appendChild(body);
 
         galeriasGrid.appendChild(card);

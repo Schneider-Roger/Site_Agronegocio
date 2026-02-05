@@ -1168,12 +1168,23 @@ html {
   transform: rotateY(180deg);
   z-index: 1;
   padding: 0;
+  overflow: hidden;
 }
 .oqueesperar-card-back img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 18px;
+}
+.oqueesperar-card-back picture {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.oqueesperar-card-back picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .oqueesperar-card {
   transition: box-shadow 0.2s;
