@@ -1,240 +1,319 @@
+/* =========================================================
+   GALERIAS ADMIN — CSS COMPLETO (USABILIDADE + RESPONSIVO)
+   Mantém tokens do projeto: #005523, #994C11, #E8C48B
+   ========================================================= */
+
 /* Preview compacta da imagem de capa no formulário */
 .modern-preview img {
-	max-width: 500px;
-	max-height: 250px;
-	border-radius: 10px;
-	box-shadow: 0 2px 8px #0001;
-	margin-top: 10px;
-	display: block;
+  width: min(100%, 500px);
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-top: 10px;
+  display: block;
 }
-/* Estilos para a listagem de galerias no admin - segue tokens visuais do projeto */
 
+/* Grid responsivo (auto-fit) */
 .galerias-grid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 28px;
-	margin-top: 18px;
-	padding-bottom: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 18px;
+  padding-bottom: 24px;
 }
 
+/* Card */
 .galeria-card {
-	background: #fff;
-	border-radius: 16px;
-	box-shadow: 0 6px 24px rgba(0,0,0,0.10), 0 1.5px 4px rgba(0,0,0,0.04);
-	border: 2px solid #007800;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
-	transition: box-shadow 0.2s, transform 0.18s;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10), 0 1.5px 4px rgba(0,0,0,0.04);
+  border: 2px solid #007800;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer; /* usabilidade: card clicável */
 }
 
 .galeria-card:hover {
-	box-shadow: 0 10px 28px rgba(0,0,0,0.14), 0 2px 6px rgba(0,0,0,0.08);
-	transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.14), 0 2px 6px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
 }
 
+.galeria-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* Miniatura (capa) */
 .galeria-media {
-	position: relative;
-	width: 150px;
-	height: 100px;
-	overflow: hidden;
-	background: #eee;
-	border-bottom: 2px solid #E8C48B;
-	margin: 12px auto 0 auto;
-	border-radius: 10px;
+  position: relative;
+  width: min(92%, 260px);
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: #eee;
+  border-bottom: 2px solid #E8C48B;
+  margin: 12px auto 0 auto;
+  border-radius: 10px;
 }
 
-
+/* Imagem */
 .galeria-capa {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
-	transition: transform 0.25s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1);
+  transition: transform 0.2s ease;
 }
 
 .galeria-card:hover .galeria-capa {
-	transform: scale(1.04);
+  transform: scale(1.06); /* melhor percepção visual */
 }
 
+/* Overlay (ações rápidas) */
 .galeria-media-overlay {
-	position: absolute;
-	inset: 0;
-	background: linear-gradient(180deg, rgba(0,0,0,0) 20%, rgba(0,0,0,0.6) 100%);
-	opacity: 0;
-	transition: opacity 0.2s ease;
-	display: flex;
-	align-items: flex-end;
-	justify-content: space-between;
-	padding: 10px 12px;
-	color: #fff;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 20%, rgba(0,0,0,0.62) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 10px 12px;
+  color: #fff;
+  pointer-events: none; /* evita roubar clique do card */
 }
 
 .galeria-card:hover .galeria-media-overlay {
-	opacity: 1;
+  opacity: 1;
 }
 
 .galeria-media-overlay .overlay-actions {
-	display: flex;
-	gap: 8px;
+  display: flex;
+  gap: 8px;
+  pointer-events: auto; /* botões clicáveis */
 }
 
+/* Botão de preview (overlay) */
 .btn-preview {
-	background: rgba(255,255,255,0.9);
-	border: none;
-	color: #005523;
-	font-weight: 700;
-	padding: 6px 12px;
-	border-radius: 999px;
-	cursor: pointer;
-	font-size: 0.9rem;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(0,0,0,0.06);
+  color: #005523;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
 }
 
 .btn-preview:hover {
-	background: #fff;
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
 }
 
+.btn-preview:active {
+  transform: scale(0.98);
+}
+
+/* Corpo do card */
 .galeria-body {
-	padding: 18px 16px 12px 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	flex: 1;
+  padding: 18px 16px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
 }
 
+/* Hierarquia visual */
 .galeria-ano {
-	font-weight: 700;
-	color: #005523;
-	font-size: 1.13rem;
-	letter-spacing: 0.2px;
+  font-weight: 900;
+  color: #005523;
+  font-size: 1.2rem;
+  letter-spacing: 0.2px;
+  line-height: 1.15;
 }
 
 .galeria-count {
-	color: #994C11;
-	font-size: 1.01rem;
+  color: #994C11;
+  font-size: 0.95rem;
+  opacity: 0.8;
 }
 
+/* Área de ações */
 .galeria-actions {
-	margin-top: 12px;
-	display: flex;
-	gap: 10px;
-	justify-content: flex-end;
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
+/* Botões padrão */
+.btn-gerenciar-fotos,
+.btn-excluir-galeria {
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 1.01rem;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-gerenciar-fotos:active,
+.btn-excluir-galeria:active {
+  transform: scale(0.98);
+}
+
+/* Gerenciar */
 .btn-gerenciar-fotos {
-	background: #005523;
-	color: #fff;
-	border: 2px solid #005523;
-	padding: 8px 18px;
-	border-radius: 10px;
-	cursor: pointer;
-	font-weight: 700;
-	font-size: 1.01rem;
-	transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
-	box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  background: #005523;
+  color: #fff;
+  border: 2px solid #005523;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .btn-gerenciar-fotos:hover {
-	background: #004419;
-	box-shadow: 0 4px 16px rgba(0,85,35,0.25);
+  background: #004419;
+  box-shadow: 0 4px 16px rgba(0,85,35,0.25);
+  transform: translateY(-1px);
 }
 
+/* Excluir (seguro + contraste) */
 .btn-excluir-galeria {
-	background: #994C11;
-	color: #dc3545;
-	border: 2px solid #dc3545;
-	padding: 8px 18px;
-	border-radius: 10px;
-	cursor: pointer;
-	font-weight: 700;
-	font-size: 1.01rem;
-	transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
-	box-shadow: 0 1px 4px #dc354522;
-}
-.btn-excluir-galeria:hover {
-	background: #dc3545;
-	color: #fff;
-	
-	box-shadow: 0 4px 16px #dc354544;
+  background: #fff;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  box-shadow: 0 1px 4px rgba(220,53,69,0.12);
 }
 
+.btn-excluir-galeria:hover {
+  background: #dc3545;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(220,53,69,0.26);
+  transform: translateY(-1px);
+}
+
+/* Estado desabilitado / loading */
+.is-loading,
+.is-disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Feedback sucesso */
+.is-success {
+  outline: 3px solid rgba(46, 204, 113, 0.6);
+  outline-offset: 2px;
+}
+
+/* Modal */
 .galeria-modal {
-	position: fixed;
-	inset: 0;
-	background: rgba(0,0,0,0.6);
-	backdrop-filter: blur(4px);
-	display: none;
-	align-items: center;
-	justify-content: center;
-	padding: 20px;
-	z-index: 2000;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 2000;
 }
 
 .galeria-modal.active {
-	display: flex;
+  display: flex;
 }
 
 .galeria-modal-content {
-	background: #fff;
-	border-radius: 16px;
-	box-shadow: 0 10px 32px rgba(0,0,0,0.3);
-	max-width: 900px;
-	width: min(92vw, 900px);
-	max-height: 90vh;
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.3);
+  max-width: 900px;
+  width: min(92vw, 900px);
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .galeria-modal-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 14px 18px;
-	border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid #eee;
 }
 
 .galeria-modal-title {
-	font-weight: 700;
-	color: #005523;
-	font-size: 1.1rem;
+  font-weight: 900;
+  color: #005523;
+  font-size: 1.1rem;
 }
 
 .galeria-modal-close {
-	background: transparent;
-	border: none;
-	font-size: 1.4rem;
-	cursor: pointer;
-	color: #333;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: #333;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+
+.galeria-modal-close:hover {
+  background: rgba(0,0,0,0.06);
 }
 
 .galeria-modal-body {
-	padding: 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .galeria-modal-body img {
-	width: 100%;
-	max-height: 70vh;
-	object-fit: contain;
-	border-radius: 12px;
-	background: #f6f6f6;
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f6f6f6;
 }
 
 .galeria-modal-meta {
-	color: #666;
-	font-size: 0.95rem;
+  color: #666;
+  font-size: 0.95rem;
 }
 
+/* Mobile: botões full-width */
+@media (max-width: 600px) {
+  .galeria-actions {
+    justify-content: center;
+  }
 
-@media (max-width: 1200px) {
-	.galerias-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 800px) {
-	.galerias-grid { grid-template-columns: 1fr; gap: 18px; }
-	.galeria-card { border-radius: 12px; }
-	.galeria-media { width: 150px; height: 100px; }
+  .btn-gerenciar-fotos,
+  .btn-excluir-galeria {
+    width: 100%;
+    text-align: center;
+  }
+
+  .galeria-media {
+    width: min(92%, 320px);
+  }
 }
 
+/* Acessibilidade: reduz animações para quem prefere */
+@media (prefers-reduced-motion: reduce) {
+  .galeria-card,
+  .galeria-capa,
+  .galeria-media-overlay,
+  .btn-preview,
+  .btn-gerenciar-fotos,
+  .btn-excluir-galeria {
+    transition: none !important;
+  }
+}
