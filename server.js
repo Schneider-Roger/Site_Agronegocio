@@ -6,6 +6,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const sharp = require('sharp');
 const { getHomeData, saveHomeData, DATA_PATH } = require('./db');
 
@@ -99,6 +100,42 @@ const IMAGE_MIME_WHITELIST = new Set([
 ]);
 
 const RESPONSIVE_WIDTHS = [480, 768, 1024, 1440, 1920];
+const CONVERSION_CONCURRENCY = Math.max(2, Math.min(4, (os.cpus() || []).length || 2));
+
+async function safeUnlink(filePath, attempts = 4, delayMs = 120) {
+  if (!filePath) return;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      return;
+    } catch (e) {
+      const isLast = i === attempts - 1;
+      if (isLast) {
+        console.error('[DEBUG] Erro ao remover arquivo:', filePath, e);
+        return;
+      }
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
+  }
+}
+
+async function runWithConcurrency(items, limit, worker) {
+  const executing = new Set();
+  const results = [];
+  for (const item of items) {
+    const p = Promise.resolve().then(() => worker(item));
+    results.push(p);
+    executing.add(p);
+    const cleanup = () => executing.delete(p);
+    p.then(cleanup).catch(cleanup);
+    if (executing.size >= limit) {
+      await Promise.race(executing);
+    }
+  }
+  await Promise.allSettled(results);
+}
 
 function isConvertibleImage(file) {
   if (!file || !file.mimetype) return false;
@@ -109,15 +146,16 @@ function isConvertibleImage(file) {
 }
 
 function getSharpOptions(hasAlpha) {
+  const base = { lossless: true, effort: 6 };
   if (hasAlpha) {
     return {
-      webp: { lossless: true, effort: 4 },
-      avif: { lossless: true, effort: 4 }
+      webp: { ...base },
+      avif: { ...base }
     };
   }
   return {
-    webp: { quality: 88, nearLossless: true, effort: 4 },
-    avif: { quality: 60, effort: 4 }
+    webp: { ...base },
+    avif: { ...base }
   };
 }
 
@@ -155,8 +193,10 @@ async function convertImageToVariants(file) {
       }
     }
 
-    if (fs.existsSync(inputPath)) {
-      fs.unlinkSync(inputPath);
+    try {
+      await safeUnlink(inputPath);
+    } catch (e) {
+      console.error('[DEBUG] Falha ao remover arquivo original (ignorado):', inputPath, e);
     }
 
     file.filename = `${baseName}.webp`;
@@ -174,9 +214,8 @@ async function convertImageToVariants(file) {
 async function convertUploadedImages(files) {
   if (!files) return;
   const list = Array.isArray(files) ? files : [files];
-  for (const file of list) {
-    await convertImageToVariants(file);
-  }
+  const limit = Math.max(1, Math.min(CONVERSION_CONCURRENCY, list.length));
+  await runWithConcurrency(list, limit, convertImageToVariants);
 }
 
 // GET /api/galerias - lista todas as galerias
@@ -272,15 +311,17 @@ app.post('/api/galerias/:id/fotos', uploadGaleriaFotos.array('fotos', 40), async
     if (idx === -1) return res.status(404).json({ success: false, error: 'Galeria não encontrada.' });
 
     const files = req.files || [];
+    galerias[idx].fotos = galerias[idx].fotos || [];
+    const totalAfter = galerias[idx].fotos.length + files.length;
+    if (totalAfter > 40) {
+      files.forEach(f => safeUnlink(f.path));
+      return res.status(400).json({ success: false, error: 'Limite de 40 fotos por galeria.' });
+    }
+
     await convertUploadedImages(files);
     const caminhos = files.map(f => '/uploads/' + f.filename);
 
     // Acumula sem ultrapassar 40 fotos
-    galerias[idx].fotos = galerias[idx].fotos || [];
-    const totalAfter = galerias[idx].fotos.length + caminhos.length;
-    if (totalAfter > 40) {
-      return res.status(400).json({ success: false, error: 'Limite de 40 fotos por galeria.' });
-    }
     galerias[idx].fotos = [...galerias[idx].fotos, ...caminhos];
     fs.writeFileSync(galeriasDataPath, JSON.stringify(galerias, null, 2), 'utf8');
     res.json({ success: true, fotos: galerias[idx].fotos });

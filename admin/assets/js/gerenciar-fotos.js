@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('form-fotos');
   const status = document.getElementById('status-fotos');
   const titulo = document.getElementById('galeria-titulo');
+  let totalFotos = 0;
 
   const apiBase = getApiBase();
 
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function renderFotos(fotos) {
     fotosGrid.innerHTML = '';
+    totalFotos = Array.isArray(fotos) ? fotos.length : 0;
     fotos.forEach(f => {
       const card = document.createElement('div');
       card.className = 'galeria-card';
@@ -148,6 +150,12 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       status.textContent = '';
+      const inputFotos = form.querySelector('#fotos');
+      const novos = inputFotos && inputFotos.files ? inputFotos.files.length : 0;
+      if (totalFotos + novos > 40) {
+        status.textContent = 'Limite de 40 fotos por galeria.';
+        return;
+      }
       const fd = new FormData(form);
       try {
         const idResolved = await resolveGaleriaIfNeeded();
